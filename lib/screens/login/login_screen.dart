@@ -1,4 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:meetingme/models/country.dart';
+import 'package:meetingme/services/login_service.dart';
 
 import '../../components/components.dart';
 import '../../widgets/constant_widgets.dart';
@@ -20,6 +24,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
     List<String> _locations = ['A', 'B', 'C', 'D']; // Option 2
     String? _selectedLocation;
+    late var _countries;
+
+    @override
+    void initState() {
+      super.initState();
+      _loadCountries();
+    }
 
     return Scaffold(
       body: SafeArea(
@@ -32,7 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Image.asset('assets/images/meetingme_logo.jpg'),
             ),
             const SizedBox(
-              height: 50,
+              height: 40,
             ),
             DropdownButton(
               hint: Text('Country'), // Not necessary for Option 1
@@ -103,5 +114,12 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  navigateToNext(BuildContext context) {}
+  _loadCountries() async {
+    var _countries = LoginService().getCountries();
+    setState(() {});
+  }
+
+  navigateToNext(BuildContext context) {
+    //var _countries = LoginService().getCountries();
+  }
 }

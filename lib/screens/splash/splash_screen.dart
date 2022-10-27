@@ -53,7 +53,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 backgroundColor: Colors.deepPurple,
               ),
               onPressed: () {
-                _sendDataToSecondScreen(context);
+                _navigateToLoginScreen(context);
               },
               child: const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10.0),
@@ -71,7 +71,7 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 
-  void _sendDataToSecondScreen(BuildContext context) {
+  void _navigateToLoginScreen(BuildContext context) {
     Navigator.pushNamed(context, '/login');
     // Navigator.pushNamed(
     //   context,
