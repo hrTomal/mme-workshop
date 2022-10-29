@@ -5,10 +5,12 @@ import 'package:meetingme/models/country.dart';
 
 import 'package:http/http.dart' as http;
 
+import '../models/login_token.dart';
+
 class LoginService {
   Future<CountryInfo> getCountries() async {
     const countriesApiURL =
-        "https://api.meetingme.live/api/locations/countries/";
+        "http://dev.meetingme.live/api/locations/countries/";
     var client = http.Client();
     var coutries;
     try {
@@ -17,14 +19,35 @@ class LoginService {
       );
       if (response.statusCode == 200) {
         var jsonString = response.body;
-        List<dynamic> jsonMap = json.decode(jsonString);
-        //coutries = CountryInfo.fromJson(jsonMap);
-        coutries = jsonMap;
-        //log(jsonMap.toString());
+        var jsonMap = json.decode(jsonString);
+        coutries = CountryInfo.fromJson(jsonMap);
       }
     } catch (ex) {
       print(ex);
     }
     return coutries;
+  }
+
+  Future<LoginToken> Login(
+      String phone, String password, String country_code) async {
+    const loginApiURL = "http://dev.meetingme.live/api/users/token/";
+    var client = http.Client();
+    var responseToken;
+    try {
+      var response =
+          await http.post(Uri.parse(loginApiURL), headers: {}, body: {
+        "phone": phone,
+        "password": password,
+        "country_code": country_code,
+      });
+      if (response.statusCode == 200) {
+        var jsonString = response.body;
+        var jsonMap = json.decode(jsonString);
+        responseToken = LoginToken.fromJson(jsonMap);
+      }
+    } catch (ex) {
+      print(ex);
+    }
+    return responseToken;
   }
 }

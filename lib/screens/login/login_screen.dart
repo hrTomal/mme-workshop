@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:meetingme/models/country.dart';
 import 'package:meetingme/services/login_service.dart';
 
@@ -26,10 +27,24 @@ class _LoginScreenState extends State<LoginScreen> {
     String? _selectedLocation;
     late var _countries;
 
+    void loadCountries() async {
+      var data = await LoginService().getCountries();
+      setState(() {
+        _countries = data.results;
+      });
+    }
+
+    var phone = TextEditingController();
+    var password = TextEditingController();
+
     @override
     void initState() {
       super.initState();
-      _loadCountries();
+      Future.delayed(Duration.zero, () {
+        setState(() {
+          loadCountries();
+        });
+      });
     }
 
     return Scaffold(
@@ -46,7 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
               height: 40,
             ),
             DropdownButton(
-              hint: Text('Country'), // Not necessary for Option 1
+              hint: const Text('Country'), // Not necessary for Option 1
               value: _selectedLocation,
               onChanged: (newValue) {
                 setState(() {
@@ -68,6 +83,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: TextFieldContainer(
                 child: TextField(
                   textAlign: TextAlign.center,
+                  controller: phone,
                   decoration: roundedInputFieldDecoration.copyWith(
                     hintText: "Phone No",
                     icon: const Icon(Icons.phone),
@@ -84,6 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: TextField(
                   textAlign: TextAlign.center,
                   obscureText: true,
+                  controller: password,
                   decoration: roundedInputFieldDecoration.copyWith(
                     hintText: "Password",
                     icon: const Icon(Icons.lock_clock_outlined),
@@ -105,7 +122,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               onPressed: () {
-                navigateToNext(context);
+                login();
+                //loadCountries();
+                //navigateToNext(context);
               },
             ),
           ],
@@ -114,12 +133,12 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  _loadCountries() async {
-    var _countries = LoginService().getCountries();
-    setState(() {});
+  login() async {
+    var test = await LoginService().Login("01954492600", "1234", "BD");
+    Map<String, dynamic> decodedToken = JwtDecoder.decode(test.access);
   }
 
   navigateToNext(BuildContext context) {
-    //var _countries = LoginService().getCountries();
+    var _countries = LoginService().getCountries();
   }
 }

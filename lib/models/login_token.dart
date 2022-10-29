@@ -1,6 +1,14 @@
 class LoginToken {
-  final String refresh;
-  final String access;
+  late final String refresh;
+  late final String access;
 
-  LoginToken(this.refresh, this.access);
+  LoginToken(
+    this.refresh,
+    this.access,
+  );
+
+  LoginToken.fromJson(Map<String, dynamic> json) {
+    refresh = json['refresh'];
+    access = json['access'];
+  }
 }

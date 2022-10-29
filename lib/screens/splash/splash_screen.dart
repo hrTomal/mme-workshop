@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:meetingme/models/country.dart';
 import 'package:meetingme/screens/login/login_screen.dart';
+
+import '../../services/login_service.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
+
+  static const routeName = '/splash';
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -72,11 +77,6 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void _navigateToLoginScreen(BuildContext context) {
-    Navigator.pushNamed(context, '/login');
-    // Navigator.pushNamed(
-    //   context,
-    //   LoginScreen.routeName,
-    //   arguments: LoginScreen(),
-    // );
+    Navigator.pushNamed(context, LoginScreen.routeName);
   }
 }
