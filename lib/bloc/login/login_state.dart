@@ -14,8 +14,10 @@ class UserLoginSuccessState extends LoginStates {}
 
 class OrganizationLoginSuccessState extends LoginStates {}
 
+class AdminLoginSuccessState extends LoginStates {}
+
 class ErrorLoginState extends LoginStates {
   final String message;
 
-  ErrorLoginState(this.message);
+  ErrorLoginState({required this.message});
 }

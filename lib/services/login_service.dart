@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:meetingme/constants/urls.dart';
 import 'package:meetingme/models/country.dart';
 
 import 'package:http/http.dart' as http;
@@ -9,8 +10,7 @@ import '../models/login_token.dart';
 
 class LoginService {
   Future<CountryInfo> getCountries() async {
-    const countriesApiURL =
-        "http://dev.meetingme.live/api/locations/countries/";
+    const countriesApiURL = "${APIurls.devURL}locations/countries/";
     var client = http.Client();
     var coutries;
     try {
@@ -30,7 +30,7 @@ class LoginService {
 
   Future<LoginToken> Login(
       String phone, String password, String country_code) async {
-    const loginApiURL = "http://dev.meetingme.live/api/users/token/";
+    const loginApiURL = "${APIurls.devURL}users/token/";
     var client = http.Client();
     var responseToken;
     try {

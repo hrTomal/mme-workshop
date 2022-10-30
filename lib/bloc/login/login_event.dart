@@ -13,9 +13,9 @@ class LoginButtonPressed extends LoginEvents {
   final String password;
   final String country_code;
 
-  LoginButtonPressed(
-    this.phone,
-    this.password,
-    this.country_code,
-  );
+  LoginButtonPressed({
+    required this.phone,
+    required this.password,
+    required this.country_code,
+  });
 }

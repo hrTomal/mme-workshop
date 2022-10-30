@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:meetingme/bloc/login/login_bloc.dart';
+import 'package:meetingme/bloc/login/login_state.dart';
 import 'package:meetingme/models/country.dart';
 import 'package:meetingme/screens/dashboard/dashboard_screen.dart';
 import 'package:meetingme/screens/login/login_screen.dart';
 import 'package:meetingme/screens/splash/splash_screen.dart';
+import 'package:meetingme/services/general_data_service.dart';
+import 'package:meetingme/services/login_service.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,29 +18,40 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'MeetingMe',
-      theme: ThemeData(
-        primarySwatch: Colors.blueGrey,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => LoginBloc(
+            LoginInitState(),
+            LoginService(),
+            DataService(),
+          ),
+        )
+      ],
+      child: MaterialApp(
+        title: 'MeetingMe',
+        theme: ThemeData(
+          primarySwatch: Colors.blueGrey,
+        ),
+        home: const SplashScreen(),
+        // routes: {
+        //   LoginScreen.routeName: (context) => LoginScreen(),
+        // },
+        onGenerateRoute: (settings) {
+          if (settings.name == LoginScreen.routeName) {
+            //final args = settings.arguments as Country;
+            return MaterialPageRoute(
+              builder: (_) => LoginScreen(),
+            );
+          }
+          if (settings.name == Dashboard.routeName) {
+            return MaterialPageRoute(
+              builder: (_) => Dashboard(),
+            );
+          }
+          return null;
+        },
       ),
-      home: const SplashScreen(),
-      // routes: {
-      //   LoginScreen.routeName: (context) => LoginScreen(),
-      // },
-      onGenerateRoute: (settings) {
-        if (settings.name == LoginScreen.routeName) {
-          //final args = settings.arguments as Country;
-          return MaterialPageRoute(
-            builder: (_) => LoginScreen(),
-          );
-        }
-        if (settings.name == Dashboard.routeName) {
-          return MaterialPageRoute(
-            builder: (_) => Dashboard(),
-          );
-        }
-        return null;
-      },
     );
   }
 }
