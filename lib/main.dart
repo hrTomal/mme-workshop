@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meetingme/bloc/login/login_bloc.dart';
 import 'package:meetingme/bloc/login/login_state.dart';
-import 'package:meetingme/models/country.dart';
-import 'package:meetingme/screens/dashboard/dashboard_screen.dart';
+import 'package:meetingme/screens/dashboard/user_dashboard_screen.dart';
 import 'package:meetingme/screens/login/login_screen.dart';
 import 'package:meetingme/screens/splash/splash_screen.dart';
 import 'package:meetingme/services/general_data_service.dart';
@@ -39,14 +38,13 @@ class MyApp extends StatelessWidget {
         // },
         onGenerateRoute: (settings) {
           if (settings.name == LoginScreen.routeName) {
-            //final args = settings.arguments as Country;
             return MaterialPageRoute(
               builder: (_) => LoginScreen(),
             );
           }
-          if (settings.name == Dashboard.routeName) {
+          if (settings.name == UserDashboard.routeName) {
             return MaterialPageRoute(
-              builder: (_) => Dashboard(),
+              builder: (_) => UserDashboard(),
             );
           }
           return null;

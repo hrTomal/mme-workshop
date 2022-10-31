@@ -7,7 +7,8 @@ import 'package:meetingme/bloc/login/login_bloc.dart';
 import 'package:meetingme/bloc/login/login_event.dart';
 import 'package:meetingme/bloc/login/login_state.dart';
 import 'package:meetingme/models/country.dart';
-import 'package:meetingme/screens/dashboard/dashboard_screen.dart';
+import 'package:meetingme/screens/dashboard/user_dashboard_screen.dart';
+import 'package:meetingme/screens/splash/splash_screen.dart';
 import 'package:meetingme/services/login_service.dart';
 
 import '../../components/components.dart';
@@ -37,9 +38,8 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     loginBloc = BlocProvider.of<LoginBloc>(context);
-    setState(() {
-      loadCountries();
-    });
+    loadCountries();
+    setState(() {});
     super.initState();
   }
 
@@ -66,7 +66,9 @@ class _LoginScreenState extends State<LoginScreen> {
       body: BlocListener<LoginBloc, LoginStates>(
         listener: (context, state) {
           if (state is UserLoginSuccessState) {
-            Navigator.pushNamed(context, Dashboard.routeName);
+            Navigator.pushNamed(context, UserDashboard.routeName);
+          } else {
+            Navigator.pushNamed(context, SplashScreen.routeName);
           }
         },
         child: SafeArea(
@@ -146,9 +148,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 onPressed: () {
                   loginBloc.add(
                     LoginButtonPressed(
-                      phone: '01954492600', //phone.text
-                      password: '1234', //password.text
-                      country_code: 'BD', //_selectedCountry
+                      phone: phone.text, //'01954492600'
+                      password: password.text, //'1234'
+                      country_code: _selectedCountry!, //'BD'
                     ),
                   );
 
