@@ -23,3 +23,16 @@ class TextFieldContainer extends StatelessWidget {
         child: child);
   }
 }
+
+class WhiteDivider extends StatelessWidget {
+  const WhiteDivider({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Divider(
+      color: Colors.white,
+    );
+  }
+}
