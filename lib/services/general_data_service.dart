@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 class DataService {
   getUserInfo(token) async {
     var accessToken = token.access;
-    const userInfoApiURL = "${APIurls.devURL}users/me/";
+    const userInfoApiURL = "${APIurls.liveURL}users/me/";
     var client = http.Client();
     User? userInfo;
     try {

@@ -76,7 +76,14 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 
+  Future<List<Country>> loadCountries() async {
+    var data = await LoginService().getCountries();
+    var countries = data.results;
+    return countries;
+  }
+
   void _navigateToLoginScreen(BuildContext context) {
+    var countries = loadCountries();
     Navigator.pushNamed(context, LoginScreen.routeName);
   }
 }

@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
@@ -10,6 +11,7 @@ import 'package:meetingme/models/country.dart';
 import 'package:meetingme/screens/dashboard/user_dashboard_screen.dart';
 import 'package:meetingme/screens/splash/splash_screen.dart';
 import 'package:meetingme/services/login_service.dart';
+import 'package:meetingme/services/room_data_service.dart';
 
 import '../../components/components.dart';
 import '../../widgets/constant_widgets.dart';
@@ -23,16 +25,16 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   String? _selectedCountry;
-  late var _countries;
+  //late var _countries;
   var phone = TextEditingController();
   var password = TextEditingController();
   late LoginBloc loginBloc;
 
-  void loadCountries() async {
+  final _countries = LoginService().getCountries();
+
+  Future<CountryInfo> loadCountries() async {
     var data = await LoginService().getCountries();
-    setState(() {
-      _countries = data.results;
-    });
+    return data;
   }
 
   @override
@@ -67,6 +69,8 @@ class _LoginScreenState extends State<LoginScreen> {
         listener: (context, state) {
           if (state is UserLoginSuccessState) {
             Navigator.pushNamed(context, UserDashboard.routeName);
+          } else if (state is LoginLoadingState) {
+            Navigator.pushNamed(context, UserDashboard.routeName);
           } else {
             Navigator.pushNamed(context, SplashScreen.routeName);
           }
@@ -83,22 +87,53 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(
                 height: 40,
               ),
-              DropdownButton(
-                hint: const Text('Country'),
-                value: _selectedCountry,
-                onChanged: (newValue) {
-                  setState(() {
-                    _selectedCountry = newValue;
-                  });
-                },
-                items:
-                    _countries.map<DropdownMenuItem<String>>((Country value) {
-                  return DropdownMenuItem<String>(
-                    value: value.country_code,
-                    child: Text('${value.name!}(${value.phone_code!})'),
-                  );
-                }).toList(),
-              ),
+              FutureBuilder(
+                  future: _countries,
+                  builder: (BuildContext context,
+                      AsyncSnapshot<CountryInfo> snapshot) {
+                    if (snapshot.hasData) {
+                      /// When the result of the future call respond and has data show that data
+                      var _countriesForDropDown = snapshot.data!.results;
+                      //print(dat.data!.results);
+                      return DropdownButton(
+                        hint: const Text('Country'),
+                        value: _selectedCountry,
+                        onChanged: (newValue) {
+                          setState(() {
+                            _selectedCountry = newValue;
+                          });
+                        },
+                        items: _countriesForDropDown
+                            .map<DropdownMenuItem<String>>((Country value) {
+                          return DropdownMenuItem<String>(
+                            value: value.country_code,
+                            child: Text('${value.name!}(${value.phone_code!})'),
+                          );
+                        }).toList(),
+                      );
+                    }
+
+                    /// While is no data show this
+                    return const Center(
+                      child: CupertinoActivityIndicator(),
+                    );
+                  }),
+              // DropdownButton(
+              //   hint: const Text('Country'),
+              //   value: _selectedCountry,
+              //   onChanged: (newValue) {
+              //     setState(() {
+              //       _selectedCountry = newValue;
+              //     });
+              //   },
+              //   items:
+              //       _countries.map<DropdownMenuItem<String>>((Country value) {
+              //     return DropdownMenuItem<String>(
+              //       value: value.country_code,
+              //       child: Text('${value.name!}(${value.phone_code!})'),
+              //     );
+              //   }).toList(),
+              // ),
               const SizedBox(
                 height: 10,
               ),
@@ -150,11 +185,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     LoginButtonPressed(
                       phone: phone.text, //'01954492600'
                       password: password.text, //'1234'
-                      country_code: _selectedCountry!, //'BD'
+                      country_code: 'BD', //'BD' _selectedCountry!
                     ),
                   );
-
-                  //login(phone.text, password.text, _selectedCountry!);
                 },
               ),
             ],
@@ -162,11 +195,6 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
-  }
-
-  login(String phone, String password, String country_code) async {
-    var test = await LoginService().Login(phone, password, country_code);
-    Map<String, dynamic> decodedToken = JwtDecoder.decode(test.access);
   }
 
   navigateToNext(BuildContext context) {

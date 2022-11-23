@@ -1,8 +1,12 @@
+import 'dart:developer';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:meetingme/models/room_info.dart';
+import 'package:meetingme/screens/live_meeting/jitsi_meet.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
+import '../../services/room_data_service.dart';
 import '../../widgets/buttons.dart';
 import '../../widgets/constant_widgets.dart';
 
@@ -25,13 +29,15 @@ class _DashboardState extends State<UserDashboard> {
         title: const Text('MeetingMe'),
       ),
       drawer: DashboardSideDrawer(),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            UpcomingEventsContainer(height: height, width: width),
-            RoomsContainer(height: height, width: width)
-          ],
+      body: Container(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              UpcomingEventsContainer(height: height, width: width),
+              RoomsContainer(height: height, width: width),
+            ],
+          ),
         ),
       ),
     );
@@ -210,7 +216,7 @@ class RoomsContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: double.infinity,
+      height: height * .45,
       width: width * 1,
       margin: EdgeInsets.all(width * .02),
       decoration: BoxDecoration(
@@ -244,8 +250,8 @@ class ActivitesWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: width * .45,
       padding: EdgeInsets.all(height * .01),
+      width: width * .45,
       margin:
           EdgeInsets.symmetric(horizontal: width * .01, vertical: height * .01),
       decoration: BoxDecoration(
@@ -262,7 +268,6 @@ class ActivitesWidget extends StatelessWidget {
               color: Colors.white,
             ),
           ),
-          WhiteDivider(),
         ],
       ),
     );
@@ -270,7 +275,9 @@ class ActivitesWidget extends StatelessWidget {
 }
 
 class RoomsWidget extends StatelessWidget {
-  const RoomsWidget({
+  final _rooms = RoomService().getRooms;
+
+  RoomsWidget({
     Key? key,
     required this.width,
     required this.height,
@@ -309,12 +316,48 @@ class RoomsWidget extends StatelessWidget {
           ),
           OutlinedIconButton(
             Buttontext: 'Join Now',
-            onPressedFunction: () {},
+            onPressedFunction: () {
+              _navigateToMeeting(context);
+            },
           ),
-          WhiteDivider()
+          WhiteDivider(),
+          Container(
+            height: height * .28,
+            width: width * .4,
+            child: FutureBuilder(
+                future: _rooms(),
+                builder: (context, AsyncSnapshot snapshot) {
+                  if (!snapshot.hasData) {
+                    return Center(child: CircularProgressIndicator());
+                  } else {
+                    var _roomList = snapshot.data!.results;
+                    return ListView.builder(
+                      itemCount: _roomList.length,
+                      scrollDirection: Axis.vertical,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Column(
+                          children: [
+                            Text(
+                              _roomList[index].name,
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            Divider(
+                              color: Colors.indigo,
+                            )
+                          ],
+                        );
+                      },
+                    );
+                  }
+                }),
+          )
         ],
       ),
     );
+  }
+
+  void _navigateToMeeting(BuildContext context) {
+    Navigator.pushNamed(context, Meeting.routeName);
   }
 }
 

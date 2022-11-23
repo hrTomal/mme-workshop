@@ -24,7 +24,7 @@ class LoginBloc extends Bloc<LoginEvents, LoginStates> {
           if (userInfo.user_type == 'REGULAR') {
             emit(UserLoginSuccessState());
           } else if (userInfo.user_type == 'ORGANIZATION') {
-            emit(OrganizationLoginSuccessState());
+            emit(UserLoginSuccessState());
           }
         } else {
           emit(ErrorLoginState(message: 'LoginFailed'));

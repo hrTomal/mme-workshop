@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meetingme/bloc/login/login_bloc.dart';
 import 'package:meetingme/bloc/login/login_state.dart';
 import 'package:meetingme/screens/dashboard/user_dashboard_screen.dart';
+import 'package:meetingme/screens/live_meeting/jitsi_meet.dart';
 import 'package:meetingme/screens/login/login_screen.dart';
 import 'package:meetingme/screens/splash/splash_screen.dart';
 import 'package:meetingme/services/general_data_service.dart';
@@ -45,6 +46,11 @@ class MyApp extends StatelessWidget {
           if (settings.name == UserDashboard.routeName) {
             return MaterialPageRoute(
               builder: (_) => UserDashboard(),
+            );
+          }
+          if (settings.name == Meeting.routeName) {
+            return MaterialPageRoute(
+              builder: (_) => Meeting(),
             );
           }
           return null;
