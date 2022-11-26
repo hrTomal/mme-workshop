@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meetingme/bloc/login/login_bloc.dart';
 import 'package:meetingme/bloc/login/login_state.dart';
+import 'package:meetingme/models/user.dart';
 import 'package:meetingme/screens/dashboard/user_dashboard_screen.dart';
-import 'package:meetingme/screens/live_meeting/jitsi_meet.dart';
+import 'package:meetingme/screens/live_meeting/meeting_screen.dart';
 import 'package:meetingme/screens/login/login_screen.dart';
 import 'package:meetingme/screens/splash/splash_screen.dart';
 import 'package:meetingme/services/general_data_service.dart';
@@ -38,19 +39,36 @@ class MyApp extends StatelessWidget {
         //   LoginScreen.routeName: (context) => LoginScreen(),
         // },
         onGenerateRoute: (settings) {
+          if (settings.name == SplashScreen.routeName) {
+            return MaterialPageRoute(
+              builder: (_) => const SplashScreen(),
+            );
+          }
           if (settings.name == LoginScreen.routeName) {
             return MaterialPageRoute(
               builder: (_) => LoginScreen(),
             );
           }
           if (settings.name == UserDashboard.routeName) {
+            final args = settings.arguments as User;
             return MaterialPageRoute(
-              builder: (_) => UserDashboard(),
+              builder: (context) {
+                return UserDashboard(
+                  userInfo: args,
+                );
+              },
             );
           }
           if (settings.name == Meeting.routeName) {
+            final args = settings.arguments as MeetingArguments;
             return MaterialPageRoute(
-              builder: (_) => Meeting(),
+              builder: (context) {
+                return Meeting(
+                  userName: args.userName,
+                  lobbyName: args.lobbyName,
+                  name: args.name,
+                );
+              },
             );
           }
           return null;
