@@ -32,15 +32,15 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final _countries = LoginService().getCountries();
 
-  Future<CountryInfo> loadCountries() async {
-    var data = await LoginService().getCountries();
-    return data;
-  }
+  // Future<CountryInfo> loadCountries() async {
+  //   var data = await LoginService().getCountries();
+  //   return data;
+  // }
 
   @override
   void initState() {
     loginBloc = BlocProvider.of<LoginBloc>(context);
-    loadCountries();
+    //loadCountries();
     setState(() {});
     super.initState();
   }
@@ -68,9 +68,8 @@ class _LoginScreenState extends State<LoginScreen> {
       body: BlocListener<LoginBloc, LoginStates>(
         listener: (context, state) {
           if (state is UserLoginSuccessState) {
-            Navigator.pushNamed(context, UserDashboard.routeName);
-          } else if (state is LoginLoadingState) {
-            Navigator.pushNamed(context, UserDashboard.routeName);
+            Navigator.pushNamed(context, UserDashboard.routeName,
+                arguments: state.userInfo);
           } else {
             Navigator.pushNamed(context, SplashScreen.routeName);
           }
@@ -143,6 +142,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: TextField(
                     textAlign: TextAlign.center,
                     controller: phone,
+                    keyboardType: TextInputType.number,
                     decoration: roundedInputFieldDecoration.copyWith(
                       hintText: "Phone No",
                       icon: const Icon(Icons.phone),

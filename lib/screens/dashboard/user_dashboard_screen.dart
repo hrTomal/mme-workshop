@@ -1,422 +1,593 @@
-import 'dart:developer';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:meetingme/models/room_info.dart';
-import 'package:meetingme/screens/live_meeting/jitsi_meet.dart';
+import 'package:flutter/rendering.dart';
+import 'package:meetingme/screens/dashboard/widgets/dashboard_side_drawer.dart';
+import 'package:meetingme/widgets/constant_widgets.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
+import '../../models/user.dart';
 import '../../services/room_data_service.dart';
-import '../../widgets/buttons.dart';
-import '../../widgets/constant_widgets.dart';
+import '../live_meeting/meeting_screen.dart';
 
 class UserDashboard extends StatefulWidget {
-  const UserDashboard({super.key});
+  const UserDashboard({super.key, required this.userInfo});
 
   static const routeName = '/user_dashboard';
+  final User userInfo;
 
   @override
-  State<UserDashboard> createState() => _DashboardState();
+  State<UserDashboard> createState() => _UserDashboardState(userInfo);
 }
 
-class _DashboardState extends State<UserDashboard> {
+class _UserDashboardState extends State<UserDashboard>
+    with SingleTickerProviderStateMixin {
+  final User userInfo;
+  late TabController _controller;
+
+  bool? isAudioOnly = true;
+
+  bool? isAudioMuted = true;
+
+  bool? isVideoMuted = true;
+
+  _UserDashboardState(this.userInfo);
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = new TabController(length: 2, vsync: this);
+  }
+
   @override
   Widget build(BuildContext context) {
+    GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('MeetingMe'),
-      ),
-      drawer: DashboardSideDrawer(),
-      body: Container(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              UpcomingEventsContainer(height: height, width: width),
-              RoomsContainer(height: height, width: width),
-            ],
-          ),
+    final topSectionHeight = height * .10;
+    final userVerification = userInfo.isActive ?? false;
+    final _rooms = RoomService().getRooms();
+    final meetings = MeetingRoomService().getMeetingRooms();
+    return SafeArea(
+      child: Scaffold(
+        key: _scaffoldKey,
+        backgroundColor: Color.fromRGBO(26, 55, 77, 1),
+        drawer: SideDrawerForAllPage(
+          userInfo: userInfo,
         ),
-      ),
-    );
-  }
-}
-
-class UpcomingEventsContainer extends StatelessWidget {
-  const UpcomingEventsContainer({
-    Key? key,
-    required this.height,
-    required this.width,
-  }) : super(key: key);
-
-  final double height;
-  final double width;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: height * .4,
-      width: width * 1,
-      margin: EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: Color.fromRGBO(105, 152, 171, 1),
-        border: Border.all(
-          color: Colors.white,
-        ),
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            width: width * .9,
-            decoration: BoxDecoration(
-              color: Color.fromRGBO(26, 55, 77, 1),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            margin: const EdgeInsets.all(5),
-            child: Column(
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
-                  child: Text(
-                    'Upcoming Events',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                Container(
-                  height: height * .325,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        Eventcard(height: height),
-                        Eventcard(height: height),
-                        Eventcard(height: height),
-                        Eventcard(height: height),
-                      ],
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
-          // Container(
-          //   width: width * .3,
-          //   color: Color.fromRGBO(26, 55, 77, 1),
-          //   margin: const EdgeInsets.only(top: 5, right: 5, bottom: 5),
-          //   child: Column(
-          //     mainAxisAlignment: MainAxisAlignment.center,
-          //     children: [
-          //       const Text(
-          //         'Calendar View',
-          //         style: TextStyle(color: Colors.white),
-          //       ),
-          //       IconButton(
-          //           onPressed: () {},
-          //           icon: const Icon(
-          //             Icons.calendar_month_outlined,
-          //             color: Colors.white,
-          //           ))
-          //     ],
-          //   ),
-          // )
-        ],
-      ),
-    );
-  }
-}
-
-class Eventcard extends StatelessWidget {
-  const Eventcard({
-    Key? key,
-    required this.height,
-  }) : super(key: key);
-
-  final double height;
-
-  @override
-  Widget build(BuildContext context) {
-    final double width = MediaQuery.of(context).size.width;
-    return Card(
-      color: Colors.blueGrey,
-      child: Container(
-        height: height * .1,
-        child: Row(
+        body: Column(
           children: [
             Container(
-              width: width * .17,
-              height: height * .09,
-              margin: EdgeInsets.all(5),
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: Color.fromRGBO(26, 55, 77, 1),
-                borderRadius: BorderRadius.circular(5),
-              ),
-              child: const Text(
-                '14 Oct',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                ),
-              ),
-            ),
-            Container(
-              width: width * .65,
-              margin: EdgeInsets.all(5),
-              decoration: BoxDecoration(
-                color: Color.fromRGBO(26, 55, 77, 1),
-                borderRadius: BorderRadius.circular(5),
-              ),
-              child: Column(
-                children: const [
-                  Text(
-                    '9.00 AM To 12.PM',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
-                    ),
+              height: topSectionHeight,
+              padding: EdgeInsets.symmetric(horizontal: width * .03),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          _scaffoldKey.currentState?.openDrawer();
+                        },
+                        icon: Icon(Icons.line_weight),
+                        color: Colors.white,
+                      ),
+                      const VerticalDivider(),
+                      Text(
+                        'Meeting me',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: height * .03),
+                      ),
+                    ],
                   ),
-                  Divider(
-                    color: Colors.white,
-                  ),
-                  Text(
-                    'Course Flutter',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                    ),
+                  Row(
+                    children: [
+                      SizedBox(
+                        child: Text(
+                          '${userInfo.firstName} ${userInfo.lastName}',
+                          style: const TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        child: Icon(
+                          Icons.verified_user,
+                          color: userVerification ? Colors.green : Colors.red,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
-            )
+            ),
+            Expanded(
+              child: Container(
+                padding: EdgeInsets.all(width * .025),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(width * .05),
+                    topLeft: Radius.circular(width * .05),
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    Container(
+                      height: (height - topSectionHeight) * .68,
+                      color: Colors.white,
+                      child: ListView(
+                        children: [
+                          TabBar(
+                            labelColor: const Color.fromRGBO(105, 152, 171, 1),
+                            automaticIndicatorColorAdjustment: true,
+                            controller: _controller,
+                            tabs: const [
+                              Tab(
+                                icon: Icon(
+                                  Icons.calendar_month,
+                                ),
+                                text: 'Events',
+                              ),
+                              Tab(
+                                icon: Icon(Icons.notifications_none_outlined),
+                                text: 'Notices',
+                              ),
+                            ],
+                          ),
+                          Container(
+                            height: (height - topSectionHeight) * .55,
+                            decoration: BoxDecoration(
+                              color: const Color.fromRGBO(145, 220, 250, 1),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(width * .03),
+                              ),
+                            ),
+                            child: TabBarView(
+                              controller: _controller,
+                              children: [
+                                Container(
+                                    padding:
+                                        EdgeInsets.only(bottom: height * .05),
+                                    child: FutureBuilder(
+                                      future: meetings,
+                                      builder: ((context, snapshot) {
+                                        if (snapshot.hasData) {
+                                          return SfCalendar(
+                                            view: CalendarView.month,
+                                            allowedViews: const [
+                                              CalendarView.day,
+                                              CalendarView.week,
+                                              CalendarView.workWeek,
+                                              CalendarView.month,
+                                              CalendarView.timelineDay,
+                                              CalendarView.timelineWeek,
+                                              CalendarView.timelineWorkWeek,
+                                            ],
+                                            dataSource:
+                                                MeetingDataSource(_getMeetings(
+                                              snapshot,
+                                              userInfo,
+                                            )),
+                                            showNavigationArrow: true,
+                                            onTap: calendarTapped,
+                                          );
+                                        } else {
+                                          return const Center(
+                                              child:
+                                                  CircularProgressIndicator());
+                                        }
+                                      }),
+                                    )
+
+                                    // SfCalendar(
+                                    //   view: CalendarView.month,
+                                    //   dataSource:
+                                    //       MeetingDataSource(_getMeetings()),
+                                    //   showNavigationArrow: true,
+                                    // ),
+                                    ),
+                                const Center(
+                                  child: Text('Notice Section'),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: (height - topSectionHeight) * .01,
+                    ),
+                    Container(
+                      height: (height - topSectionHeight) * .24,
+                      child: Column(
+                        children: [
+                          // Container(
+                          //   height: (height - topSectionHeight) * .24 * .2,
+                          //   decoration: const BoxDecoration(
+                          //     color: const Color.fromRGBO(105, 152, 171, 1),
+                          //     boxShadow: [
+                          //       BoxShadow(
+                          //         color: Colors.blueGrey,
+                          //         spreadRadius: 2,
+                          //         blurRadius: 3,
+                          //         offset: Offset(
+                          //             0, 3), // changes position of shadow
+                          //       ),
+                          //     ],
+                          //   ),
+                          //   child: const Center(
+                          //     child: Text(
+                          //       'My Rooms',
+                          //       style: TextStyle(
+                          //         color: Colors.white,
+                          //       ),
+                          //     ),
+                          //   ),
+                          // ),
+                          Expanded(
+                            child: Container(
+                                width: width - (width * .050),
+                                color: Colors.white,
+                                child: FutureBuilder(
+                                  future: _rooms,
+                                  builder: ((context, snapshot) {
+                                    if (snapshot.hasData) {
+                                      var _roomList = snapshot.data!.results;
+                                      return ListView.builder(
+                                          scrollDirection: Axis.horizontal,
+                                          itemCount: _roomList!.length,
+                                          itemBuilder: (context, index) {
+                                            return Container(
+                                                width:
+                                                    (width - (width * .050)) *
+                                                        .27,
+                                                height: (height -
+                                                        topSectionHeight) *
+                                                    .24 *
+                                                    .8,
+                                                margin: EdgeInsets.symmetric(
+                                                  horizontal: (height -
+                                                          topSectionHeight) *
+                                                      .015,
+                                                  vertical: (height -
+                                                          topSectionHeight) *
+                                                      .01,
+                                                ),
+                                                decoration: BoxDecoration(
+                                                  color: const Color.fromRGBO(
+                                                      105, 152, 171, 1),
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                    Radius.circular(
+                                                        width * .03),
+                                                  ),
+                                                  boxShadow: const [
+                                                    BoxShadow(
+                                                      color: Colors.blueGrey,
+                                                      // Color.fromRGBO(
+                                                      //     105, 152, 171, 1),
+                                                      spreadRadius: 3,
+                                                      blurRadius: 5,
+                                                      offset: Offset(3,
+                                                          3), // changes position of shadow
+                                                    ),
+                                                  ],
+                                                ),
+                                                child: GestureDetector(
+                                                  onTap: () {},
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Text(
+                                                        _roomList[index].name ??
+                                                            '',
+                                                        style: const TextStyle(
+                                                            color:
+                                                                Colors.white),
+                                                      ),
+                                                      WhiteDivider(),
+                                                      Text(
+                                                        _roomList[index].code ??
+                                                            '',
+                                                        style: const TextStyle(
+                                                            color:
+                                                                Colors.white),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ));
+                                          });
+                                    } else {
+                                      return Center(
+                                          child: CircularProgressIndicator());
+                                    }
+                                  }),
+                                )
+                                //
+                                // Container(
+                                //   width: (width - (width * .050)) * .3,
+                                //   height: (height - topSectionHeight) * .24 * .8,
+                                //   margin: EdgeInsets.symmetric(
+                                //     horizontal: (height - topSectionHeight) * .01,
+                                //   ),
+                                //   decoration: BoxDecoration(
+                                //     color: Color.fromRGBO(105, 152, 171, 1),
+                                //     borderRadius: BorderRadius.all(
+                                //       Radius.circular(width * .03),
+                                //     ),
+                                //   ),
+                                // ),
+                                ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),
     );
   }
+
+  void calendarTapped(CalendarTapDetails details) {
+    if (details.appointments!.length != 0) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            scrollable: true,
+            content: Container(
+              height: MediaQuery.of(context).size.height * .5,
+              width: 500,
+              child: ListView.builder(
+                shrinkWrap: true,
+                scrollDirection: Axis.vertical,
+                itemCount: details.appointments!.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Card(
+                      child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(details.appointments![index].eventName),
+                      IconButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                scrollable: true,
+                                title: Text(
+                                    'Join - ${details.appointments![index].name}'),
+                                content: Column(
+                                  children: [
+                                    CheckboxListTile(
+                                      title: Text("Audio Only"),
+                                      value: isAudioOnly,
+                                      onChanged: _onAudioOnlyChanged,
+                                    ),
+                                    const SizedBox(
+                                      height: 14.0,
+                                    ),
+                                    CheckboxListTile(
+                                      title: Text("Audio Muted"),
+                                      value: isAudioMuted,
+                                      onChanged: _onAudioMutedChanged,
+                                    ),
+                                    const SizedBox(
+                                      height: 14.0,
+                                    ),
+                                    CheckboxListTile(
+                                      title: Text("Video Muted"),
+                                      value: isVideoMuted,
+                                      onChanged: _onVideoMutedChanged,
+                                    ),
+                                  ],
+                                ),
+                                actions: [
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.of(context, rootNavigator: true)
+                                          .pop();
+                                      _navigateToMeeting(
+                                          context,
+                                          details.appointments![index].userName,
+                                          details
+                                              .appointments![index].lobbyName,
+                                          details.appointments![index].name);
+                                    },
+                                    child: Text('Join now'),
+                                  )
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        icon: Icon(Icons.arrow_forward),
+                      )
+                    ],
+                  ));
+                },
+              ),
+            ),
+          );
+        },
+      );
+    }
+
+    // showDialog(
+    //     context: context,
+    //     builder: (BuildContext context) {
+    //       return AlertDialog(
+    //         title: Container(child: Text('test')),
+    //         content: Container(
+    //           height: 80,
+    //           child: Column(
+    //             children: <Widget>[
+    //               Row(
+    //                 children: <Widget>[
+    //                   Text(
+    //                     'test',
+    //                     style: TextStyle(
+    //                       fontWeight: FontWeight.w400,
+    //                       fontSize: 20,
+    //                     ),
+    //                   ),
+    //                 ],
+    //               ),
+    //               Row(
+    //                 children: <Widget>[
+    //                   Text('tttt'),
+    //                 ],
+    //               ),
+    //               Row(
+    //                 children: <Widget>[
+    //                   Text('xxx',
+    //                       style: TextStyle(
+    //                           fontWeight: FontWeight.w400, fontSize: 15)),
+    //                 ],
+    //               )
+    //             ],
+    //           ),
+    //         ),
+    //         actions: <Widget>[
+    //           ElevatedButton(
+    //               onPressed: () {
+    //                 Navigator.of(context).pop();
+    //               },
+    //               child: Text('close'))
+    //         ],
+    //       );
+    //     });
+  }
+
+  _onAudioOnlyChanged(bool? value) {
+    setState(() {
+      isAudioOnly = value;
+    });
+  }
+
+  _onAudioMutedChanged(bool? value) {
+    setState(() {
+      isAudioMuted = value;
+    });
+  }
+
+  _onVideoMutedChanged(bool? value) {
+    setState(() {
+      isVideoMuted = value;
+    });
+  }
 }
 
-class RoomsContainer extends StatelessWidget {
-  RoomsContainer({
-    Key? key,
-    required this.height,
-    required this.width,
-  }) : super(key: key);
+_getMeetings(values, userInfo) {
+  //final rooms = MeetingRoomService().getMeetingRooms();
+  final List<SingleMeeting> meetings = <SingleMeeting>[];
 
-  final double height;
-  final double width;
-  final Color containerColor = Color.fromRGBO(105, 152, 171, 1);
+  values.data.results?.forEach(
+    (element) {
+      DateTime meetingDate = DateTime.parse(element.meeting!.date);
+      DateTime startTimeFull = DateTime.parse(
+          element.meeting!.date + ' ' + element.meeting!.startTime);
+      DateTime endTimeFull = DateTime.parse(
+          (element.meeting!.date) + ' ' + element.meeting!.endTime);
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: height * .45,
-      width: width * 1,
-      margin: EdgeInsets.all(width * .02),
-      decoration: BoxDecoration(
-        color: Color.fromRGBO(105, 152, 171, 1),
-        border: Border.all(
-          color: Colors.white,
+      DateTime startTime = DateTime(
+          meetingDate.year,
+          meetingDate.month,
+          meetingDate.day,
+          startTimeFull.hour,
+          startTimeFull.minute,
+          startTimeFull.second);
+
+      DateTime endTime = DateTime(
+          meetingDate.year,
+          meetingDate.month,
+          meetingDate.day,
+          endTimeFull.hour,
+          endTimeFull.minute,
+          endTimeFull.second);
+
+      var userName = '${userInfo.firstName} ${userInfo.lastName}';
+      var lobbyName = element.meeting!.lobbyName;
+      var name = element.meeting!.name;
+
+      meetings.add(
+        SingleMeeting(
+          element.meeting!.name ?? '',
+          startTime,
+          endTime,
+          const Color(0xFF0F8644),
+          false,
+          userName,
+          lobbyName,
+          name,
         ),
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          RoomsWidget(width: width, height: height),
-          ActivitesWidget(width: width, height: height)
-        ],
-      ),
-    );
+      );
+    },
+  );
+
+  return meetings;
+}
+
+void _navigateToMeeting(
+    BuildContext context, String userName, String lobbyName, String name) {
+  Navigator.pushNamed(
+    context,
+    Meeting.routeName,
+    arguments: MeetingArguments(userName, lobbyName, name),
+  );
+}
+
+class MeetingDataSource extends CalendarDataSource {
+  MeetingDataSource(List<SingleMeeting> source) {
+    appointments = source;
+  }
+
+  @override
+  DateTime getStartTime(int index) {
+    return appointments![index].from;
+  }
+
+  @override
+  DateTime getEndTime(int index) {
+    return appointments![index].to;
+  }
+
+  @override
+  String getSubject(int index) {
+    return appointments![index].eventName;
+  }
+
+  @override
+  Color getColor(int index) {
+    return appointments![index].background;
+  }
+
+  @override
+  bool isAllDay(int index) {
+    return appointments![index].isAllDay;
   }
 }
 
-class ActivitesWidget extends StatelessWidget {
-  const ActivitesWidget({
-    Key? key,
-    required this.width,
-    required this.height,
-  }) : super(key: key);
+class SingleMeeting {
+  SingleMeeting(this.eventName, this.from, this.to, this.background,
+      this.isAllDay, this.userName, this.lobbyName, this.name);
 
-  final double width;
-  final double height;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(height * .01),
-      width: width * .45,
-      margin:
-          EdgeInsets.symmetric(horizontal: width * .01, vertical: height * .01),
-      decoration: BoxDecoration(
-        color: Color.fromRGBO(26, 55, 77, 1),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Column(
-        children: const [
-          Text(
-            'Activities',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class RoomsWidget extends StatelessWidget {
-  final _rooms = RoomService().getRooms;
-
-  RoomsWidget({
-    Key? key,
-    required this.width,
-    required this.height,
-  }) : super(key: key);
-
-  final double width;
-  final double height;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: width * .45,
-      padding: EdgeInsets.all(height * .01),
-      margin:
-          EdgeInsets.symmetric(horizontal: width * .01, vertical: height * .01),
-      decoration: BoxDecoration(
-        color: Color.fromRGBO(26, 55, 77, 1),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Column(
-        children: [
-          const Text(
-            'My Rooms',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-          ),
-          // OutlinedIconButton(
-          //   Buttontext: 'Add new',
-          //   onPressedFunction: () {},
-          // ),
-          SizedBox(
-            width: width * .1,
-          ),
-          OutlinedIconButton(
-            Buttontext: 'Join Now',
-            onPressedFunction: () {
-              _navigateToMeeting(context);
-            },
-          ),
-          WhiteDivider(),
-          Container(
-            height: height * .28,
-            width: width * .4,
-            child: FutureBuilder(
-                future: _rooms(),
-                builder: (context, AsyncSnapshot snapshot) {
-                  if (!snapshot.hasData) {
-                    return Center(child: CircularProgressIndicator());
-                  } else {
-                    var _roomList = snapshot.data!.results;
-                    return ListView.builder(
-                      itemCount: _roomList.length,
-                      scrollDirection: Axis.vertical,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Column(
-                          children: [
-                            Text(
-                              _roomList[index].name,
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            Divider(
-                              color: Colors.indigo,
-                            )
-                          ],
-                        );
-                      },
-                    );
-                  }
-                }),
-          )
-        ],
-      ),
-    );
-  }
-
-  void _navigateToMeeting(BuildContext context) {
-    Navigator.pushNamed(context, Meeting.routeName);
-  }
-}
-
-class DashboardSideDrawer extends StatelessWidget {
-  const DashboardSideDrawer({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
-    return Drawer(
-      backgroundColor: Colors.blueGrey,
-      width: width * .7,
-      child: ListView(
-        children: [
-          DrawerHeader(
-            decoration: const BoxDecoration(
-              color: Color.fromRGBO(26, 55, 77, 1),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                CircleAvatar(
-                  radius: width * .11,
-                  backgroundColor: Colors.white,
-                ),
-                const SizedBox(
-                  child: Text(
-                    'Profile Name',
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
-          ListTile(
-            title: const Text('Payment'),
-            onTap: (() {}),
-          ),
-          WhiteDivider(),
-          ListTile(
-            title: const Text('My Rooms'),
-            onTap: (() {}),
-          ),
-          WhiteDivider(),
-          ListTile(
-            title: const Text('Contact Us'),
-            onTap: (() {}),
-          ),
-          WhiteDivider(),
-          ListTile(
-            title: const Text('Logout'),
-            onTap: (() {}),
-          )
-        ],
-      ),
-    );
-  }
+  String eventName;
+  DateTime from;
+  DateTime to;
+  Color background;
+  bool isAllDay;
+  String userName;
+  String lobbyName;
+  String name;
 }

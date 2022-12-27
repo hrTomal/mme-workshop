@@ -10,7 +10,7 @@ import '../models/login_token.dart';
 
 class LoginService {
   Future<CountryInfo> getCountries() async {
-    const countriesApiURL = "${APIurls.liveURL}locations/countries/";
+    const countriesApiURL = "${APIurls.devURL}locations/countries/";
     var client = http.Client();
     var coutries;
     try {
@@ -30,7 +30,7 @@ class LoginService {
 
   Future<LoginToken> Login(
       String phone, String password, String country_code) async {
-    const loginApiURL = "${APIurls.liveURL}users/token/";
+    const loginApiURL = "${APIurls.devURL}users/token/";
     var client = http.Client();
     var responseToken;
     try {

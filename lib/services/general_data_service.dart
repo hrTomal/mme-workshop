@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:meetingme/models/user.dart';
 
 import '../constants/urls.dart';
@@ -7,9 +8,9 @@ import '../constants/urls.dart';
 import 'package:http/http.dart' as http;
 
 class DataService {
-  getUserInfo(token) async {
-    var accessToken = token.access;
-    const userInfoApiURL = "${APIurls.liveURL}users/me/";
+  getUserInfo() async {
+    var accessToken = await SessionManager().get("token");
+    const userInfoApiURL = "${APIurls.devURL}users/me/";
     var client = http.Client();
     User? userInfo;
     try {

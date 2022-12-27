@@ -83,7 +83,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void _navigateToLoginScreen(BuildContext context) {
-    var countries = loadCountries();
+    //var countries = loadCountries();
     Navigator.pushNamed(context, LoginScreen.routeName);
   }
 }

@@ -4,6 +4,7 @@ import 'package:meetingme/bloc/login/login_bloc.dart';
 import 'package:meetingme/bloc/login/login_state.dart';
 import 'package:meetingme/models/user.dart';
 import 'package:meetingme/screens/dashboard/user_dashboard_screen.dart';
+import 'package:meetingme/screens/fees/fees_screeen.dart';
 import 'package:meetingme/screens/live_meeting/meeting_screen.dart';
 import 'package:meetingme/screens/login/login_screen.dart';
 import 'package:meetingme/screens/splash/splash_screen.dart';
@@ -68,6 +69,13 @@ class MyApp extends StatelessWidget {
                   lobbyName: args.lobbyName,
                   name: args.name,
                 );
+              },
+            );
+          }
+          if (settings.name == Fees.routeName) {
+            return MaterialPageRoute(
+              builder: (_) {
+                return Fees();
               },
             );
           }

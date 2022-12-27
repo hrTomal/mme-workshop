@@ -46,6 +46,8 @@ dependencies:
     git:
       url: https://github.com/dispersik/jitsi_meet_fork
       ref: master
+  flutter_session_manager: ^1.0.3
+  fluttertoast: ^8.1.1
 
 dev_dependencies:
   flutter_test:
