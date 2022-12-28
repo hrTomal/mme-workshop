@@ -7,8 +7,8 @@ import 'package:meetingme/models/fee_info.dart';
 import '../models/room_info.dart';
 
 class FeesService {
-  Future<FeeInfo> getUserFees() async {
-    const apiURL = "${APIurls.devURL}payment/user-fees/";
+  Future<List<FeeInfo>> getUserFees() async {
+    const apiURL = "${APIurls.devURL}payments/room-user-fees/payable/";
     var client = http.Client();
     var _fees;
     try {
@@ -20,8 +20,9 @@ class FeesService {
       });
       if (response.statusCode == 200) {
         var jsonString = response.body;
-        var jsonMap = json.decode(jsonString);
-        _fees = FeeInfo.fromJson(jsonMap);
+        List jsonMap = json.decode(jsonString);
+        _fees = jsonMap.map((e) => FeeInfo.fromJson(e)).toList();
+        //FeeInfo.fromJson(jsonMap);
       }
     } catch (ex) {
       print(ex);

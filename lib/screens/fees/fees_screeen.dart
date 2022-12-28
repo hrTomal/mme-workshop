@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:meetingme/screens/fees/payment_screen.dart';
 
 import '../../models/fee_info.dart';
 import '../../services/fees_data_service.dart';
@@ -16,8 +17,27 @@ class _Fees extends State<Fees> {
   static const int numItems = 10;
   List<bool> selected = List<bool>.generate(numItems, (int index) => false);
 
-  final _fees = FeesService().getUserFees();
+  Future<List<FeeInfo>> _fees = FeesService().getUserFees();
   List<DataRow> _dataRows = [];
+
+  late List<SingleFeeInfo> selectedFees;
+  late List<String> selectedFeeIds;
+
+  @override
+  void initState() {
+    selectedFeeIds = [];
+    super.initState();
+  }
+
+  onSelectedRow(bool selected, SingleFeeInfo fee) async {
+    setState(() {
+      if (selected) {
+        selectedFeeIds.add(fee.id!);
+      } else {
+        selectedFeeIds.remove(fee.id!);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +50,10 @@ class _Fees extends State<Fees> {
           width: MediaQuery.of(context).size.width * .2,
           child: FittedBox(
             child: FloatingActionButton(
-              onPressed: () {},
+              onPressed: () {
+                //print(selectedFeeIds);
+                Navigator.pushNamed(context, PaymentWebView.routeName);
+              },
               child: const FittedBox(
                 child: Text('Pay Now'),
               ),
@@ -43,17 +66,16 @@ class _Fees extends State<Fees> {
             Container(
               child: FutureBuilder(
                   future: _fees,
-                  builder:
-                      (BuildContext context, AsyncSnapshot<FeeInfo> snapshot) {
+                  builder: (BuildContext context,
+                      AsyncSnapshot<List<FeeInfo>> snapshot) {
                     if (snapshot.hasData) {
-                      var res = snapshot.data!.results;
-                      var test = res!
+                      var res = snapshot.data;
+                      var fees = res!
                           .map(((e) => SingleFeeInfo(
-                                id: e.id,
-                                amount: e.roomFee!.fee!.amount,
-                                feeMonth: e.roomFee!.feeMonth,
-                                feeYear: e.roomFee!.year,
-                              )))
+                              id: e.id,
+                              amount: e.roomFee!.fee!.amount,
+                              feeMonth: e.roomFee!.feeMonth,
+                              feeYear: e.roomFee!.year)))
                           .toList();
 
                       return SizedBox(
@@ -72,9 +94,15 @@ class _Fees extends State<Fees> {
                             ),
                           ],
                           rows: <DataRow>[
-                            ...test.map(
+                            ...fees.map(
                               (e) => DataRow(
-                                  onSelectChanged: (value) => {},
+                                  selected: selectedFeeIds.contains(e.id),
+                                  onSelectChanged: (value) {
+                                    onSelectedRow(value!, e);
+                                  },
+                                  onLongPress: () {
+                                    onSelectedRow(true, e);
+                                  },
                                   cells: [
                                     DataCell(Text(e.amount ?? '')),
                                     DataCell(Text(e.feeMonth ?? '')),

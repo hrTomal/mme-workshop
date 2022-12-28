@@ -5,6 +5,7 @@ import 'package:meetingme/bloc/login/login_state.dart';
 import 'package:meetingme/models/user.dart';
 import 'package:meetingme/screens/dashboard/user_dashboard_screen.dart';
 import 'package:meetingme/screens/fees/fees_screeen.dart';
+import 'package:meetingme/screens/fees/payment_screen.dart';
 import 'package:meetingme/screens/live_meeting/meeting_screen.dart';
 import 'package:meetingme/screens/login/login_screen.dart';
 import 'package:meetingme/screens/splash/splash_screen.dart';
@@ -48,6 +49,11 @@ class MyApp extends StatelessWidget {
           if (settings.name == LoginScreen.routeName) {
             return MaterialPageRoute(
               builder: (_) => LoginScreen(),
+            );
+          }
+          if (settings.name == PaymentWebView.routeName) {
+            return MaterialPageRoute(
+              builder: (_) => const PaymentWebView(),
             );
           }
           if (settings.name == UserDashboard.routeName) {
