@@ -1,7 +1,7 @@
 class RoomInfo {
   int? count;
-  String? next;
-  String? previous;
+  Null? next;
+  Null? previous;
   List<Results>? results;
   int? totalPages;
   int? currentPage;
@@ -44,61 +44,50 @@ class RoomInfo {
 
 class Results {
   String? id;
-  bool? isAuthor;
-  bool? isTeacher;
-  String? createdAt;
-  String? updatedAt;
-  bool? isActive;
-  String? name;
-  String? code;
-  bool? isAdministrationRoom;
-  String? author;
-  List<String>? categories;
-  List<String>? user;
+  Subject? subject;
+  String? description;
+  String? room;
 
-  Results(
-      {this.id,
-      this.isAuthor,
-      this.isTeacher,
-      this.createdAt,
-      this.updatedAt,
-      this.isActive,
-      this.name,
-      this.code,
-      this.isAdministrationRoom,
-      this.author,
-      this.categories,
-      this.user});
+  Results({this.id, this.subject, this.description, this.room});
 
   Results.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    isAuthor = json['is_author'];
-    isTeacher = json['is_teacher'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
-    isActive = json['is_active'];
-    name = json['name'];
-    code = json['code'];
-    isAdministrationRoom = json['is_administration_room'];
-    author = json['author'];
-    categories = json['categories'].cast<String>();
-    user = json['user'].cast<String>();
+    subject =
+        json['subject'] != null ? new Subject.fromJson(json['subject']) : null;
+    description = json['description'];
+    room = json['room'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
-    data['is_author'] = this.isAuthor;
-    data['is_teacher'] = this.isTeacher;
-    data['created_at'] = this.createdAt;
-    data['updated_at'] = this.updatedAt;
-    data['is_active'] = this.isActive;
-    data['name'] = this.name;
-    data['code'] = this.code;
-    data['is_administration_room'] = this.isAdministrationRoom;
-    data['author'] = this.author;
-    data['categories'] = this.categories;
-    data['user'] = this.user;
+    if (this.subject != null) {
+      data['subject'] = this.subject!.toJson();
+    }
+    data['description'] = this.description;
+    data['room'] = this.room;
+    return data;
+  }
+}
+
+class Subject {
+  String? id;
+  String? title;
+  String? description;
+
+  Subject({this.id, this.title, this.description});
+
+  Subject.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    title = json['title'];
+    description = json['description'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['title'] = this.title;
+    data['description'] = this.description;
     return data;
   }
 }

@@ -1,9 +1,7 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:meetingme/screens/dashboard/widgets/dashboard_side_drawer.dart';
-import 'package:meetingme/widgets/constant_widgets.dart';
+import 'package:meetingme/screens/dashboard/widgets/notice_widget.dart';
+import 'package:meetingme/screens/dashboard/widgets/rooms_widget.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import '../../models/user.dart';
@@ -26,9 +24,7 @@ class _UserDashboardState extends State<UserDashboard>
   late TabController _controller;
 
   bool? isAudioOnly = true;
-
   bool? isAudioMuted = true;
-
   bool? isVideoMuted = true;
 
   _UserDashboardState(this.userInfo);
@@ -116,12 +112,12 @@ class _UserDashboardState extends State<UserDashboard>
                 child: Column(
                   children: [
                     Container(
-                      height: (height - topSectionHeight) * .68,
+                      height: (height - topSectionHeight) * .65,
                       color: Colors.white,
                       child: ListView(
                         children: [
                           TabBar(
-                            labelColor: const Color.fromRGBO(105, 152, 171, 1),
+                            labelColor: Color.fromARGB(255, 71, 88, 95),
                             automaticIndicatorColorAdjustment: true,
                             controller: _controller,
                             tabs: const [
@@ -138,69 +134,83 @@ class _UserDashboardState extends State<UserDashboard>
                             ],
                           ),
                           Container(
-                            height: (height - topSectionHeight) * .55,
+                            height: (height - topSectionHeight) * .52,
                             decoration: BoxDecoration(
-                              color: const Color.fromRGBO(145, 220, 250, 1),
+                              color: Color.fromARGB(255, 232, 242, 255),
                               borderRadius: BorderRadius.all(
                                 Radius.circular(width * .03),
                               ),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color:
+                                      const Color.fromARGB(255, 232, 242, 255),
+                                  spreadRadius: 3,
+                                  blurRadius: 5,
+                                  offset: Offset(
+                                      3, 3), // changes position of shadow
+                                ),
+                              ],
                             ),
                             child: TabBarView(
                               controller: _controller,
                               children: [
                                 Container(
-                                    padding:
-                                        EdgeInsets.only(bottom: height * .05),
-                                    child: FutureBuilder(
-                                      future: meetings,
-                                      builder: ((context, snapshot) {
-                                        if (snapshot.hasData) {
-                                          return SfCalendar(
-                                            view: CalendarView.month,
-                                            allowedViews: const [
-                                              CalendarView.day,
-                                              CalendarView.week,
-                                              CalendarView.workWeek,
-                                              CalendarView.month,
-                                              CalendarView.timelineDay,
-                                              CalendarView.timelineWeek,
-                                              CalendarView.timelineWorkWeek,
-                                            ],
-                                            dataSource:
-                                                MeetingDataSource(_getMeetings(
-                                              snapshot,
-                                              userInfo,
-                                            )),
-                                            showNavigationArrow: true,
-                                            onTap: calendarTapped,
-                                          );
-                                        } else {
-                                          return const Center(
-                                              child:
-                                                  CircularProgressIndicator());
-                                        }
-                                      }),
-                                    )
-
-                                    // SfCalendar(
-                                    //   view: CalendarView.month,
-                                    //   dataSource:
-                                    //       MeetingDataSource(_getMeetings()),
-                                    //   showNavigationArrow: true,
-                                    // ),
-                                    ),
-                                const Center(
-                                  child: Text('Notice Section'),
+                                  padding:
+                                      EdgeInsets.only(bottom: height * .012),
+                                  child: FutureBuilder(
+                                    future: meetings,
+                                    builder: ((context, snapshot) {
+                                      if (snapshot.hasData) {
+                                        return SfCalendar(
+                                          view: CalendarView.month,
+                                          allowedViews: const [
+                                            CalendarView.day,
+                                            CalendarView.week,
+                                            CalendarView.workWeek,
+                                            CalendarView.month,
+                                            CalendarView.timelineDay,
+                                            CalendarView.timelineWeek,
+                                            CalendarView.timelineWorkWeek,
+                                          ],
+                                          dataSource:
+                                              MeetingDataSource(_getMeetings(
+                                            snapshot,
+                                            userInfo,
+                                          )),
+                                          showNavigationArrow: true,
+                                          onTap: calendarTapped,
+                                        );
+                                      } else {
+                                        return SfCalendar(
+                                          view: CalendarView.month,
+                                          allowedViews: const [
+                                            CalendarView.day,
+                                            CalendarView.week,
+                                            CalendarView.workWeek,
+                                            CalendarView.month,
+                                            CalendarView.timelineDay,
+                                            CalendarView.timelineWeek,
+                                            CalendarView.timelineWorkWeek,
+                                          ],
+                                          showNavigationArrow: true,
+                                        );
+                                      }
+                                    }),
+                                  ),
                                 ),
+                                NoticeWidget(),
                               ],
                             ),
                           ),
                         ],
                       ),
                     ),
-                    SizedBox(
-                      height: (height - topSectionHeight) * .01,
-                    ),
+
+                    // SizedBox(
+                    //   height: (height - topSectionHeight) * .002,
+                    // ),
+
+                    //After the Calendar
                     Container(
                       height: (height - topSectionHeight) * .24,
                       child: Column(
@@ -208,10 +218,10 @@ class _UserDashboardState extends State<UserDashboard>
                           // Container(
                           //   height: (height - topSectionHeight) * .24 * .2,
                           //   decoration: const BoxDecoration(
-                          //     color: const Color.fromRGBO(105, 152, 171, 1),
+                          //     color: Color.fromARGB(255, 232, 242, 255),
                           //     boxShadow: [
                           //       BoxShadow(
-                          //         color: Colors.blueGrey,
+                          //         color: Color.fromARGB(255, 232, 255, 255),
                           //         spreadRadius: 2,
                           //         blurRadius: 3,
                           //         offset: Offset(
@@ -223,108 +233,17 @@ class _UserDashboardState extends State<UserDashboard>
                           //     child: Text(
                           //       'My Rooms',
                           //       style: TextStyle(
-                          //         color: Colors.white,
+                          //         color: Colors.black,
                           //       ),
                           //     ),
                           //   ),
                           // ),
-                          Expanded(
-                            child: Container(
-                                width: width - (width * .050),
-                                color: Colors.white,
-                                child: FutureBuilder(
-                                  future: _rooms,
-                                  builder: ((context, snapshot) {
-                                    if (snapshot.hasData) {
-                                      var _roomList = snapshot.data!.results;
-                                      return ListView.builder(
-                                          scrollDirection: Axis.horizontal,
-                                          itemCount: _roomList!.length,
-                                          itemBuilder: (context, index) {
-                                            return Container(
-                                                width:
-                                                    (width - (width * .050)) *
-                                                        .27,
-                                                height: (height -
-                                                        topSectionHeight) *
-                                                    .24 *
-                                                    .8,
-                                                margin: EdgeInsets.symmetric(
-                                                  horizontal: (height -
-                                                          topSectionHeight) *
-                                                      .015,
-                                                  vertical: (height -
-                                                          topSectionHeight) *
-                                                      .01,
-                                                ),
-                                                decoration: BoxDecoration(
-                                                  color: const Color.fromRGBO(
-                                                      105, 152, 171, 1),
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                    Radius.circular(
-                                                        width * .03),
-                                                  ),
-                                                  boxShadow: const [
-                                                    BoxShadow(
-                                                      color: Colors.blueGrey,
-                                                      // Color.fromRGBO(
-                                                      //     105, 152, 171, 1),
-                                                      spreadRadius: 3,
-                                                      blurRadius: 5,
-                                                      offset: Offset(3,
-                                                          3), // changes position of shadow
-                                                    ),
-                                                  ],
-                                                ),
-                                                child: GestureDetector(
-                                                  onTap: () {},
-                                                  child: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      Text(
-                                                        _roomList[index].name ??
-                                                            '',
-                                                        style: const TextStyle(
-                                                            color:
-                                                                Colors.white),
-                                                      ),
-                                                      WhiteDivider(),
-                                                      Text(
-                                                        _roomList[index].code ??
-                                                            '',
-                                                        style: const TextStyle(
-                                                            color:
-                                                                Colors.white),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ));
-                                          });
-                                    } else {
-                                      return Center(
-                                          child: CircularProgressIndicator());
-                                    }
-                                  }),
-                                )
-                                //
-                                // Container(
-                                //   width: (width - (width * .050)) * .3,
-                                //   height: (height - topSectionHeight) * .24 * .8,
-                                //   margin: EdgeInsets.symmetric(
-                                //     horizontal: (height - topSectionHeight) * .01,
-                                //   ),
-                                //   decoration: BoxDecoration(
-                                //     color: Color.fromRGBO(105, 152, 171, 1),
-                                //     borderRadius: BorderRadius.all(
-                                //       Radius.circular(width * .03),
-                                //     ),
-                                //   ),
-                                // ),
-                                ),
-                          )
+                          RoomsWidget(
+                            width: width,
+                            rooms: _rooms,
+                            height: height,
+                            topSectionHeight: topSectionHeight,
+                          ),
                         ],
                       ),
                     ),
@@ -422,51 +341,6 @@ class _UserDashboardState extends State<UserDashboard>
         },
       );
     }
-
-    // showDialog(
-    //     context: context,
-    //     builder: (BuildContext context) {
-    //       return AlertDialog(
-    //         title: Container(child: Text('test')),
-    //         content: Container(
-    //           height: 80,
-    //           child: Column(
-    //             children: <Widget>[
-    //               Row(
-    //                 children: <Widget>[
-    //                   Text(
-    //                     'test',
-    //                     style: TextStyle(
-    //                       fontWeight: FontWeight.w400,
-    //                       fontSize: 20,
-    //                     ),
-    //                   ),
-    //                 ],
-    //               ),
-    //               Row(
-    //                 children: <Widget>[
-    //                   Text('tttt'),
-    //                 ],
-    //               ),
-    //               Row(
-    //                 children: <Widget>[
-    //                   Text('xxx',
-    //                       style: TextStyle(
-    //                           fontWeight: FontWeight.w400, fontSize: 15)),
-    //                 ],
-    //               )
-    //             ],
-    //           ),
-    //         ),
-    //         actions: <Widget>[
-    //           ElevatedButton(
-    //               onPressed: () {
-    //                 Navigator.of(context).pop();
-    //               },
-    //               child: Text('close'))
-    //         ],
-    //       );
-    //     });
   }
 
   _onAudioOnlyChanged(bool? value) {
@@ -525,7 +399,7 @@ _getMeetings(values, userInfo) {
           element.meeting!.name ?? '',
           startTime,
           endTime,
-          const Color(0xFF0F8644),
+          const Color.fromRGBO(0, 29, 51, 1),
           false,
           userName,
           lobbyName,

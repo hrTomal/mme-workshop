@@ -8,7 +8,7 @@ import '../models/room_info.dart';
 
 class RoomService {
   Future<RoomInfo> getRooms() async {
-    const apiURL = "${APIurls.devURL}rooms/";
+    const apiURL = "${APIurls.devURL}rooms/room-subjects/";
     var client = http.Client();
     var rooms;
     try {
@@ -34,7 +34,7 @@ class MeetingRoomService {
   Future<MeetingRoom> getMeetingRooms() async {
     //const meetingRoomsUrl = "${APIurls.devURL}meeting/room-meetings/";
     const meetingRoomsUrl =
-        "http://dev.meetingme.live/api/meeting/room-meetings/";
+        "http://dev.meetingme.live/api/meetings/room-subject-meetings/";
     var client = http.Client();
     var rooms;
     try {

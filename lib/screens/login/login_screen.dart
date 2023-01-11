@@ -32,17 +32,29 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final _countries = LoginService().getCountries();
 
-  // Future<CountryInfo> loadCountries() async {
-  //   var data = await LoginService().getCountries();
-  //   return data;
-  // }
-
   @override
   void initState() {
     loginBloc = BlocProvider.of<LoginBloc>(context);
-    //loadCountries();
     setState(() {});
     super.initState();
+  }
+
+  // Dialog error
+  _showDialog(context) {
+    return showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+              title: Text('Error'),
+              content: Text('Username or password wrong'),
+              actions: <Widget>[
+                ElevatedButton(
+                  child: Text('Close me!'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            ));
   }
 
   @override
@@ -53,7 +65,20 @@ class _LoginScreenState extends State<LoginScreen> {
     final msg = BlocBuilder(
       builder: (context, state) {
         if (state is ErrorLoginState) {
-          return Text(state.message);
+          return AlertDialog(
+            title: Text('Error'),
+            content: Text(state.message),
+            actions: <Widget>[
+              ElevatedButton(
+                child: Text('Close me!'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          );
+
+          // Text(state.message);
         } else if (state is LoginLoadingState) {
           return const Center(
             child: CircularProgressIndicator(),
@@ -70,129 +95,142 @@ class _LoginScreenState extends State<LoginScreen> {
           if (state is UserLoginSuccessState) {
             Navigator.pushNamed(context, UserDashboard.routeName,
                 arguments: state.userInfo);
-          } else {
-            Navigator.pushNamed(context, SplashScreen.routeName);
           }
         },
-        child: SafeArea(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                height: deviceHeight * .08,
-                padding: const EdgeInsets.symmetric(horizontal: 40.0),
-                child: Image.asset('assets/images/meetingme_logo.jpg'),
-              ),
-              const SizedBox(
-                height: 40,
-              ),
-              FutureBuilder(
-                  future: _countries,
-                  builder: (BuildContext context,
-                      AsyncSnapshot<CountryInfo> snapshot) {
-                    if (snapshot.hasData) {
-                      /// When the result of the future call respond and has data show that data
-                      var _countriesForDropDown = snapshot.data!.results;
-                      //print(dat.data!.results);
-                      return DropdownButton(
-                        hint: const Text('Country'),
-                        value: _selectedCountry,
-                        onChanged: (newValue) {
-                          setState(() {
-                            _selectedCountry = newValue;
-                          });
-                        },
-                        items: _countriesForDropDown
-                            .map<DropdownMenuItem<String>>((Country value) {
-                          return DropdownMenuItem<String>(
-                            value: value.country_code,
-                            child: Text('${value.name!}(${value.phone_code!})'),
-                          );
-                        }).toList(),
+        child: BlocBuilder<LoginBloc, LoginStates>(
+          builder: (context, state) {
+            if (state is ErrorLoginState) {
+              //return LoginInitState();
+              return AlertDialog(
+                title: Text('Error'),
+                content: Text(state.message),
+                actions: <Widget>[
+                  ElevatedButton(
+                    child: Text('Close me!'),
+                    onPressed: () {
+                      loginBloc.add(
+                        InitialEvent(),
                       );
-                    }
-
-                    /// While is no data show this
-                    return const Center(
-                      child: CupertinoActivityIndicator(),
-                    );
-                  }),
-              // DropdownButton(
-              //   hint: const Text('Country'),
-              //   value: _selectedCountry,
-              //   onChanged: (newValue) {
-              //     setState(() {
-              //       _selectedCountry = newValue;
-              //     });
-              //   },
-              //   items:
-              //       _countries.map<DropdownMenuItem<String>>((Country value) {
-              //     return DropdownMenuItem<String>(
-              //       value: value.country_code,
-              //       child: Text('${value.name!}(${value.phone_code!})'),
-              //     );
-              //   }).toList(),
-              // ),
-              const SizedBox(
-                height: 10,
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: deviceWidth * .125),
-                child: TextFieldContainer(
-                  child: TextField(
-                    textAlign: TextAlign.center,
-                    controller: phone,
-                    keyboardType: TextInputType.number,
-                    decoration: roundedInputFieldDecoration.copyWith(
-                      hintText: "Phone No",
-                      icon: const Icon(Icons.phone),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: deviceWidth * .125),
-                child: TextFieldContainer(
-                  child: TextField(
-                    textAlign: TextAlign.center,
-                    obscureText: true,
-                    controller: password,
-                    decoration: roundedInputFieldDecoration.copyWith(
-                      hintText: "Password",
-                      icon: const Icon(Icons.lock_clock_outlined),
-                    ),
-                  ),
-                ),
-              ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.deepPurple,
-                ),
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Text(
-                    'Login',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                onPressed: () {
-                  loginBloc.add(
-                    LoginButtonPressed(
-                      phone: phone.text, //'01954492600'
-                      password: password.text, //'1234'
-                      country_code: 'BD', //'BD' _selectedCountry!
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
+                      Navigator.pushNamed(context, LoginScreen.routeName);
+                    },
+                  )
+                ],
+              );
+            } else if (state is LoginLoadingState) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else {
+              return LoginWidget(deviceHeight, deviceWidth);
+            }
+          },
         ),
+      ),
+    );
+  }
+
+  SafeArea LoginWidget(double deviceHeight, double deviceWidth) {
+    return SafeArea(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            height: deviceHeight * .08,
+            padding: const EdgeInsets.symmetric(horizontal: 40.0),
+            child: Image.asset('assets/images/meetingme_logo.jpg'),
+          ),
+          const SizedBox(
+            height: 40,
+          ),
+          FutureBuilder(
+              future: _countries,
+              builder:
+                  (BuildContext context, AsyncSnapshot<CountryInfo> snapshot) {
+                if (snapshot.hasData) {
+                  /// When the result of the future call respond and has data show that data
+                  var _countriesForDropDown = snapshot.data!.results;
+                  //print(dat.data!.results);
+                  return DropdownButton(
+                    hint: const Text('Country'),
+                    value: _selectedCountry,
+                    onChanged: (newValue) {
+                      setState(() {
+                        _selectedCountry = newValue;
+                      });
+                    },
+                    items: _countriesForDropDown
+                        .map<DropdownMenuItem<String>>((Country value) {
+                      return DropdownMenuItem<String>(
+                        value: value.country_code,
+                        child: Text('${value.name!}(${value.phone_code!})'),
+                      );
+                    }).toList(),
+                  );
+                }
+
+                /// While is no data show this
+                return const Center(
+                  child: CupertinoActivityIndicator(),
+                );
+              }),
+          const SizedBox(
+            height: 10,
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: deviceWidth * .125),
+            child: TextFieldContainer(
+              child: TextField(
+                textAlign: TextAlign.center,
+                controller: phone,
+                keyboardType: TextInputType.number,
+                decoration: roundedInputFieldDecoration.copyWith(
+                  hintText: "Phone No",
+                  icon: const Icon(Icons.phone),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: deviceWidth * .125),
+            child: TextFieldContainer(
+              child: TextField(
+                textAlign: TextAlign.center,
+                obscureText: true,
+                controller: password,
+                decoration: roundedInputFieldDecoration.copyWith(
+                  hintText: "Password",
+                  icon: const Icon(Icons.lock_clock_outlined),
+                ),
+              ),
+            ),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.deepPurple,
+            ),
+            child: const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10.0),
+              child: Text(
+                'Login',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            onPressed: () {
+              loginBloc.add(
+                LoginButtonPressed(
+                  phone: phone.text, //'01954492600'
+                  password: password.text, //'1234'
+                  country_code: 'BD', //'BD' _selectedCountry!
+                ),
+              );
+            },
+          ),
+        ],
       ),
     );
   }

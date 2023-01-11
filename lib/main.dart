@@ -5,6 +5,7 @@ import 'package:meetingme/bloc/login/login_state.dart';
 import 'package:meetingme/models/user.dart';
 import 'package:meetingme/screens/dashboard/user_dashboard_screen.dart';
 import 'package:meetingme/screens/fees/fees_screeen.dart';
+import 'package:meetingme/screens/fees/payment_history.dart';
 import 'package:meetingme/screens/fees/payment_screen.dart';
 import 'package:meetingme/screens/live_meeting/meeting_screen.dart';
 import 'package:meetingme/screens/login/login_screen.dart';
@@ -52,8 +53,11 @@ class MyApp extends StatelessWidget {
             );
           }
           if (settings.name == PaymentWebView.routeName) {
+            final args = settings.arguments as String;
             return MaterialPageRoute(
-              builder: (_) => const PaymentWebView(),
+              builder: (_) => PaymentWebView(
+                paymentUrl: args,
+              ),
             );
           }
           if (settings.name == UserDashboard.routeName) {
@@ -82,6 +86,13 @@ class MyApp extends StatelessWidget {
             return MaterialPageRoute(
               builder: (_) {
                 return Fees();
+              },
+            );
+          }
+          if (settings.name == PaymentHistory.routeName) {
+            return MaterialPageRoute(
+              builder: (_) {
+                return PaymentHistory();
               },
             );
           }

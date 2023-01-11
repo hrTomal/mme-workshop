@@ -4,7 +4,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:meetingme/models/user.dart';
 import 'package:meetingme/screens/dashboard/widgets/dashboard_side_drawer.dart';
-import 'package:meetingme/screens/dashboard/widgets/rooms_container.dart';
+import 'package:meetingme/screens/dashboard/widgets/rooms_container_old.dart';
 
 class UserDashboard extends StatefulWidget {
   const UserDashboard({super.key, required this.userInfo});

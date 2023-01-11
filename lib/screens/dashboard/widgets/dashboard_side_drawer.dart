@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
+import 'package:meetingme/screens/fees/payment_history.dart';
 import 'package:meetingme/screens/login/login_screen.dart';
 import 'package:meetingme/screens/splash/splash_screen.dart';
 
@@ -68,42 +69,72 @@ class _DashboardSideDrawerState extends State<DashboardSideDrawer> {
               ],
             ),
           ),
-          ListTile(
+          ExpansionTile(
             title: const Text(
-              'Payment',
-              style: const TextStyle(
+              "Payment",
+              style: TextStyle(
                 color: Colors.white,
               ),
             ),
-            onTap: (() {
-              Navigator.pushNamed(context, Fees.routeName);
-            }),
+            childrenPadding: const EdgeInsets.only(
+              left: 60,
+            ),
+            children: [
+              ListTile(
+                title: const Text(
+                  'Payable',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+                onTap: (() {
+                  Navigator.pushNamed(
+                    context,
+                    Fees.routeName,
+                  );
+                }),
+              ),
+              ListTile(
+                title: const Text(
+                  'Payment History',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+                onTap: (() {
+                  Navigator.pushNamed(
+                    context,
+                    PaymentHistory.routeName,
+                  );
+                }),
+              ),
+            ],
           ),
-          WhiteDivider(),
+          const WhiteDivider(),
           ListTile(
             title: const Text(
               'My Rooms',
-              style: const TextStyle(
+              style: TextStyle(
                 color: Colors.white,
               ),
             ),
             onTap: (() {}),
           ),
-          WhiteDivider(),
+          const WhiteDivider(),
           ListTile(
             title: const Text(
               'Contact Us',
-              style: const TextStyle(
+              style: TextStyle(
                 color: Colors.white,
               ),
             ),
             onTap: (() {}),
           ),
-          WhiteDivider(),
+          const WhiteDivider(),
           ListTile(
             title: const Text(
               'Logout',
-              style: const TextStyle(
+              style: TextStyle(
                 color: Colors.white,
               ),
             ),

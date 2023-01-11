@@ -44,6 +44,8 @@ class LoginService {
         var jsonString = response.body;
         var jsonMap = json.decode(jsonString);
         responseToken = LoginToken.fromJson(jsonMap);
+      } else {
+        responseToken = LoginToken('error', 'error');
       }
     } catch (ex) {
       print(ex);

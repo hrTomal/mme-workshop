@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:meetingme/screens/fees/payment_screen.dart';
 
-import '../../models/fee_info.dart';
+import '../../models/fee/fee_info.dart';
 import '../../services/fees_data_service.dart';
 
 class Fees extends StatefulWidget {
@@ -45,14 +45,27 @@ class _Fees extends State<Fees> {
       home: Scaffold(
         appBar: AppBar(
           title: const Text('Meeting Me - Payments'),
+          backgroundColor: Color.fromRGBO(26, 55, 77, 1),
+          centerTitle: true,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
         ),
+
         floatingActionButton: Container(
           width: MediaQuery.of(context).size.width * .2,
           child: FittedBox(
             child: FloatingActionButton(
-              onPressed: () {
-                //print(selectedFeeIds);
-                Navigator.pushNamed(context, PaymentWebView.routeName);
+              onPressed: () async {
+                var aamarpayUrl =
+                    await FeesService().getAamarPayUrl(selectedFeeIds);
+                //print(aamarpayUrl.paymentUrl);
+                Navigator.pushNamed(
+                  context,
+                  PaymentWebView.routeName,
+                  arguments: aamarpayUrl.paymentUrl,
+                );
               },
               child: const FittedBox(
                 child: Text('Pay Now'),
