@@ -55,8 +55,10 @@ class _Fees extends State<Fees> {
 
         floatingActionButton: Container(
           width: MediaQuery.of(context).size.width * .2,
+          height: MediaQuery.of(context).size.height * .15,
           child: FittedBox(
             child: FloatingActionButton(
+              backgroundColor: Color.fromRGBO(26, 55, 77, 1),
               onPressed: () async {
                 var aamarpayUrl =
                     await FeesService().getAamarPayUrl(selectedFeeIds);
@@ -76,7 +78,7 @@ class _Fees extends State<Fees> {
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         body: Column(
           children: [
-            Container(
+            SizedBox(
               child: FutureBuilder(
                   future: _fees,
                   builder: (BuildContext context,
@@ -92,7 +94,7 @@ class _Fees extends State<Fees> {
                           .toList();
 
                       return SizedBox(
-                        height: 400,
+                        height: MediaQuery.of(context).size.height * .8,
                         child: DataTable(
                           showCheckboxColumn: true,
                           columns: const <DataColumn>[

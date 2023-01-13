@@ -32,7 +32,7 @@ class _UserDashboardState extends State<UserDashboard>
   @override
   void initState() {
     super.initState();
-    _controller = new TabController(length: 2, vsync: this);
+    _controller = TabController(length: 2, vsync: this);
   }
 
   @override

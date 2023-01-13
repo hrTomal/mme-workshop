@@ -91,3 +91,17 @@ class Subject {
     return data;
   }
 }
+
+class RoomArguments {
+  final String id;
+  final Subject subject;
+  final String description;
+  final String room;
+
+  RoomArguments(
+    this.id,
+    this.subject,
+    this.description,
+    this.room,
+  );
+}

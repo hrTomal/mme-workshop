@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:meetingme/screens/room/subject_sreen.dart';
 
 import '../../../models/room_info.dart';
 import '../../../widgets/constant_widgets.dart';
@@ -54,7 +55,23 @@ class RoomsWidget extends StatelessWidget {
                         ],
                       ),
                       child: GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.pushNamed(
+                            context,
+                            SubjectScreen.routeName,
+                            arguments: RoomArguments(
+                              _roomList[index].id ?? '',
+                              Subject(
+                                  id: _roomList[index].subject?.id ?? '',
+                                  title: _roomList[index].subject?.title ?? '',
+                                  description:
+                                      _roomList[index].subject?.description ??
+                                          ''),
+                              _roomList[index].description ?? '',
+                              _roomList[index].room ?? '',
+                            ),
+                          );
+                        },
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
