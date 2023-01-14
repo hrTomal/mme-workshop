@@ -38,78 +38,126 @@ class _AssignmentsWidgetState extends State<AssignmentsWidget> {
                 var hourString = dueDate.hour.toString();
                 var minuteString = dueDate.minute.toString();
                 var secondString = dueDate.second.toString();
-                return Padding(
-                  padding: EdgeInsets.symmetric(horizontal: width * .02),
-                  child: Card(
-                    color: const Color.fromARGB(255, 232, 242, 255),
-                    shadowColor: const Color.fromARGB(255, 232, 242, 255),
-                    elevation: width * .01,
-                    child: Container(
-                        padding: EdgeInsets.symmetric(
-                          vertical: width * .02,
-                          horizontal: width * .02,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Container(
-                              width: width * .19,
-                              height: height * .1,
-                              margin: EdgeInsets.only(right: width * 0.03),
-                              decoration: BoxDecoration(
-                                color: const Color.fromRGBO(26, 55, 77, 1),
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(width * .03),
-                                ),
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Text(
-                                    'Mark',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                      top: width * .012,
-                                    ),
-                                    child: Text(
-                                      allData[index].mark ?? '',
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: width * .045),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                            Column(
+                return GestureDetector(
+                  onTap: () {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            backgroundColor:
+                                const Color.fromARGB(255, 232, 242, 255),
+                            scrollable: true,
+                            content: Column(
                               children: [
-                                Text(
-                                  allData[index].name ?? '',
-                                  style: const TextStyle(
+                                const Text(
+                                  'Title',
+                                  style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                WhiteDivider(),
-                                Row(
-                                  children: [
-                                    const Text('Due Date: '),
-                                    Text(
-                                      '$hourString:$minuteString:$secondString $dayString-$monthString-$yearString',
-                                      style: TextStyle(
-                                        color: Colors.red,
-                                      ),
+                                Container(
+                                  width: width * 1,
+                                  margin: EdgeInsets.symmetric(
+                                      vertical: height * .01),
+                                  color: Colors.white,
+                                  child: Text(
+                                    allData[index].name ?? '',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
                                     ),
-                                  ],
+                                  ),
+                                ),
+                                const Text(
+                                  'Description',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Container(
+                                  width: width * 1,
+                                  margin: EdgeInsets.symmetric(
+                                      vertical: height * .01),
+                                  color: Colors.white,
+                                  child: Text(allData[index].description ?? ''),
                                 ),
                               ],
                             ),
-                          ],
-                        )),
+                          );
+                        });
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: width * .02),
+                    child: Card(
+                      color: const Color.fromARGB(255, 232, 242, 255),
+                      shadowColor: const Color.fromARGB(255, 232, 242, 255),
+                      elevation: width * .01,
+                      child: Container(
+                          padding: EdgeInsets.symmetric(
+                            vertical: width * .02,
+                            horizontal: width * .02,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Container(
+                                width: width * .19,
+                                height: height * .1,
+                                margin: EdgeInsets.only(right: width * 0.03),
+                                decoration: BoxDecoration(
+                                  color: const Color.fromRGBO(26, 55, 77, 1),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(width * .03),
+                                  ),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Text(
+                                      'Mark',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                        top: width * .012,
+                                      ),
+                                      child: Text(
+                                        allData[index].mark ?? '',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: width * .045),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Column(
+                                children: [
+                                  Text(
+                                    allData[index].name ?? '',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  WhiteDivider(),
+                                  Row(
+                                    children: [
+                                      const Text('Due Date: '),
+                                      Text(
+                                        '$hourString:$minuteString:$secondString $dayString-$monthString-$yearString',
+                                        style: TextStyle(
+                                          color: Colors.red,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          )),
+                    ),
                   ),
                 );
               },

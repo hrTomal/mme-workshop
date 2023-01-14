@@ -1,15 +1,15 @@
 import 'dart:convert';
 
 import 'package:flutter_session_manager/flutter_session_manager.dart';
+import 'package:meetingme/models/notice/notice.dart';
 import '../constants/urls.dart';
-import '../models/tasks/assignments.dart';
 import 'package:http/http.dart' as http;
 
-class TasksService {
-  Future<Assignment> getAllAssignments() async {
-    const apiURL = "${APIurls.devURL}assignments/";
+class NoticesService {
+  Future<Notice> getAllNotices() async {
+    const apiURL = "${APIurls.devURL}notice/";
     var client = http.Client();
-    var assignments;
+    var notces;
     try {
       var token = await SessionManager().get("token");
       var response = await client.get(Uri.parse(apiURL), headers: {
@@ -20,11 +20,11 @@ class TasksService {
       if (response.statusCode == 200) {
         var jsonString = response.body;
         var jsonMap = json.decode(jsonString);
-        assignments = Assignment.fromJson(jsonMap);
+        notces = Notice.fromJson(jsonMap);
       }
     } catch (ex) {
       print(ex);
     }
-    return assignments;
+    return notces;
   }
 }

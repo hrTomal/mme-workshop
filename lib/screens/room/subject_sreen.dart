@@ -51,7 +51,7 @@ class _SubjectScreenState extends State<SubjectScreen>
     return Scaffold(
       appBar: AppBar(
         title: Text('Meeting Me- ${subject.title}'),
-        backgroundColor: Color.fromRGBO(26, 55, 77, 1),
+        backgroundColor: const Color.fromRGBO(26, 55, 77, 1),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
