@@ -66,11 +66,11 @@ class _LoginScreenState extends State<LoginScreen> {
       builder: (context, state) {
         if (state is ErrorLoginState) {
           return AlertDialog(
-            title: Text('Error'),
+            title: const Text('Error'),
             content: Text(state.message),
             actions: <Widget>[
               ElevatedButton(
-                child: Text('Close me!'),
+                child: const Text('Close me!'),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },

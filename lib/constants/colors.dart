@@ -1,3 +1,5 @@
-// class ConstantColors {
-//   static const color1 = Color.fromRGBO(105, 152, 171, 1);
-// }
+import 'package:flutter/material.dart';
+
+class ConstantColors {
+  static const widgetColor = Color.fromARGB(255, 232, 242, 255);
+}

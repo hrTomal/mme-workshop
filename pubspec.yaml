@@ -49,6 +49,7 @@ dependencies:
   flutter_session_manager: ^1.0.3
   fluttertoast: ^8.1.1
   webview_flutter: ^4.0.1
+  carousel_slider: ^4.2.1
 
 dev_dependencies:
   flutter_test:

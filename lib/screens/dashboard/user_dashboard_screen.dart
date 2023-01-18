@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:meetingme/screens/dashboard/widgets/dashboard_image_carousel.dart';
 import 'package:meetingme/screens/dashboard/widgets/dashboard_side_drawer.dart';
 import 'package:meetingme/screens/dashboard/widgets/notice_widget.dart';
 import 'package:meetingme/screens/dashboard/widgets/rooms_widget.dart';
@@ -70,7 +71,7 @@ class _UserDashboardState extends State<UserDashboard>
                       ),
                       const VerticalDivider(),
                       Text(
-                        'Meeting me',
+                        'Meeting Me',
                         style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -125,7 +126,7 @@ class _UserDashboardState extends State<UserDashboard>
                                 icon: Icon(
                                   Icons.calendar_month,
                                 ),
-                                text: 'Events',
+                                text: 'Schedule',
                               ),
                               Tab(
                                 icon: Icon(Icons.notifications_none_outlined),
@@ -136,27 +137,25 @@ class _UserDashboardState extends State<UserDashboard>
                           Container(
                             height: (height - topSectionHeight) * .52,
                             decoration: BoxDecoration(
-                              color: Color.fromARGB(255, 232, 242, 255),
+                              color: const Color.fromARGB(255, 232, 242, 255),
                               borderRadius: BorderRadius.all(
                                 Radius.circular(width * .03),
                               ),
-                              boxShadow: const [
-                                BoxShadow(
-                                  color:
-                                      const Color.fromARGB(255, 232, 242, 255),
-                                  spreadRadius: 3,
-                                  blurRadius: 5,
-                                  offset: Offset(
-                                      3, 3), // changes position of shadow
-                                ),
-                              ],
+                              // boxShadow: const [
+                              //   BoxShadow(
+                              //     color: Color.fromARGB(255, 232, 242, 255),
+                              //     spreadRadius: 3,
+                              //     blurRadius: 5,
+                              //     offset: Offset(
+                              //         3, 3), // changes position of shadow
+                              //   ),
+                              //],
                             ),
                             child: TabBarView(
                               controller: _controller,
                               children: [
                                 Container(
-                                  padding:
-                                      EdgeInsets.only(bottom: height * .012),
+                                  padding: EdgeInsets.all(height * .012),
                                   child: FutureBuilder(
                                     future: meetings,
                                     builder: ((context, snapshot) {
@@ -172,11 +171,16 @@ class _UserDashboardState extends State<UserDashboard>
                                             CalendarView.timelineWeek,
                                             CalendarView.timelineWorkWeek,
                                           ],
-                                          dataSource:
-                                              MeetingDataSource(_getMeetings(
-                                            snapshot,
-                                            userInfo,
-                                          )),
+                                          dataSource: MeetingDataSource(
+                                            _getMeetings(
+                                              snapshot,
+                                              userInfo,
+                                            ),
+                                          ),
+                                          monthViewSettings: MonthViewSettings(
+                                            showAgenda: false,
+                                            agendaViewHeight: height * .1,
+                                          ),
                                           showNavigationArrow: true,
                                           onTap: calendarTapped,
                                         );
@@ -212,7 +216,7 @@ class _UserDashboardState extends State<UserDashboard>
 
                     //After the Calendar
                     Container(
-                      height: (height - topSectionHeight) * .24,
+                      height: (height - topSectionHeight) * .28,
                       child: Column(
                         children: [
                           // Container(
@@ -244,6 +248,7 @@ class _UserDashboardState extends State<UserDashboard>
                             height: height,
                             topSectionHeight: topSectionHeight,
                           ),
+                          DashboardImageCarousel(),
                         ],
                       ),
                     ),

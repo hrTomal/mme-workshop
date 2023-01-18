@@ -1,10 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:meetingme/models/room_info.dart';
 import 'package:meetingme/screens/room/widgets/assignments_widget.dart';
-import 'package:meetingme/screens/room/widgets/exams_widget.dart';
-import 'package:meetingme/screens/room/widgets/links_widget.dart';
-import 'package:meetingme/screens/room/widgets/notes_widget.dart';
 
 class SubjectScreen extends StatefulWidget {
   const SubjectScreen({

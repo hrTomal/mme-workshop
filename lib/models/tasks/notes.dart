@@ -1,12 +1,12 @@
-class Assignment {
+class Note {
   int? count;
-  String? next;
-  String? previous;
+  Null? next;
+  Null? previous;
   List<Results>? results;
   int? totalPages;
   int? currentPage;
 
-  Assignment(
+  Note(
       {this.count,
       this.next,
       this.previous,
@@ -14,7 +14,7 @@ class Assignment {
       this.totalPages,
       this.currentPage});
 
-  Assignment.fromJson(Map<String, dynamic> json) {
+  Note.fromJson(Map<String, dynamic> json) {
     count = json['count'];
     next = json['next'];
     previous = json['previous'];
@@ -51,12 +51,9 @@ class Results {
   bool? isActive;
   String? name;
   String? description;
-  String? mark;
-  String? submissionDateTime;
-  String? createdBy;
-  String? updatedBy;
+  Null? createdBy;
+  Null? updatedBy;
   String? roomSubject;
-  bool? hasSubmitted;
 
   Results(
       {this.id,
@@ -67,12 +64,9 @@ class Results {
       this.isActive,
       this.name,
       this.description,
-      this.mark,
-      this.submissionDateTime,
       this.createdBy,
       this.updatedBy,
-      this.roomSubject,
-      this.hasSubmitted});
+      this.roomSubject});
 
   Results.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -93,12 +87,9 @@ class Results {
     isActive = json['is_active'];
     name = json['name'];
     description = json['description'];
-    mark = json['mark'];
-    submissionDateTime = json['submission_date_time'];
     createdBy = json['created_by'];
     updatedBy = json['updated_by'];
     roomSubject = json['room_subject'];
-    hasSubmitted = json['has_submitted'];
   }
 
   Map<String, dynamic> toJson() {
@@ -115,12 +106,9 @@ class Results {
     data['is_active'] = this.isActive;
     data['name'] = this.name;
     data['description'] = this.description;
-    data['mark'] = this.mark;
-    data['submission_date_time'] = this.submissionDateTime;
     data['created_by'] = this.createdBy;
     data['updated_by'] = this.updatedBy;
     data['room_subject'] = this.roomSubject;
-    data['has_submitted'] = this.hasSubmitted;
     return data;
   }
 }
@@ -153,7 +141,7 @@ class Comments {
   Null? createdBy;
   Null? updatedBy;
   String? user;
-  String? assignment;
+  String? note;
 
   Comments(
       {this.id,
@@ -164,7 +152,7 @@ class Comments {
       this.createdBy,
       this.updatedBy,
       this.user,
-      this.assignment});
+      this.note});
 
   Comments.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -175,7 +163,7 @@ class Comments {
     createdBy = json['created_by'];
     updatedBy = json['updated_by'];
     user = json['user'];
-    assignment = json['assignment'];
+    note = json['note'];
   }
 
   Map<String, dynamic> toJson() {
@@ -188,41 +176,7 @@ class Comments {
     data['created_by'] = this.createdBy;
     data['updated_by'] = this.updatedBy;
     data['user'] = this.user;
-    data['assignment'] = this.assignment;
+    data['note'] = this.note;
     return data;
   }
-}
-
-class AssignmentArguments {
-  final String? id;
-  final List<Files>? files;
-  final List<Comments>? comments;
-  final String? createdAt;
-  final String? updatedAt;
-  final bool? isActive;
-  final String? name;
-  final String? description;
-  final String? mark;
-  final String? submissionDateTime;
-  final String? createdBy;
-  final String? updatedBy;
-  final String? roomSubject;
-  final bool? hasSubmitted;
-
-  AssignmentArguments(
-    this.id,
-    this.files,
-    this.comments,
-    this.createdAt,
-    this.updatedAt,
-    this.isActive,
-    this.name,
-    this.description,
-    this.mark,
-    this.submissionDateTime,
-    this.createdBy,
-    this.updatedBy,
-    this.roomSubject,
-    this.hasSubmitted,
-  );
 }

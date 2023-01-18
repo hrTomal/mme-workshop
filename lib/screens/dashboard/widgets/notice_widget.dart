@@ -54,7 +54,7 @@ class _NoticeWidgetState extends State<NoticeWidget> {
                                 color: Colors.red,
                                 child: Text(
                                   (allData[index].type ?? '').toUpperCase(),
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
                                   ),

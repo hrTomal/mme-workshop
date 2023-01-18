@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meetingme/bloc/login/login_bloc.dart';
 import 'package:meetingme/bloc/login/login_state.dart';
 import 'package:meetingme/models/room_info.dart';
+import 'package:meetingme/models/tasks/assignments.dart';
 import 'package:meetingme/models/user.dart';
 import 'package:meetingme/screens/dashboard/user_dashboard_screen.dart';
 import 'package:meetingme/screens/fees/fees_screeen.dart';
@@ -11,6 +12,7 @@ import 'package:meetingme/screens/fees/payment_screen.dart';
 import 'package:meetingme/screens/live_meeting/meeting_screen.dart';
 import 'package:meetingme/screens/login/login_screen.dart';
 import 'package:meetingme/screens/room/subject_sreen.dart';
+import 'package:meetingme/screens/room/task_screens/assignment_screen.dart';
 import 'package:meetingme/screens/splash/splash_screen.dart';
 import 'package:meetingme/services/general_data_service.dart';
 import 'package:meetingme/services/login_service.dart';
@@ -36,24 +38,22 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'MeetingMe',
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.blueGrey,
         ),
-        home: const SplashScreen(),
-        // routes: {
-        //   LoginScreen.routeName: (context) => LoginScreen(),
-        // },
+        home: LoginScreen(),
         onGenerateRoute: (settings) {
           if (settings.name == SplashScreen.routeName) {
             return MaterialPageRoute(
               builder: (_) => const SplashScreen(),
             );
           }
-          if (settings.name == LoginScreen.routeName) {
-            return MaterialPageRoute(
-              builder: (_) => LoginScreen(),
-            );
-          }
+          // if (settings.name == LoginScreen.routeName) {
+          //   return MaterialPageRoute(
+          //     builder: (_) => LoginScreen(),
+          //   );
+          // }
           if (settings.name == PaymentWebView.routeName) {
             final args = settings.arguments as String;
             return MaterialPageRoute(
@@ -107,6 +107,29 @@ class MyApp extends StatelessWidget {
                   subject: args.subject,
                   description: args.description,
                   room: args.room,
+                );
+              },
+            );
+          }
+          if (settings.name == AssignmentScreen.routeName) {
+            final args = settings.arguments as AssignmentArguments;
+            return MaterialPageRoute(
+              builder: (_) {
+                return AssignmentScreen(
+                  id: args.id,
+                  files: args.files,
+                  comments: args.comments,
+                  createdAt: args.createdAt,
+                  updatedAt: args.updatedAt,
+                  isActive: args.isActive,
+                  name: args.name,
+                  description: args.description,
+                  mark: args.mark,
+                  submissionDateTime: args.submissionDateTime,
+                  createdBy: args.createdBy,
+                  updatedBy: args.updatedBy,
+                  roomSubject: args.roomSubject,
+                  hasSubmitted: args.hasSubmitted,
                 );
               },
             );

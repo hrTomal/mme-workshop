@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:meetingme/models/tasks/assignments.dart';
+import 'package:meetingme/screens/room/task_screens/assignment_screen.dart';
 import 'package:meetingme/widgets/constant_widgets.dart';
 
 import '../../../services/tasks_data_service.dart';
@@ -40,50 +41,25 @@ class _AssignmentsWidgetState extends State<AssignmentsWidget> {
                 var secondString = dueDate.second.toString();
                 return GestureDetector(
                   onTap: () {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            backgroundColor:
-                                const Color.fromARGB(255, 232, 242, 255),
-                            scrollable: true,
-                            content: Column(
-                              children: [
-                                const Text(
-                                  'Title',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Container(
-                                  width: width * 1,
-                                  margin: EdgeInsets.symmetric(
-                                      vertical: height * .01),
-                                  color: Colors.white,
-                                  child: Text(
-                                    allData[index].name ?? '',
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                                const Text(
-                                  'Description',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Container(
-                                  width: width * 1,
-                                  margin: EdgeInsets.symmetric(
-                                      vertical: height * .01),
-                                  color: Colors.white,
-                                  child: Text(allData[index].description ?? ''),
-                                ),
-                              ],
-                            ),
-                          );
-                        });
+                    Navigator.of(context).pushNamed(
+                      AssignmentScreen.routeName,
+                      arguments: AssignmentArguments(
+                        allData[index].id,
+                        allData[index].files,
+                        allData[index].comments,
+                        allData[index].createdAt,
+                        allData[index].updatedAt,
+                        allData[index].isActive,
+                        allData[index].name,
+                        allData[index].description,
+                        allData[index].mark,
+                        allData[index].submissionDateTime,
+                        allData[index].createdBy,
+                        allData[index].updatedBy,
+                        allData[index].roomSubject,
+                        allData[index].hasSubmitted,
+                      ),
+                    );
                   },
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: width * .02),
