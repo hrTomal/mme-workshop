@@ -45,218 +45,224 @@ class _UserDashboardState extends State<UserDashboard>
     final userVerification = userInfo.isActive ?? false;
     final _rooms = RoomService().getRooms();
     final meetings = MeetingRoomService().getMeetingRooms();
-    return SafeArea(
-      child: Scaffold(
-        key: _scaffoldKey,
-        backgroundColor: Color.fromRGBO(26, 55, 77, 1),
-        drawer: SideDrawerForAllPage(
-          userInfo: userInfo,
-        ),
-        body: Column(
-          children: [
-            Container(
-              height: topSectionHeight,
-              padding: EdgeInsets.symmetric(horizontal: width * .03),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          _scaffoldKey.currentState?.openDrawer();
-                        },
-                        icon: Icon(Icons.line_weight),
-                        color: Colors.white,
-                      ),
-                      const VerticalDivider(),
-                      Text(
-                        'Meeting Me',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: height * .03),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      SizedBox(
-                        child: Text(
-                          '${userInfo.firstName} ${userInfo.lastName}',
-                          style: const TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        child: Icon(
-                          Icons.verified_user,
-                          color: userVerification ? Colors.green : Colors.red,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: Container(
-                padding: EdgeInsets.all(width * .025),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(width * .05),
-                    topLeft: Radius.circular(width * .05),
-                  ),
-                ),
-                child: Column(
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: SafeArea(
+        child: Scaffold(
+          key: _scaffoldKey,
+          backgroundColor: Color.fromRGBO(26, 55, 77, 1),
+          drawer: SideDrawerForAllPage(
+            userInfo: userInfo,
+          ),
+          body: Column(
+            children: [
+              Container(
+                height: topSectionHeight,
+                padding: EdgeInsets.symmetric(horizontal: width * .03),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(
-                      height: (height - topSectionHeight) * .65,
-                      color: Colors.white,
-                      child: ListView(
-                        children: [
-                          TabBar(
-                            labelColor: Color.fromARGB(255, 71, 88, 95),
-                            automaticIndicatorColorAdjustment: true,
-                            controller: _controller,
-                            tabs: const [
-                              Tab(
-                                icon: Icon(
-                                  Icons.calendar_month,
-                                ),
-                                text: 'Schedule',
-                              ),
-                              Tab(
-                                icon: Icon(Icons.notifications_none_outlined),
-                                text: 'Notices',
-                              ),
-                            ],
-                          ),
-                          Container(
-                            height: (height - topSectionHeight) * .52,
-                            decoration: BoxDecoration(
-                              color: const Color.fromARGB(255, 232, 242, 255),
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(width * .03),
-                              ),
-                              // boxShadow: const [
-                              //   BoxShadow(
-                              //     color: Color.fromARGB(255, 232, 242, 255),
-                              //     spreadRadius: 3,
-                              //     blurRadius: 5,
-                              //     offset: Offset(
-                              //         3, 3), // changes position of shadow
-                              //   ),
-                              //],
-                            ),
-                            child: TabBarView(
-                              controller: _controller,
-                              children: [
-                                Container(
-                                  padding: EdgeInsets.all(height * .012),
-                                  child: FutureBuilder(
-                                    future: meetings,
-                                    builder: ((context, snapshot) {
-                                      if (snapshot.hasData) {
-                                        return SfCalendar(
-                                          view: CalendarView.month,
-                                          allowedViews: const [
-                                            CalendarView.day,
-                                            CalendarView.week,
-                                            CalendarView.workWeek,
-                                            CalendarView.month,
-                                            CalendarView.timelineDay,
-                                            CalendarView.timelineWeek,
-                                            CalendarView.timelineWorkWeek,
-                                          ],
-                                          dataSource: MeetingDataSource(
-                                            _getMeetings(
-                                              snapshot,
-                                              userInfo,
-                                            ),
-                                          ),
-                                          monthViewSettings: MonthViewSettings(
-                                            showAgenda: false,
-                                            agendaViewHeight: height * .1,
-                                          ),
-                                          showNavigationArrow: true,
-                                          onTap: calendarTapped,
-                                        );
-                                      } else {
-                                        return SfCalendar(
-                                          view: CalendarView.month,
-                                          allowedViews: const [
-                                            CalendarView.day,
-                                            CalendarView.week,
-                                            CalendarView.workWeek,
-                                            CalendarView.month,
-                                            CalendarView.timelineDay,
-                                            CalendarView.timelineWeek,
-                                            CalendarView.timelineWorkWeek,
-                                          ],
-                                          showNavigationArrow: true,
-                                        );
-                                      }
-                                    }),
-                                  ),
-                                ),
-                                NoticeWidget(),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
+                    Row(
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            _scaffoldKey.currentState?.openDrawer();
+                          },
+                          icon: Icon(Icons.line_weight),
+                          color: Colors.white,
+                        ),
+                        const VerticalDivider(),
+                        Text(
+                          'Meeting Me',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: height * .03),
+                        ),
+                      ],
                     ),
-
-                    // SizedBox(
-                    //   height: (height - topSectionHeight) * .002,
-                    // ),
-
-                    //After the Calendar
-                    Container(
-                      height: (height - topSectionHeight) * .28,
-                      child: Column(
-                        children: [
-                          // Container(
-                          //   height: (height - topSectionHeight) * .24 * .2,
-                          //   decoration: const BoxDecoration(
-                          //     color: Color.fromARGB(255, 232, 242, 255),
-                          //     boxShadow: [
-                          //       BoxShadow(
-                          //         color: Color.fromARGB(255, 232, 255, 255),
-                          //         spreadRadius: 2,
-                          //         blurRadius: 3,
-                          //         offset: Offset(
-                          //             0, 3), // changes position of shadow
-                          //       ),
-                          //     ],
-                          //   ),
-                          //   child: const Center(
-                          //     child: Text(
-                          //       'My Rooms',
-                          //       style: TextStyle(
-                          //         color: Colors.black,
-                          //       ),
-                          //     ),
-                          //   ),
-                          // ),
-                          RoomsWidget(
-                            width: width,
-                            rooms: _rooms,
-                            height: height,
-                            topSectionHeight: topSectionHeight,
+                    Row(
+                      children: [
+                        SizedBox(
+                          child: Text(
+                            '${userInfo.firstName} ${userInfo.lastName}',
+                            style: const TextStyle(
+                              color: Colors.white,
+                            ),
                           ),
-                          DashboardImageCarousel(),
-                        ],
-                      ),
+                        ),
+                        SizedBox(
+                          child: Icon(
+                            Icons.verified_user,
+                            color: userVerification ? Colors.green : Colors.red,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
               ),
-            ),
-          ],
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.all(width * .025),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(width * .05),
+                      topLeft: Radius.circular(width * .05),
+                    ),
+                  ),
+                  child: Column(
+                    children: [
+                      Container(
+                        height: (height - topSectionHeight) * .65,
+                        color: Colors.white,
+                        child: ListView(
+                          children: [
+                            TabBar(
+                              labelColor: Color.fromARGB(255, 71, 88, 95),
+                              automaticIndicatorColorAdjustment: true,
+                              controller: _controller,
+                              tabs: const [
+                                Tab(
+                                  icon: Icon(
+                                    Icons.calendar_month,
+                                  ),
+                                  text: 'Schedule',
+                                ),
+                                Tab(
+                                  icon: Icon(Icons.notifications_none_outlined),
+                                  text: 'Notices',
+                                ),
+                              ],
+                            ),
+                            Container(
+                              height: (height - topSectionHeight) * .52,
+                              decoration: BoxDecoration(
+                                color: const Color.fromARGB(255, 232, 242, 255),
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(width * .03),
+                                ),
+                                // boxShadow: const [
+                                //   BoxShadow(
+                                //     color: Color.fromARGB(255, 232, 242, 255),
+                                //     spreadRadius: 3,
+                                //     blurRadius: 5,
+                                //     offset: Offset(
+                                //         3, 3), // changes position of shadow
+                                //   ),
+                                //],
+                              ),
+                              child: TabBarView(
+                                controller: _controller,
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.all(height * .012),
+                                    child: FutureBuilder(
+                                      future: meetings,
+                                      builder: ((context, snapshot) {
+                                        if (snapshot.hasData) {
+                                          return SfCalendar(
+                                            view: CalendarView.month,
+                                            allowedViews: const [
+                                              CalendarView.day,
+                                              CalendarView.week,
+                                              CalendarView.workWeek,
+                                              CalendarView.month,
+                                              CalendarView.timelineDay,
+                                              CalendarView.timelineWeek,
+                                              CalendarView.timelineWorkWeek,
+                                            ],
+                                            dataSource: MeetingDataSource(
+                                              _getMeetings(
+                                                snapshot,
+                                                userInfo,
+                                              ),
+                                            ),
+                                            monthViewSettings:
+                                                MonthViewSettings(
+                                              showAgenda: false,
+                                              agendaViewHeight: height * .1,
+                                            ),
+                                            showNavigationArrow: true,
+                                            onTap: calendarTapped,
+                                          );
+                                        } else {
+                                          return SfCalendar(
+                                            view: CalendarView.month,
+                                            allowedViews: const [
+                                              CalendarView.day,
+                                              CalendarView.week,
+                                              CalendarView.workWeek,
+                                              CalendarView.month,
+                                              CalendarView.timelineDay,
+                                              CalendarView.timelineWeek,
+                                              CalendarView.timelineWorkWeek,
+                                            ],
+                                            showNavigationArrow: true,
+                                          );
+                                        }
+                                      }),
+                                    ),
+                                  ),
+                                  NoticeWidget(),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      // SizedBox(
+                      //   height: (height - topSectionHeight) * .002,
+                      // ),
+
+                      //After the Calendar
+                      Container(
+                        height: (height - topSectionHeight) * .28,
+                        child: Column(
+                          children: [
+                            // Container(
+                            //   height: (height - topSectionHeight) * .24 * .2,
+                            //   decoration: const BoxDecoration(
+                            //     color: Color.fromARGB(255, 232, 242, 255),
+                            //     boxShadow: [
+                            //       BoxShadow(
+                            //         color: Color.fromARGB(255, 232, 255, 255),
+                            //         spreadRadius: 2,
+                            //         blurRadius: 3,
+                            //         offset: Offset(
+                            //             0, 3), // changes position of shadow
+                            //       ),
+                            //     ],
+                            //   ),
+                            //   child: const Center(
+                            //     child: Text(
+                            //       'My Rooms',
+                            //       style: TextStyle(
+                            //         color: Colors.black,
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
+                            RoomsWidget(
+                              width: width,
+                              rooms: _rooms,
+                              height: height,
+                              topSectionHeight: topSectionHeight,
+                            ),
+                            DashboardImageCarousel(),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

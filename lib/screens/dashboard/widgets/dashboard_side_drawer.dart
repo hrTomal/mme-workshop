@@ -149,6 +149,6 @@ class _DashboardSideDrawerState extends State<DashboardSideDrawer> {
 
   Future<void> _logout(BuildContext context) async {
     await SessionManager().destroy();
-    Navigator.pushNamed(context, SplashScreen.routeName);
+    Navigator.pushNamed(context, LoginScreen.routeName);
   }
 }

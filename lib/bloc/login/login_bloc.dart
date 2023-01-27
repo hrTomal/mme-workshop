@@ -26,6 +26,7 @@ class LoginBloc extends Bloc<LoginEvents, LoginStates> {
             await sessionManager.set("token", token.access);
 
             var userInfo = await dataService.getUserInfo();
+            await sessionManager.set("userType", userInfo.userType);
 
             emit(UserLoginSuccessState(userInfo));
           } else {

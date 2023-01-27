@@ -7,3 +7,7 @@ const roundedInputFieldDecoration = InputDecoration(
     color: Colors.grey,
   ),
 );
+
+const normalTextInput = InputDecoration(
+  labelText: 'Enter with .copyWIth()',
+);

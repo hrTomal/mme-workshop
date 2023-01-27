@@ -34,12 +34,20 @@ class LoginService {
     var client = http.Client();
     var responseToken;
     try {
-      var response =
-          await http.post(Uri.parse(loginApiURL), headers: {}, body: {
+      var reqBody = {
         "phone": phone,
         "password": password,
         "country_code": country_code,
-      });
+      };
+      var jsonReqBody = json.encode(reqBody);
+      var response = await http.post(
+        Uri.parse(loginApiURL),
+        headers: {
+          "Accept": "application/json",
+          "content-type": "application/json"
+        },
+        body: jsonReqBody,
+      );
       if (response.statusCode == 200) {
         var jsonString = response.body;
         var jsonMap = json.decode(jsonString);
