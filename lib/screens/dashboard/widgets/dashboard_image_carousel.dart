@@ -13,7 +13,7 @@ class DashboardImageCarousel extends StatelessWidget {
     //'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzD87JlVDN3LaBfRfMPsf2mKEXltAigADgW-6nXeAKc9LSJnYlgZ0HnHd2XCBnMN7Heb4&usqp=CAU',
     //'https://st.depositphotos.com/1000423/4113/i/450/depositphotos_41137937-stock-photo-cute-boy-with-banner.jpg',
     //'https://d2gg9evh47fn9z.cloudfront.net/800px_COLOURBOX26669067.jpg',
-    'https://i.ibb.co/7YQTWkH/meetingme-banner.jpg'
+    'https://obs1.ap-south-1.linodeobjects.com/uploads/2023/a724032a-2c8c-4291-a977-68de50cf70dd.jpeg'
   ];
 
   @override
@@ -50,7 +50,7 @@ class DashboardImageCarousel extends StatelessWidget {
       margin: EdgeInsets.only(top: height * .024),
       child: Center(
         child: Image.network(
-          'https://i.ibb.co/7YQTWkH/meetingme-banner.jpg',
+          'https://obs1.ap-south-1.linodeobjects.com/uploads/2023/a724032a-2c8c-4291-a977-68de50cf70dd.jpeg',
           fit: BoxFit.cover,
           width: MediaQuery.of(context).size.width * 1,
           height: height * .13,

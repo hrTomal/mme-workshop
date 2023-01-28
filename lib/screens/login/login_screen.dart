@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:meetingme/bloc/login/login_bloc.dart';
 import 'package:meetingme/bloc/login/login_event.dart';
@@ -223,13 +224,44 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             onPressed: () {
-              loginBloc.add(
-                LoginButtonPressed(
-                  phone: phone.text, //'01954492600'
-                  password: password.text, //'1234'
-                  country_code: 'BD', //'BD' _selectedCountry!
-                ),
-              );
+              var country = _selectedCountry ?? 'null';
+              if (country == 'null') {
+                Fluttertoast.showToast(
+                    msg: "Please Select Country First.",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                    fontSize: 16.0);
+              } else if (phone.text == '') {
+                Fluttertoast.showToast(
+                    msg: "Please Enter Phone Number.",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                    fontSize: 16.0);
+              } else if (password.text == '') {
+                Fluttertoast.showToast(
+                    msg: "Please Enter Your Password.",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                    fontSize: 16.0);
+              } else {
+                loginBloc.add(
+                  LoginButtonPressed(
+                    phone: phone.text, //'01954492600'
+                    password: password.text, //'1234'
+                    country_code:
+                        _selectedCountry!, //'BD', //'BD' _selectedCountry!
+                  ),
+                );
+              }
             },
           ),
         ],
