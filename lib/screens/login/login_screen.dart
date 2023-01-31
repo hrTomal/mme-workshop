@@ -186,9 +186,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 textAlign: TextAlign.center,
                 controller: phone,
                 keyboardType: TextInputType.number,
+                maxLength: 11,
                 decoration: roundedInputFieldDecoration.copyWith(
                   hintText: "Phone No",
                   icon: const Icon(Icons.phone),
+                  counterText: '',
                 ),
               ),
             ),

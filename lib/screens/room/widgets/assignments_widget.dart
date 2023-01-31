@@ -26,7 +26,17 @@ class _AssignmentsWidgetState extends State<AssignmentsWidget> {
   var marksCtrl = TextEditingController();
   var subTimeCtrl = TextEditingController();
 
-  var userType = SessionManager().get("userType");
+  var userType;
+
+  @override
+  void initState() {
+    super.initState();
+    SessionManager().get("userType").then((value) => {
+          setState(() {
+            userType = value;
+          })
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
