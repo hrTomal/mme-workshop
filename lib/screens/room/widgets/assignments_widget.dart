@@ -150,10 +150,14 @@ class _AssignmentsWidgetState extends State<AssignmentsWidget> {
                                     ),
                                     Column(
                                       children: [
-                                        Text(
-                                          allData[index].name ?? '',
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
+                                        Container(
+                                          width: width * .67,
+                                          child: Text(
+                                            allData[index].name ?? '',
+                                            overflow: TextOverflow.ellipsis,
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                           ),
                                         ),
                                         const WhiteDivider(),

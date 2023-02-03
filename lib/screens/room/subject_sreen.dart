@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:meetingme/models/room_info.dart';
 import 'package:meetingme/screens/room/widgets/assignments_widget.dart';
+import 'package:meetingme/screens/room/widgets/notes_widget.dart';
 
 class SubjectScreen extends StatefulWidget {
   const SubjectScreen({
@@ -88,9 +89,7 @@ class _SubjectScreenState extends State<SubjectScreen>
               child: TabBarView(
                 controller: _controller,
                 children: const [
-                  Center(
-                    child: Text('Notes'),
-                  ),
+                  NotesWidget(),
                   AssignmentsWidget(),
                   Center(
                     child: Text('Exams'),

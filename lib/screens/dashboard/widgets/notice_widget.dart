@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:meetingme/constants/colors.dart';
 import 'package:meetingme/models/notice/notice.dart';
 
 import '../../../services/notice_data_service.dart';
@@ -105,7 +106,7 @@ class _NoticeWidgetState extends State<NoticeWidget> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Container(
-                        color: const Color.fromRGBO(26, 55, 77, 1),
+                        color: ConstantColors.primaryColor,
                         margin: EdgeInsets.only(right: width * .02),
                         padding: EdgeInsets.symmetric(horizontal: width * .02),
                         child: Text(

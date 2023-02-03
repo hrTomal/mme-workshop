@@ -1,17 +1,12 @@
-// ignore_for_file: no_logic_in_create_state
-
-import 'dart:isolate';
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:meetingme/constants/colors.dart';
+import 'package:meetingme/screens/task_screens/assignment_widgets/description_widget.dart';
+import 'package:meetingme/screens/task_screens/assignment_widgets/time_and_mark_widget.dart';
 import 'package:meetingme/widgets/constant_widgets.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 import '../../models/tasks/assignments.dart';
+import 'assignment_widgets/files_widget.dart';
 
 class AssignmentScreen extends StatefulWidget {
   AssignmentScreen({
@@ -100,12 +95,23 @@ class _AssignmentScreenState extends State<AssignmentScreen> {
       this.roomSubject,
       this.hasSubmitted);
 
+  var userType;
+  @override
+  void initState() {
+    super.initState();
+    SessionManager().get("userType").then((value) => {
+          setState(() {
+            userType = value;
+          })
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     var deviceHeight = MediaQuery.of(context).size.height;
     var deviceWidth = MediaQuery.of(context).size.width;
     var gapSize = deviceHeight * .007;
-
+    var descriptionWithoutNull = description ?? '';
     return Scaffold(
       appBar: AppBar(
         title: const Text('Meeting Me'),
@@ -141,252 +147,33 @@ class _AssignmentScreenState extends State<AssignmentScreen> {
               height: gapSize,
             ),
             files!.isNotEmpty
-                ? FilesContainer(
+                ? FilesWidget(
                     deviceWidth: deviceWidth,
                     deviceHeight: deviceHeight,
                     files: files,
                     gapSize: gapSize)
                 : Container(),
-            // FloatingActionButton.extended(
-            //   onPressed: () {},
-            //   label: const Text('Submit'),
-            // )
+            SizedBox(
+              height: gapSize,
+            ),
+            descriptionWithoutNull != ''
+                ? DescriptionWidget(
+                    deviceWidth: deviceWidth,
+                    gapSize: gapSize,
+                    description: description)
+                : Container(),
+            SizedBox(
+              height: gapSize,
+            ),
+            // userType != 'TEACHER'
+            //     ? FloatingActionButton.extended(
+            //         onPressed: () {},
+            //         backgroundColor: ConstantColors.primaryColor,
+            //         label: const Text('Submit'),
+            //       )
+            //     : Container()
           ],
         ),
-      ),
-    );
-  }
-}
-
-class FilesContainer extends StatefulWidget {
-  const FilesContainer({
-    Key? key,
-    required this.deviceWidth,
-    required this.deviceHeight,
-    required this.files,
-    required this.gapSize,
-  }) : super(key: key);
-
-  final double deviceWidth;
-  final double deviceHeight;
-  final List<Files>? files;
-  final double gapSize;
-
-  @override
-  State<FilesContainer> createState() => _FilesContainerState();
-}
-
-class _FilesContainerState extends State<FilesContainer> {
-  ReceivePort _port = ReceivePort();
-  @override
-  void initState() {
-    super.initState();
-
-    IsolateNameServer.registerPortWithName(
-        _port.sendPort, 'downloader_send_port');
-    _port.listen((dynamic data) {
-      String id = data[0];
-      DownloadTaskStatus status = data[1];
-      int progress = data[2];
-      setState(() {});
-    });
-    FlutterDownloader.registerCallback(downloadCallback);
-  }
-
-  static void downloadCallback(
-      String id, DownloadTaskStatus status, int progress) {
-    final SendPort? send =
-        IsolateNameServer.lookupPortByName('downloader_send_port');
-    send!.send([id, status, progress]);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: widget.deviceWidth * 1,
-      height: widget.deviceHeight * .1,
-      color: ConstantColors.widgetColor,
-      child: Row(
-        children: [
-          const Text('Documents '),
-          SizedBox(
-            width: widget.deviceWidth * .77,
-            //color: Colors.white,
-            child: ListView.builder(
-                itemCount: widget.files!.length,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) {
-                  return Container(
-                    margin: EdgeInsets.all(widget.gapSize),
-                    height: widget.gapSize * 10,
-                    width: widget.gapSize * 10,
-                    color: Colors.white,
-                    child: GestureDetector(
-                      onTap: (() {
-                        _downloadFile(widget.files![index].file);
-                      }),
-                      child: Image.network(
-                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT3-RjXBulP7lPhXjyWTa1jaW6cd5fDzoC240S1hLRH_A6BUZ1b-U2UMYcJS9tg-xdfLYQ&usqp=CAU',
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                  );
-                }),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Future<void> _downloadFile(url) async {
-    final permission = await Permission.storage.request();
-    //final permission = await Permission.storage.status;
-
-    if (permission.isGranted) {
-      final externalDir = await getExternalStorageDirectory();
-
-      await FlutterDownloader.enqueue(
-        url: url,
-        headers: {}, // optional: header send with url (auth token etc)
-        savedDir: externalDir!.path,
-        showNotification:
-            true, // show download progress in status bar (for Android)
-        openFileFromNotification:
-            true, // click on notification to open downloaded file (for Android)
-      );
-    } else {
-      Fluttertoast.showToast(
-          msg: "Storage Permission required to download assignment.",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0);
-    }
-  }
-}
-
-class TimeAndMarkWidget extends StatelessWidget {
-  const TimeAndMarkWidget({
-    Key? key,
-    required this.deviceWidth,
-    required this.deviceHeight,
-    required this.createdAt,
-    required this.submissionDateTime,
-    required this.mark,
-  }) : super(key: key);
-
-  final double deviceWidth;
-  final double deviceHeight;
-  final String? createdAt;
-  final String? submissionDateTime;
-  final String? mark;
-
-  @override
-  Widget build(BuildContext context) {
-    var createdDate = DateTime.parse(createdAt ?? '').toLocal();
-    var createdDayString = createdDate.day.toString();
-    var createdMonthString = createdDate.month.toString();
-    var createdYearString = createdDate.year.toString();
-    var createdHourString = createdDate.hour.toString();
-    var createdMinuteString = createdDate.minute.toString();
-    var createdSecondString = createdDate.second.toString();
-
-    var submissionDate = DateTime.parse(submissionDateTime ?? '').toLocal();
-    var submissionDayString = submissionDate.day.toString();
-    var submissionMonthString = submissionDate.month.toString();
-    var submissionYearString = submissionDate.year.toString();
-    var submissionHourString = submissionDate.hour.toString();
-    var submissionMinuteString = submissionDate.minute.toString();
-    var submissionSecondString = submissionDate.second.toString();
-
-    var gapSize = deviceHeight * .007;
-    return Container(
-      width: deviceWidth * 1,
-      height: deviceHeight * .1,
-      color: ConstantColors.widgetColor,
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              const Text('Assigned On: '),
-              Text(
-                  '$createdDayString-$createdMonthString-$createdYearString $createdHourString:$createdMinuteString:$createdSecondString'),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              const Text('Submmission Deadline: '),
-              Row(
-                children: [
-                  Text(
-                      '$submissionDayString-$submissionMonthString-$submissionYearString'),
-                  Card(
-                    color: ConstantColors.primaryColor,
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: gapSize * 2),
-                      child: Text(
-                        '$submissionHourString:$submissionMinuteString:$submissionSecondString',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              )
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              const Text('Total Mark: '),
-              Text(mark ?? ''),
-            ],
-          )
-        ],
-      ),
-    );
-  }
-}
-
-class TitleWidget extends StatelessWidget {
-  const TitleWidget({
-    Key? key,
-    required this.deviceWidth,
-    required this.deviceHeight,
-    required this.gapSize,
-    required this.name,
-  }) : super(key: key);
-
-  final double deviceWidth;
-  final double deviceHeight;
-  final double gapSize;
-  final String? name;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: deviceWidth * 1,
-      height: deviceHeight * .1,
-      padding: EdgeInsets.all(gapSize * .5),
-      color: ConstantColors.widgetColor,
-      child: Column(
-        children: [
-          const Text('Assignment Title'),
-          const WhiteDivider(),
-          FittedBox(
-            alignment: Alignment.center,
-            child: Text(
-              name ?? '',
-              maxLines: 2,
-            ),
-          ),
-        ],
       ),
     );
   }

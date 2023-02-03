@@ -1,7 +1,7 @@
 class Note {
   int? count;
-  Null? next;
-  Null? previous;
+  String? next;
+  String? previous;
   List<Results>? results;
   int? totalPages;
   int? currentPage;
@@ -51,8 +51,8 @@ class Results {
   bool? isActive;
   String? name;
   String? description;
-  Null? createdBy;
-  Null? updatedBy;
+  String? createdBy;
+  String? updatedBy;
   String? roomSubject;
 
   Results(
@@ -138,8 +138,8 @@ class Comments {
   String? updatedAt;
   bool? isActive;
   String? text;
-  Null? createdBy;
-  Null? updatedBy;
+  String? createdBy;
+  String? updatedBy;
   String? user;
   String? note;
 
