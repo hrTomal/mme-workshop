@@ -1,6 +1,11 @@
+import 'dart:isolate';
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:meetingme/constants/colors.dart';
 import 'package:meetingme/models/tasks/notes.dart';
+import 'package:meetingme/services/download_from_url.dart';
 import 'package:meetingme/services/tasks_data_service.dart';
 import 'package:meetingme/widgets/constant_widgets.dart';
 
@@ -15,6 +20,22 @@ class NotesWidget extends StatefulWidget {
 
 class _NotesWidgetState extends State<NotesWidget> {
   final Future<Note> notes = TasksService().getAllNotes();
+  final ReceivePort _port = ReceivePort();
+
+  @override
+  void initState() {
+    super.initState();
+    IsolateNameServer.registerPortWithName(
+        _port.sendPort, 'downloader_send_port');
+    _port.listen((dynamic data) {
+      // String id = data[0];
+      // DownloadTaskStatus status = data[1];
+      // int progress = data[2];
+      setState(() {});
+    });
+    FlutterDownloader.registerCallback(DownloadFromURL.downloadCallback);
+  }
+
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
@@ -80,7 +101,12 @@ class _NotesWidgetState extends State<NotesWidget> {
                                                     color: Colors.white,
                                                     child: GestureDetector(
                                                       onTap: (() {
-                                                        //_downloadFile(widget.files![index].file);
+                                                        DownloadFromURL
+                                                            .downloadFile(
+                                                                allData[index]
+                                                                    .files![
+                                                                        fileIndex]
+                                                                    .file);
                                                       }),
                                                       child: Image.network(
                                                         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT3-RjXBulP7lPhXjyWTa1jaW6cd5fDzoC240S1hLRH_A6BUZ1b-U2UMYcJS9tg-xdfLYQ&usqp=CAU',
