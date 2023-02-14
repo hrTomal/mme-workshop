@@ -28,8 +28,8 @@ class DownloadFromURL {
         savedDir: externalDir!.path,
         showNotification:
             true, // show download progress in status bar (for Android)
-        openFileFromNotification:
-            true, // click on notification to open downloaded file (for Android)
+        openFileFromNotification: true,
+        fileName: DateTime.now().millisecond.toString().replaceAll(" ", ""),
       );
     } else {
       Fluttertoast.showToast(

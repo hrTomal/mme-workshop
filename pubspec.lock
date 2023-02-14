@@ -166,10 +166,10 @@ packages:
   jitsi_meet:
     dependency: "direct main"
     description:
-      path: "."
+      path: jitsi_meet
       ref: master
-      resolved-ref: "2a19d529776f45bdcad4adcc1f87b123f5b82b26"
-      url: "https://github.com/dispersik/jitsi_meet_fork"
+      resolved-ref: "86cfa81eed1440d3f87e837e0b8441f541f0e2ea"
+      url: "https://github.com/Eng-NUREDDIN/jitsi_meet.git"
     source: git
     version: "4.0.0"
   jitsi_meet_platform_interface:

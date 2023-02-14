@@ -1,5 +1,3 @@
-// ignore_for_file: unnecessary_this
-
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -78,9 +76,9 @@ class _MeetingState extends State<Meeting> {
     var width = MediaQuery.of(context).size.width;
     return Scaffold(
       body: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 16.0,
-        ),
+        // padding: const EdgeInsets.symmetric(
+        //   horizontal: 16.0,
+        // ),
         child: kIsWeb
             ? Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -99,7 +97,7 @@ class _MeetingState extends State<Meeting> {
                               width: width * 0.60 * 0.70,
                               height: width * 0.60 * 0.70,
                               child: JitsiMeetConferencing(
-                                extraJS: [
+                                extraJS: const [
                                   // extraJs setup example
                                   '<script>function echo(){console.log("echo!!!")};</script>',
                                   '<script src="https://code.jquery.com/jquery-3.5.1.slim.js" integrity="sha256-DrT5NfxfbHvMHux31Lkhxg42LY6of8TaYyK50jnxRnM=" crossorigin="anonymous"></script>'
@@ -168,6 +166,7 @@ _joinMeeting(
     if (Platform.isAndroid) {
       // Disable ConnectionService usage on Android to avoid issues (see README)
       featureFlags[FeatureFlagEnum.CALL_INTEGRATION_ENABLED] = false;
+      featureFlags[FeatureFlagEnum.RECORDING_ENABLED] = false;
     } else if (Platform.isIOS) {
       // Disable PIP on iOS as it looks weird
       featureFlags[FeatureFlagEnum.PIP_ENABLED] = false;
@@ -193,7 +192,7 @@ _joinMeeting(
       "userInfo": {"displayName": nameText}
     };
 
-  debugPrint("JitsiMeetingOptions: $options");
+  //debugPrint("JitsiMeetingOptions: $options");
   await JitsiMeet.joinMeeting(
     options,
     listener: JitsiMeetingListener(
@@ -205,6 +204,8 @@ _joinMeeting(
         },
         onConferenceTerminated: (message) {
           debugPrint("${options.room} terminated with message: $message");
+
+          print('tomal');
         },
         genericListeners: [
           JitsiGenericListener(

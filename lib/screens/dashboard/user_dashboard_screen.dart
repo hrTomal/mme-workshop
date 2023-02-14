@@ -3,6 +3,7 @@ import 'package:meetingme/screens/dashboard/widgets/dashboard_image_carousel.dar
 import 'package:meetingme/screens/dashboard/widgets/dashboard_side_drawer.dart';
 import 'package:meetingme/screens/dashboard/widgets/notice_widget.dart';
 import 'package:meetingme/screens/dashboard/widgets/rooms_widget.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import '../../models/user.dart';
@@ -47,7 +48,7 @@ class _UserDashboardState extends State<UserDashboard>
     final meetings = MeetingRoomService().getMeetingRooms();
     return WillPopScope(
       onWillPop: () async {
-        return false;
+        return true;
       },
       child: SafeArea(
         child: Scaffold(
@@ -221,7 +222,7 @@ class _UserDashboardState extends State<UserDashboard>
 
                       //After the Calendar
                       Container(
-                        height: (height - topSectionHeight) * .28,
+                        height: (height - topSectionHeight) * .245,
                         child: Column(
                           children: [
                             // Container(
@@ -269,15 +270,15 @@ class _UserDashboardState extends State<UserDashboard>
   }
 
   void calendarTapped(CalendarTapDetails details) {
-    if (details.appointments!.length != 0) {
+    if (details.appointments!.isNotEmpty) {
       showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
             scrollable: true,
-            content: Container(
-              height: MediaQuery.of(context).size.height * .5,
-              width: 500,
+            content: SizedBox(
+              height: MediaQuery.of(context).size.height * .4,
+              width: MediaQuery.of(context).size.width * .8,
               child: ListView.builder(
                 shrinkWrap: true,
                 scrollDirection: Axis.vertical,
@@ -299,26 +300,45 @@ class _UserDashboardState extends State<UserDashboard>
                                     'Join - ${details.appointments![index].name}'),
                                 content: Column(
                                   children: [
-                                    CheckboxListTile(
-                                      title: Text("Audio Only"),
-                                      value: isAudioOnly,
-                                      onChanged: _onAudioOnlyChanged,
+                                    StatefulBuilder(
+                                      builder: (context, _setState) =>
+                                          CheckboxListTile(
+                                        value: isAudioOnly,
+                                        title: const Text("Audio Only"),
+                                        //value: isAudioOnly,
+                                        onChanged: (newValue) {
+                                          _setState(
+                                              () => isAudioOnly = newValue);
+                                        },
+                                      ),
                                     ),
                                     const SizedBox(
                                       height: 14.0,
                                     ),
-                                    CheckboxListTile(
-                                      title: Text("Audio Muted"),
-                                      value: isAudioMuted,
-                                      onChanged: _onAudioMutedChanged,
+                                    StatefulBuilder(
+                                      builder: (context, _setState) =>
+                                          CheckboxListTile(
+                                        value: isAudioMuted,
+                                        title: const Text("Audio Muted"),
+                                        onChanged: (valAudioMuted) {
+                                          _setState(() =>
+                                              isAudioMuted = valAudioMuted);
+                                        },
+                                      ),
                                     ),
                                     const SizedBox(
                                       height: 14.0,
                                     ),
-                                    CheckboxListTile(
-                                      title: Text("Video Muted"),
-                                      value: isVideoMuted,
-                                      onChanged: _onVideoMutedChanged,
+                                    StatefulBuilder(
+                                      builder: (context, _setState) =>
+                                          CheckboxListTile(
+                                        value: isVideoMuted,
+                                        title: const Text("Video Muted"),
+                                        onChanged: (valVideoMuted) {
+                                          _setState(() =>
+                                              isVideoMuted = valVideoMuted);
+                                        },
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -327,7 +347,7 @@ class _UserDashboardState extends State<UserDashboard>
                                     onPressed: () {
                                       Navigator.of(context, rootNavigator: true)
                                           .pop();
-                                      _navigateToMeeting(
+                                      webViewMethod(
                                           context,
                                           details.appointments![index].userName,
                                           details
@@ -352,24 +372,6 @@ class _UserDashboardState extends State<UserDashboard>
         },
       );
     }
-  }
-
-  _onAudioOnlyChanged(bool? value) {
-    setState(() {
-      isAudioOnly = value;
-    });
-  }
-
-  _onAudioMutedChanged(bool? value) {
-    setState(() {
-      isAudioMuted = value;
-    });
-  }
-
-  _onVideoMutedChanged(bool? value) {
-    setState(() {
-      isVideoMuted = value;
-    });
   }
 }
 
@@ -421,6 +423,18 @@ _getMeetings(values, userInfo) {
   );
 
   return meetings;
+}
+
+Future webViewMethod(BuildContext context, String userName, String lobbyName,
+    String name) async {
+  await Permission.microphone.request();
+  WebViewMethodForCamera(context, userName, lobbyName, name);
+}
+
+Future WebViewMethodForCamera(BuildContext context, String userName,
+    String lobbyName, String name) async {
+  await Permission.camera.request();
+  _navigateToMeeting(context, userName, lobbyName, name);
 }
 
 void _navigateToMeeting(

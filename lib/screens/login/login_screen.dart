@@ -102,11 +102,11 @@ class _LoginScreenState extends State<LoginScreen> {
             if (state is ErrorLoginState) {
               //return LoginInitState();
               return AlertDialog(
-                title: Text('Error'),
+                title: const Text('Error'),
                 content: Text(state.message),
                 actions: <Widget>[
                   ElevatedButton(
-                    child: Text('Close me!'),
+                    child: const Text('Close me!'),
                     onPressed: () {
                       loginBloc.add(
                         InitialEvent(),

@@ -2,7 +2,7 @@
     package="com.example.meetingme"
     xmlns:tools="http://schemas.android.com/tools">
     <application 
-        tools:replace="android:label"  
+        tools:replace="android:label,android:icon"  
         android:label="meetingme"
         android:icon="@mipmap/ic_launcher">
     </application>

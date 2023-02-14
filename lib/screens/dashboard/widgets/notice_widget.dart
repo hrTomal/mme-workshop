@@ -124,6 +124,10 @@ class _NoticeWidgetState extends State<NoticeWidget> {
               );
             }),
           );
+        } else {
+          return const Center(
+            child: Text('Currently no notice to show.'),
+          );
         }
 
         /// While is no data show this

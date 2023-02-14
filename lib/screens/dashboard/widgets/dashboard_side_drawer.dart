@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
+import 'package:meetingme/models/exam_board.dart';
+import 'package:meetingme/screens/exam_board/exam_board_screen.dart';
 import 'package:meetingme/screens/fees/payment_history.dart';
 import 'package:meetingme/screens/login/login_screen.dart';
 import 'package:meetingme/screens/splash/splash_screen.dart';
@@ -133,6 +135,21 @@ class _DashboardSideDrawerState extends State<DashboardSideDrawer> {
           const WhiteDivider(),
           ListTile(
             title: const Text(
+              'Exam Board',
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+            onTap: (() {
+              Navigator.pushNamed(
+                context,
+                ExamBoardScreen.routeName,
+              );
+            }),
+          ),
+          const WhiteDivider(),
+          ListTile(
+            title: const Text(
               'Logout',
               style: TextStyle(
                 color: Colors.white,
@@ -141,7 +158,7 @@ class _DashboardSideDrawerState extends State<DashboardSideDrawer> {
             onTap: (() {
               _logout(context);
             }),
-          )
+          ),
         ],
       ),
     );

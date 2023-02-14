@@ -2,7 +2,7 @@
     package="com.example.meetingme"
     xmlns:tools="http://schemas.android.com/tools">
    <application
-        tools:replace="android:label"
+        tools:replace="android:label,android:icon"
         android:label="MeetingMe"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
@@ -42,6 +42,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths"/>
         </provider>
+        
         <service
             android:name="org.jitsi.meet.sdk.ConnectionService"
             android:permission="android.permission.BIND_TELECOM_CONNECTION_SERVICE"

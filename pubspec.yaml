@@ -44,7 +44,8 @@ dependencies:
   syncfusion_flutter_calendar: ^20.3.52
   jitsi_meet:
     git:
-      url: https://github.com/dispersik/jitsi_meet_fork
+      url: https://github.com/Eng-NUREDDIN/jitsi_meet.git
+      path: jitsi_meet/
       ref: master
   flutter_session_manager: ^1.0.3
   fluttertoast: ^8.1.1
