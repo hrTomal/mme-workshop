@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:meetingme/models/tasks/assignments.dart';
+import 'package:meetingme/screens/room/widgets/create_assignment.dart';
 import 'package:meetingme/screens/task_screens/assignment_screen.dart';
 import 'package:meetingme/widgets/constant_widgets.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
-import '../../../components/components.dart';
-import '../../../constants/colors.dart';
 import '../../../services/tasks_data_service.dart';
 
 class AssignmentsWidget extends StatefulWidget {
@@ -190,99 +188,6 @@ class _AssignmentsWidgetState extends State<AssignmentsWidget> {
               }),
         ),
       ],
-    );
-  }
-}
-
-class CreateAssignment extends StatelessWidget {
-  const CreateAssignment({
-    Key? key,
-    required this.titleCtrl,
-    required this.descriptionCtrl,
-    required this.marksCtrl,
-    required this.subTimeCtrl,
-  }) : super(key: key);
-
-  final TextEditingController titleCtrl;
-  final TextEditingController descriptionCtrl;
-  final TextEditingController marksCtrl;
-  final TextEditingController subTimeCtrl;
-
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton.icon(
-      onPressed: () {
-        showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                scrollable: false,
-                content: Column(
-                  children: [
-                    TextField(
-                      controller: titleCtrl,
-                      minLines: 1,
-                      maxLines: 3,
-                      keyboardType: TextInputType.multiline,
-                      decoration: normalTextInput.copyWith(
-                          labelText: 'Assignment Title'),
-                    ),
-                    TextField(
-                      controller: descriptionCtrl,
-                      keyboardType: TextInputType.multiline,
-                      minLines: 2,
-                      maxLines: 5,
-                      decoration:
-                          normalTextInput.copyWith(labelText: 'Description'),
-                    ),
-                    TextField(
-                      controller: marksCtrl,
-                      minLines: 1,
-                      maxLines: 1,
-                      keyboardType: TextInputType.number,
-                      decoration: normalTextInput.copyWith(labelText: 'Marks'),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        DatePicker.showDateTimePicker(
-                          context,
-                          showTitleActions: true,
-                          onChanged: (time) => {
-                            subTimeCtrl.text = time.toLocal().toString(),
-                          },
-                        );
-                      },
-                      child: AbsorbPointer(
-                          child: TextField(
-                        controller: subTimeCtrl,
-                        decoration: normalTextInput.copyWith(
-                            labelText: 'Submissition Time'),
-                      )),
-                    ),
-                    ElevatedButton.icon(
-                      onPressed: () {},
-                      label: const Text('Save'),
-                      icon: const Icon(
-                        Icons.save,
-                      ),
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                            ConstantColors.createButtonColor),
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            });
-      },
-      icon: const Icon(
-        Icons.add,
-      ),
-      label: const Text('Create New'),
-      style: ButtonStyle(
-        backgroundColor:
-            MaterialStateProperty.all<Color>(ConstantColors.createButtonColor),
-      ),
     );
   }
 }
