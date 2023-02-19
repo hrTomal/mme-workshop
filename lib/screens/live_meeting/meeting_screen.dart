@@ -47,11 +47,13 @@ class _MeetingState extends State<Meeting> {
   @override
   void initState() {
     super.initState();
-    JitsiMeet.addListener(JitsiMeetingListener(
-        onConferenceWillJoin: _onConferenceWillJoin,
-        onConferenceJoined: _onConferenceJoined,
-        onConferenceTerminated: _onConferenceTerminated,
-        onError: _onError));
+    JitsiMeet.addListener(
+      JitsiMeetingListener(
+          onConferenceWillJoin: _onConferenceWillJoin,
+          onConferenceJoined: _onConferenceJoined,
+          onConferenceTerminated: _onConferenceTerminated,
+          onError: _onError),
+    );
     _joinMeeting(
       this.serverText,
       this.lobbyName,
@@ -83,10 +85,10 @@ class _MeetingState extends State<Meeting> {
             ? Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
-                    width: width * 0.30,
-                    child: meetConfig(context),
-                  ),
+                  // Container(
+                  //   width: width * 0.30,
+                  //   child: meetConfig(context),
+                  // ),
                   Container(
                       width: width * 0.60,
                       child: Padding(
@@ -169,6 +171,7 @@ _joinMeeting(
       featureFlags[FeatureFlagEnum.RECORDING_ENABLED] = false;
     } else if (Platform.isIOS) {
       // Disable PIP on iOS as it looks weird
+      featureFlags[FeatureFlagEnum.RECORDING_ENABLED] = false;
       featureFlags[FeatureFlagEnum.PIP_ENABLED] = false;
     }
   }
@@ -204,8 +207,6 @@ _joinMeeting(
         },
         onConferenceTerminated: (message) {
           debugPrint("${options.room} terminated with message: $message");
-
-          print('tomal');
         },
         genericListeners: [
           JitsiGenericListener(
@@ -227,6 +228,19 @@ void _onConferenceJoined(message) {
 
 void _onConferenceTerminated(message) {
   debugPrint("_onConferenceTerminated broadcasted with message: $message");
+
+  AlertDialog(
+    title: const Text('Error'),
+    content: Text('dddd'),
+    actions: <Widget>[
+      ElevatedButton(
+        child: const Text('Close me!'),
+        onPressed: () {
+          //Navigator.pop(context);
+        },
+      )
+    ],
+  );
 }
 
 _onError(error) {

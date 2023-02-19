@@ -140,7 +140,7 @@ class MyApp extends StatelessWidget {
             );
           }
           if (settings.name == AllSubjectScreen.routeName) {
-            final args = settings.arguments as RoomInfo;
+            final args = settings.arguments as Future<RoomInfo>;
             return MaterialPageRoute(
               builder: (_) {
                 return AllSubjectScreen(args);

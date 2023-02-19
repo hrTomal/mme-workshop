@@ -112,26 +112,17 @@ class _DashboardSideDrawerState extends State<DashboardSideDrawer> {
               ),
             ],
           ),
-          const WhiteDivider(),
-          ListTile(
-            title: const Text(
-              'My Rooms',
-              style: TextStyle(
-                color: Colors.white,
-              ),
-            ),
-            onTap: (() {}),
-          ),
-          const WhiteDivider(),
-          ListTile(
-            title: const Text(
-              'Contact Us',
-              style: TextStyle(
-                color: Colors.white,
-              ),
-            ),
-            onTap: (() {}),
-          ),
+          // const WhiteDivider(),
+          // ListTile(
+          //   title: const Text(
+          //     'My Rooms',
+          //     style: TextStyle(
+          //       color: Colors.white,
+          //     ),
+          //   ),
+          //   onTap: (() {}),
+          // ),
+
           const WhiteDivider(),
           ListTile(
             title: const Text(
@@ -146,6 +137,16 @@ class _DashboardSideDrawerState extends State<DashboardSideDrawer> {
                 ExamBoardScreen.routeName,
               );
             }),
+          ),
+          const WhiteDivider(),
+          ListTile(
+            title: const Text(
+              'Contact Us',
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+            onTap: (() {}),
           ),
           const WhiteDivider(),
           ListTile(

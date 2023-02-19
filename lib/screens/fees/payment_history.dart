@@ -22,6 +22,9 @@ class _PaymentHistoryState extends State<PaymentHistory> {
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
+      body: const Center(
+        child: Text('No transactions found for this user.'),
+      ),
     );
   }
 }

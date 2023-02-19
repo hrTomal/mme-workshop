@@ -127,6 +127,10 @@ class _Fees extends State<Fees> {
                           ],
                         ),
                       );
+                    } else {
+                      return Container(
+                        child: Text('No fees assigned.'),
+                      );
                     }
 
                     /// While is no data show this

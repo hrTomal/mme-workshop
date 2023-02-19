@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:meetingme/constants/colors.dart';
 import 'package:meetingme/screens/room/all_subject_screen.dart';
 import 'package:meetingme/screens/room/subject_sreen.dart';
 
@@ -31,7 +32,7 @@ class RoomsWidget extends StatelessWidget {
         children: [
           Container(
             //color: Colors.amber,
-            width: (width - (width * .050)) * .76,
+            width: (width - (width * .050)) * .74,
             child: FutureBuilder(
               future: _rooms,
               builder: ((context, snapshot) {
@@ -110,13 +111,17 @@ class RoomsWidget extends StatelessWidget {
             ),
           ),
           ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pushNamed(
-                  AllSubjectScreen.routeName,
-                  arguments: _rooms,
-                );
-              },
-              child: Text('Show All'))
+            onPressed: () {
+              Navigator.of(context).pushNamed(
+                AllSubjectScreen.routeName,
+                arguments: _rooms,
+              );
+            },
+            child: Text('Show All'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: ConstantColors.primaryColor,
+            ),
+          )
         ],
       ),
     );
