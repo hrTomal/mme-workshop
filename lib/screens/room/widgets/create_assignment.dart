@@ -35,98 +35,105 @@ class _CreateAssignmentState extends State<CreateAssignment> {
             builder: (BuildContext context) {
               return StatefulBuilder(builder: (context, setStateForDialog) {
                 return AlertDialog(
-                  scrollable: false,
-                  content: Column(
-                    children: [
-                      TextField(
-                        controller: widget.titleCtrl,
-                        minLines: 1,
-                        maxLines: 3,
-                        keyboardType: TextInputType.multiline,
-                        decoration: normalTextInput.copyWith(
-                            labelText: 'Assignment Title'),
-                      ),
-                      TextField(
-                        controller: widget.descriptionCtrl,
-                        keyboardType: TextInputType.multiline,
-                        minLines: 2,
-                        maxLines: 5,
-                        decoration:
-                            normalTextInput.copyWith(labelText: 'Description'),
-                      ),
-                      TextField(
-                        controller: widget.marksCtrl,
-                        minLines: 1,
-                        maxLines: 1,
-                        keyboardType: TextInputType.number,
-                        decoration:
-                            normalTextInput.copyWith(labelText: 'Marks'),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          DatePicker.showDateTimePicker(
-                            context,
-                            showTitleActions: true,
-                            onChanged: (time) => {
-                              widget.subTimeCtrl.text =
-                                  time.toLocal().toString(),
-                            },
-                          );
-                        },
-                        child: AbsorbPointer(
-                            child: TextField(
-                          controller: widget.subTimeCtrl,
+                  content: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        TextField(
+                          controller: widget.titleCtrl,
+                          minLines: 1,
+                          maxLines: 3,
+                          keyboardType: TextInputType.multiline,
                           decoration: normalTextInput.copyWith(
-                              labelText: 'Submissition Time'),
-                        )),
-                      ),
-                      WhiteDivider(),
-                      ElevatedButton.icon(
-                        onPressed: () async {
-                          result = await FilePicker.platform
-                              .pickFiles(allowMultiple: true);
-                          if (result == null) {
-                            print("No file selected");
-                          } else {
-                            setStateForDialog(() {});
-                          }
-                        },
-                        icon: const Icon(Icons.upload_file),
-                        label: const Text('Attach Files'),
-                      ),
-                      const WhiteDivider(),
-                      result == null
-                          ? Container()
-                          : Column(
-                              children: [
-                                const Text('Selected Files: '),
-                                ListView.builder(
-                                    shrinkWrap: true,
-                                    itemCount: result?.files.length ?? 0,
-                                    itemBuilder: (context, index) {
-                                      return Text(
-                                          textAlign: TextAlign.center,
-                                          result?.files[index].name ?? '',
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.bold));
-                                    }),
-                              ],
-                            ),
-                      const WhiteDivider(),
-                      ElevatedButton.icon(
-                        onPressed: () {
-                          print(result!.files.length);
-                        },
-                        label: const Text('Save'),
-                        icon: const Icon(
-                          Icons.save,
+                              labelText: 'Assignment Title'),
                         ),
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                              ConstantColors.createButtonColor),
+                        TextField(
+                          controller: widget.descriptionCtrl,
+                          keyboardType: TextInputType.multiline,
+                          minLines: 2,
+                          maxLines: 5,
+                          decoration: normalTextInput.copyWith(
+                              labelText: 'Description'),
                         ),
-                      ),
-                    ],
+                        TextField(
+                          controller: widget.marksCtrl,
+                          minLines: 1,
+                          maxLines: 1,
+                          keyboardType: TextInputType.number,
+                          decoration:
+                              normalTextInput.copyWith(labelText: 'Marks'),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            DatePicker.showDateTimePicker(
+                              context,
+                              showTitleActions: true,
+                              onChanged: (time) => {
+                                widget.subTimeCtrl.text =
+                                    time.toLocal().toString(),
+                              },
+                            );
+                          },
+                          child: AbsorbPointer(
+                              child: TextField(
+                            controller: widget.subTimeCtrl,
+                            decoration: normalTextInput.copyWith(
+                                labelText: 'Submissition Time'),
+                          )),
+                        ),
+                        WhiteDivider(),
+                        ElevatedButton.icon(
+                          onPressed: () async {
+                            result = await FilePicker.platform
+                                .pickFiles(allowMultiple: true);
+                            if (result == null) {
+                              print("No file selected");
+                            } else {
+                              setStateForDialog(() {});
+                            }
+                          },
+                          icon: const Icon(Icons.upload_file),
+                          label: const Text('Attach Files'),
+                        ),
+                        const WhiteDivider(),
+                        result == null
+                            ? Container()
+                            : Column(
+                                children: [
+                                  const Text('Selected Files: '),
+                                  ListView.builder(
+                                      shrinkWrap: true,
+                                      itemCount: result?.files.length ?? 0,
+                                      itemBuilder: (context, index) {
+                                        return Text(
+                                            textAlign: TextAlign.center,
+                                            result?.files[index].name ?? '',
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold));
+                                      }),
+                                ],
+                              ),
+                        const WhiteDivider(),
+                        ElevatedButton.icon(
+                          onPressed: () {
+                            print(widget.titleCtrl.text);
+                            print(widget.descriptionCtrl.text);
+                            print(widget.marksCtrl.text);
+                            print(widget.subTimeCtrl.text);
+                            if (result != null) {
+                              print(result!.files.length);
+                            }
+                          },
+                          label: const Text('Save'),
+                          icon: const Icon(
+                            Icons.save,
+                          ),
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                                ConstantColors.createButtonColor),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 );
               });

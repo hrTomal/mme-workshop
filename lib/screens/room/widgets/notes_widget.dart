@@ -161,7 +161,7 @@ class NotesWidgetView extends StatelessWidget {
                                   children: [
                                     const Text('Files '),
                                     SizedBox(
-                                      width: width * .57,
+                                      width: width * .53,
                                       //color: Colors.white,
                                       child: ListView.builder(
                                           itemCount:

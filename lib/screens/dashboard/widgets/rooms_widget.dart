@@ -110,16 +110,19 @@ class RoomsWidget extends StatelessWidget {
               }),
             ),
           ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).pushNamed(
-                AllSubjectScreen.routeName,
-                arguments: _rooms,
-              );
-            },
-            child: Text('Show All'),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: ConstantColors.primaryColor,
+          Padding(
+            padding: const EdgeInsets.only(top: 6.0),
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed(
+                  AllSubjectScreen.routeName,
+                  arguments: _rooms,
+                );
+              },
+              child: const Text('Show All'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: ConstantColors.primaryColor,
+              ),
             ),
           )
         ],

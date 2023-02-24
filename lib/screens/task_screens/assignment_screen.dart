@@ -1,8 +1,12 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:meetingme/constants/colors.dart';
 import 'package:meetingme/screens/task_screens/assignment_widgets/description_widget.dart';
 import 'package:meetingme/screens/task_screens/assignment_widgets/time_and_mark_widget.dart';
+import 'package:meetingme/services/common/file_picker.dart';
+import 'package:meetingme/services/common/show_toast.dart';
+import 'package:meetingme/services/tasks_data_service.dart';
 import 'package:meetingme/widgets/constant_widgets.dart';
 
 import '../../models/tasks/assignments.dart';
@@ -96,6 +100,9 @@ class _AssignmentScreenState extends State<AssignmentScreen> {
       this.hasSubmitted);
 
   var userType;
+  FilePickerResult? result;
+  List<String>? filePaths;
+
   @override
   void initState() {
     super.initState();
@@ -165,13 +172,108 @@ class _AssignmentScreenState extends State<AssignmentScreen> {
             SizedBox(
               height: gapSize,
             ),
-            // userType != 'TEACHER'
-            //     ? FloatingActionButton.extended(
-            //         onPressed: () {},
-            //         backgroundColor: ConstantColors.primaryColor,
-            //         label: const Text('Submit'),
-            //       )
-            //     : Container()
+            userType != 'TEACHER'
+                ? FloatingActionButton.extended(
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: ((context) {
+                          return StatefulBuilder(
+                              builder: (context, setStateForDialog) {
+                            return AlertDialog(
+                              content: SingleChildScrollView(
+                                child: Column(
+                                  children: [
+                                    const Text('Select Files To Submit'),
+                                    ElevatedButton.icon(
+                                      onPressed: () async {
+                                        filePaths = await LocalFilePicker()
+                                            .MultipleFilesPick();
+                                        setStateForDialog(() {});
+                                        // result = await FilePicker.platform
+                                        //     .pickFiles(allowMultiple: true);
+                                        // if (result == null) {
+                                        //   print("No file selected");
+                                        // } else {
+                                        //   setStateForDialog(() {});
+                                        // }
+                                      },
+                                      icon: const Icon(Icons.upload_file),
+                                      label: const Text('Attach Files'),
+                                    ),
+                                    WhiteDivider(),
+                                    result == null
+                                        ? Container()
+                                        : Column(
+                                            children: [
+                                              const Text('Selected Files: '),
+                                              ListView.builder(
+                                                shrinkWrap: true,
+                                                itemCount:
+                                                    result?.files.length ?? 0,
+                                                itemBuilder: (context, index) {
+                                                  return Text(
+                                                    textAlign: TextAlign.center,
+                                                    result?.files[index].name ??
+                                                        '',
+                                                    style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  );
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                    ElevatedButton.icon(
+                                      onPressed: () {
+                                        print(filePaths);
+                                        // if (result != null) {
+                                        //   if (result != null) {
+                                        //     // TasksService().assignmentSubmit(
+                                        //     //     id, result!.files);
+                                        //   } else {
+                                        //     ShowToast.ShowErrorToast(
+                                        //         'Select Files To submit');
+                                        //   }
+                                        // }
+                                        if (filePaths != null) {
+                                          TasksService()
+                                              .assignmentSubmit(id, filePaths!)
+                                              .then((value) =>
+                                                  ShowToast.ShowSuccessToast(
+                                                      'Upload Succesfull.'))
+                                              .catchError(
+                                                ShowToast.ShowErrorToast(
+                                                    'Something went wrong!'),
+                                              );
+                                        } else {
+                                          ShowToast.ShowErrorToast(
+                                              'Select Files To submit');
+                                        }
+                                      },
+                                      label: const Text('Submit'),
+                                      icon: const Icon(
+                                        Icons.save,
+                                      ),
+                                      style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all<Color>(
+                                                ConstantColors
+                                                    .createButtonColor),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          });
+                        }),
+                      );
+                    },
+                    backgroundColor: ConstantColors.primaryColor,
+                    label: const Text('Submit Assugnment'),
+                  )
+                : Container()
           ],
         ),
       ),

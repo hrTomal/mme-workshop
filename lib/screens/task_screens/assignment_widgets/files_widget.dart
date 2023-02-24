@@ -51,7 +51,7 @@ class _FilesWidgetState extends State<FilesWidget> {
         children: [
           const Text('Documents '),
           SizedBox(
-            width: widget.deviceWidth * .77,
+            width: widget.deviceWidth * .75,
             //color: Colors.white,
             child: ListView.builder(
                 itemCount: widget.files!.length,

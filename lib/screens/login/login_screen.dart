@@ -7,6 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:meetingme/bloc/login/login_bloc.dart';
 import 'package:meetingme/bloc/login/login_event.dart';
 import 'package:meetingme/bloc/login/login_state.dart';
+import 'package:meetingme/constants/colors.dart';
 import 'package:meetingme/models/country.dart';
 import 'package:meetingme/screens/dashboard/user_dashboard_screen.dart';
 import 'package:meetingme/services/login_service.dart';
@@ -211,7 +212,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.deepPurple,
+              backgroundColor: ConstantColors.loginButtonColor,
             ),
             child: const Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.0),

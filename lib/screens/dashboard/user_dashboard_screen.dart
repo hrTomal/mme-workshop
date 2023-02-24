@@ -254,6 +254,11 @@ class _UserDashboardState extends State<UserDashboard>
                               height: height,
                               topSectionHeight: topSectionHeight,
                             ),
+                            // ElevatedButton.icon(
+                            //   onPressed: () {},
+                            //   icon: Icon(Icons.slideshow),
+                            //   label: Text('Show All'),
+                            // ),
                             DashboardImageCarousel(),
                           ],
                         ),
