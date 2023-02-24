@@ -86,7 +86,7 @@ class RoomUser {
   String? firstName;
   String? lastName;
   String? email;
-  String? photo;
+  Null? photo;
   String? phone;
   String? address;
   String? userType;

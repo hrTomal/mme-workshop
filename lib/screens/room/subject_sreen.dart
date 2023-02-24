@@ -88,9 +88,9 @@ class _SubjectScreenState extends State<SubjectScreen>
               ),
               child: TabBarView(
                 controller: _controller,
-                children: const [
+                children: [
                   NotesWidget(),
-                  AssignmentsWidget(),
+                  AssignmentsWidget(id),
                   Center(
                     child: Text('Exams'),
                   ),

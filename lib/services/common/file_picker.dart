@@ -6,13 +6,13 @@ class LocalFilePicker {
         await FilePicker.platform.pickFiles(allowMultiple: true);
 
     if (result != null) {
-      List<String> fileNames = [];
+      List<String> filePaths = [];
 
       for (var file in result.files) {
-        fileNames.add(file.path!);
+        filePaths.add(file.path!);
       }
 
-      return fileNames;
+      return filePaths;
     } else {
       return null;
     }

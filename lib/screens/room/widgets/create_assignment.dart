@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:meetingme/components/components.dart';
 import 'package:meetingme/constants/colors.dart';
+import 'package:meetingme/services/common/show_toast.dart';
+import 'package:meetingme/services/tasks_data_service.dart';
 import 'package:meetingme/widgets/constant_widgets.dart';
 
 class CreateAssignment extends StatefulWidget {
@@ -12,12 +14,14 @@ class CreateAssignment extends StatefulWidget {
     required this.descriptionCtrl,
     required this.marksCtrl,
     required this.subTimeCtrl,
+    required this.subjectId,
   }) : super(key: key);
 
   final TextEditingController titleCtrl;
   final TextEditingController descriptionCtrl;
   final TextEditingController marksCtrl;
   final TextEditingController subTimeCtrl;
+  final String subjectId;
 
   @override
   State<CreateAssignment> createState() => _CreateAssignmentState();
@@ -25,6 +29,7 @@ class CreateAssignment extends StatefulWidget {
 
 class _CreateAssignmentState extends State<CreateAssignment> {
   FilePickerResult? result;
+  List<String> filePaths = [];
 
   @override
   Widget build(BuildContext context) {
@@ -83,11 +88,21 @@ class _CreateAssignmentState extends State<CreateAssignment> {
                         WhiteDivider(),
                         ElevatedButton.icon(
                           onPressed: () async {
+                            // result = await FilePicker.platform
+                            //     .pickFiles(allowMultiple: true);
+                            // if (result == null) {
+                            //   print("No file selected");
+                            // } else {
+                            //   setStateForDialog(() {});
+                            // }
                             result = await FilePicker.platform
                                 .pickFiles(allowMultiple: true);
                             if (result == null) {
                               print("No file selected");
                             } else {
+                              for (var file in result!.files) {
+                                filePaths.add(file.path!);
+                              }
                               setStateForDialog(() {});
                             }
                           },
@@ -115,12 +130,39 @@ class _CreateAssignmentState extends State<CreateAssignment> {
                         const WhiteDivider(),
                         ElevatedButton.icon(
                           onPressed: () {
-                            print(widget.titleCtrl.text);
-                            print(widget.descriptionCtrl.text);
-                            print(widget.marksCtrl.text);
-                            print(widget.subTimeCtrl.text);
-                            if (result != null) {
-                              print(result!.files.length);
+                            if (widget.titleCtrl.text.isEmpty) {
+                              ShowToast.ShowErrorToast(
+                                  'Please Enter Assignment Name');
+                            } else if (widget.descriptionCtrl.text.isEmpty) {
+                              ShowToast.ShowErrorToast(
+                                  'Please Enter Assignment Description');
+                            } else if (widget.marksCtrl.text.isEmpty) {
+                              ShowToast.ShowErrorToast(
+                                  'Please Enter Assignment Marks');
+                            } else if (widget.subTimeCtrl.text.isEmpty) {
+                              ShowToast.ShowErrorToast(
+                                  'Please Enter Assignment Submission Time');
+                            } else {
+                              TasksService()
+                                  .assignmentCreate(
+                                      widget.subjectId,
+                                      widget.titleCtrl.text,
+                                      widget.marksCtrl.text,
+                                      widget.descriptionCtrl.text,
+                                      widget.subTimeCtrl.text,
+                                      filePaths)
+                                  .then((value) => {
+                                        if (value == 200 || value == 201)
+                                          {
+                                            ShowToast.ShowSuccessToast(
+                                                'Assignment Created Succesfully!'),
+                                          }
+                                        else
+                                          {
+                                            ShowToast.ShowErrorToast(
+                                                'Failed to Create.')
+                                          }
+                                      });
                             }
                           },
                           label: const Text('Save'),

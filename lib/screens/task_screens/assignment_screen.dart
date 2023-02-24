@@ -101,7 +101,8 @@ class _AssignmentScreenState extends State<AssignmentScreen> {
 
   var userType;
   FilePickerResult? result;
-  List<String>? filePaths;
+  //List<String>? filePaths;
+  List<String> filePaths = [];
 
   @override
   void initState() {
@@ -187,16 +188,19 @@ class _AssignmentScreenState extends State<AssignmentScreen> {
                                     const Text('Select Files To Submit'),
                                     ElevatedButton.icon(
                                       onPressed: () async {
-                                        filePaths = await LocalFilePicker()
-                                            .MultipleFilesPick();
-                                        setStateForDialog(() {});
-                                        // result = await FilePicker.platform
-                                        //     .pickFiles(allowMultiple: true);
-                                        // if (result == null) {
-                                        //   print("No file selected");
-                                        // } else {
-                                        //   setStateForDialog(() {});
-                                        // }
+                                        // filePaths = await LocalFilePicker()
+                                        //     .MultipleFilesPick();
+                                        // setStateForDialog(() {});
+                                        result = await FilePicker.platform
+                                            .pickFiles(allowMultiple: true);
+                                        if (result == null) {
+                                          print("No file selected");
+                                        } else {
+                                          for (var file in result!.files) {
+                                            filePaths.add(file.path!);
+                                          }
+                                          setStateForDialog(() {});
+                                        }
                                       },
                                       icon: const Icon(Icons.upload_file),
                                       label: const Text('Attach Files'),
@@ -226,26 +230,22 @@ class _AssignmentScreenState extends State<AssignmentScreen> {
                                           ),
                                     ElevatedButton.icon(
                                       onPressed: () {
-                                        print(filePaths);
-                                        // if (result != null) {
-                                        //   if (result != null) {
-                                        //     // TasksService().assignmentSubmit(
-                                        //     //     id, result!.files);
-                                        //   } else {
-                                        //     ShowToast.ShowErrorToast(
-                                        //         'Select Files To submit');
-                                        //   }
-                                        // }
                                         if (filePaths != null) {
                                           TasksService()
-                                              .assignmentSubmit(id, filePaths!)
-                                              .then((value) =>
-                                                  ShowToast.ShowSuccessToast(
-                                                      'Upload Succesfull.'))
-                                              .catchError(
-                                                ShowToast.ShowErrorToast(
-                                                    'Something went wrong!'),
-                                              );
+                                              .assignmentSubmit(id, filePaths)
+                                              .then((value) => {
+                                                    if (value?.updatedAt ==
+                                                        null)
+                                                      {
+                                                        ShowToast.ShowErrorToast(
+                                                            'Already Submitted!'),
+                                                      }
+                                                    else
+                                                      {
+                                                        ShowToast.ShowSuccessToast(
+                                                            'Upload Succesfull.')
+                                                      }
+                                                  });
                                         } else {
                                           ShowToast.ShowErrorToast(
                                               'Select Files To submit');

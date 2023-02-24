@@ -8,9 +8,11 @@ import 'package:meetingme/widgets/constant_widgets.dart';
 import '../../../services/tasks_data_service.dart';
 
 class AssignmentsWidget extends StatefulWidget {
-  const AssignmentsWidget({
-    Key? key,
-  }) : super(key: key);
+  const AssignmentsWidget(
+    this.subjectId,
+  );
+
+  final String subjectId;
 
   @override
   State<AssignmentsWidget> createState() => _AssignmentsWidgetState();
@@ -48,6 +50,7 @@ class _AssignmentsWidgetState extends State<AssignmentsWidget> {
                 descriptionCtrl: descriptionCtrl,
                 marksCtrl: marksCtrl,
                 subTimeCtrl: subTimeCtrl,
+                subjectId: widget.subjectId,
               )
             : Container(),
         SizedBox(
