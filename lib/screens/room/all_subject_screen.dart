@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:meetingme/constants/colors.dart';
 import 'package:meetingme/constants/variable_names.dart';
 import 'package:meetingme/models/room_info.dart';
@@ -77,7 +78,10 @@ class _AllSubjectScreenState extends State<AllSubjectScreen> {
               ),
             );
           } else {
-            return CircularProgressIndicator();
+            return Center(
+              child: LoadingAnimationWidget.inkDrop(
+                  color: ConstantColors.primaryColor, size: 100),
+            );
           }
         },
       ),

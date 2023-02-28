@@ -19,7 +19,7 @@ class AssignmentsWidget extends StatefulWidget {
 }
 
 class _AssignmentsWidgetState extends State<AssignmentsWidget> {
-  final Future<Assignment> assignments = TasksService().getAllAssignments();
+  late Future<Assignment> assignments;
 
   var titleCtrl = TextEditingController();
   var descriptionCtrl = TextEditingController();
@@ -36,6 +36,7 @@ class _AssignmentsWidgetState extends State<AssignmentsWidget> {
             userType = value;
           })
         });
+    assignments = TasksService().getRoomAssignments(widget.subjectId);
   }
 
   @override
@@ -59,7 +60,11 @@ class _AssignmentsWidgetState extends State<AssignmentsWidget> {
               future: assignments,
               builder:
                   (BuildContext context, AsyncSnapshot<Assignment> snapshot) {
-                if (snapshot.hasData) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (snapshot.data!.count != 0) {
                   var allData = snapshot.data!.results;
                   return ListView.builder(
                     scrollDirection: Axis.vertical,
@@ -182,12 +187,16 @@ class _AssignmentsWidgetState extends State<AssignmentsWidget> {
                       );
                     },
                   );
+                } else {
+                  return Center(
+                    child: Text('Great work. Currently no work left.'),
+                  );
                 }
 
                 /// While is no data show this
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
+                // return const Center(
+                //   child: CircularProgressIndicator(),
+                // );
               }),
         ),
       ],

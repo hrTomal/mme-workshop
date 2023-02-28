@@ -7,4 +7,8 @@ class NotesEvents extends Equatable {
 
 class InitialEvent extends NotesEvents {}
 
-class FetchNotesEvent extends NotesEvents {}
+class FetchNotesEvent extends NotesEvents {
+  final String roomId;
+
+  FetchNotesEvent({required this.roomId});
+}

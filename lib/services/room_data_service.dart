@@ -33,8 +33,7 @@ class RoomService {
 class MeetingRoomService {
   Future<MeetingRoom> getMeetingRooms() async {
     //const meetingRoomsUrl = "${APIurls.devURL}meeting/room-meetings/";
-    const meetingRoomsUrl =
-        "http://dev.meetingme.live/api/meetings/room-subject-meetings/";
+    const meetingRoomsUrl = "${APIurls.devURL}meetings/room-subject-meetings/";
     var client = http.Client();
     var rooms;
     try {

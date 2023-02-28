@@ -246,6 +246,7 @@ class _AssignmentScreenState extends State<AssignmentScreen> {
                                                             'Upload Succesfull.')
                                                       }
                                                   });
+                                          Navigator.of(context).pop();
                                         } else {
                                           ShowToast.ShowErrorToast(
                                               'Select Files To submit');

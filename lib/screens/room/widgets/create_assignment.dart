@@ -163,6 +163,7 @@ class _CreateAssignmentState extends State<CreateAssignment> {
                                                 'Failed to Create.')
                                           }
                                       });
+                              Navigator.of(context).pop();
                             }
                           },
                           label: const Text('Save'),

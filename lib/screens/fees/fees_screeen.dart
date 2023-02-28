@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:meetingme/constants/colors.dart';
 import 'package:meetingme/screens/fees/payment_screen.dart';
 
 import '../../models/fee/fee_info.dart';
@@ -83,7 +85,14 @@ class _Fees extends State<Fees> {
                   future: _fees,
                   builder: (BuildContext context,
                       AsyncSnapshot<List<FeeInfo>> snapshot) {
-                    if (snapshot.hasData) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(
+                        child: LoadingAnimationWidget.inkDrop(
+                          color: ConstantColors.primaryColor,
+                          size: 100,
+                        ),
+                      );
+                    } else if (snapshot.hasData) {
                       var res = snapshot.data;
                       var fees = res!
                           .map(((e) => SingleFeeInfo(
@@ -128,7 +137,7 @@ class _Fees extends State<Fees> {
                         ),
                       );
                     } else {
-                      return Container(
+                      return const Center(
                         child: Text('No fees assigned.'),
                       );
                     }

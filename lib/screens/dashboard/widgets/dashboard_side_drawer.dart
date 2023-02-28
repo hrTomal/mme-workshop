@@ -4,7 +4,9 @@ import 'package:meetingme/models/exam_board.dart';
 import 'package:meetingme/screens/exam_board/exam_board_screen.dart';
 import 'package:meetingme/screens/fees/payment_history.dart';
 import 'package:meetingme/screens/login/login_screen.dart';
+import 'package:meetingme/screens/room/all_subject_screen.dart';
 import 'package:meetingme/screens/splash/splash_screen.dart';
+import 'package:meetingme/services/room_data_service.dart';
 
 import '../../../models/user.dart';
 import '../../../widgets/constant_widgets.dart';
@@ -112,17 +114,22 @@ class _DashboardSideDrawerState extends State<DashboardSideDrawer> {
               ),
             ],
           ),
-          // const WhiteDivider(),
-          // ListTile(
-          //   title: const Text(
-          //     'My Rooms',
-          //     style: TextStyle(
-          //       color: Colors.white,
-          //     ),
-          //   ),
-          //   onTap: (() {}),
-          // ),
-
+          const WhiteDivider(),
+          ListTile(
+            title: const Text(
+              'My Rooms',
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+            onTap: (() {
+              final rooms = RoomService().getRooms();
+              Navigator.of(context).pushNamed(
+                AllSubjectScreen.routeName,
+                arguments: rooms,
+              );
+            }),
+          ),
           const WhiteDivider(),
           ListTile(
             title: const Text(

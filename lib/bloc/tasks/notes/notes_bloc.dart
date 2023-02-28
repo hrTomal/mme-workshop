@@ -11,10 +11,10 @@ class NotesBloc extends Bloc<NotesEvents, NotesStates> {
     on<NotesEvents>((event, emit) async {
       if (event is InitialEvent) {
         emit(NotesLoadingState());
-        Note notes = await tasksService.getAllNotes();
-        emit(SuccessFetchingNotesState(notes));
+        // Note notes = await tasksService.getRoomNotes(event.roomId);
+        // emit(SuccessFetchingNotesState(notes));
       } else if (event is FetchNotesEvent) {
-        Note notes = await tasksService.getAllNotes();
+        Note notes = await tasksService.getRoomNotes(event.roomId);
         emit(SuccessFetchingNotesState(notes));
       }
     });

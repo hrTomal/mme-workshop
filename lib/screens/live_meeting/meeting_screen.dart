@@ -77,40 +77,15 @@ class _MeetingState extends State<Meeting> {
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     return Scaffold(
-      body: Container(
-        // padding: const EdgeInsets.symmetric(
-        //   horizontal: 16.0,
-        // ),
-        child: kIsWeb
-            ? Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // Container(
-                  //   width: width * 0.30,
-                  //   child: meetConfig(context),
-                  // ),
-                  Container(
-                      width: width * 0.60,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Card(
-                            color: Colors.white54,
-                            child: SizedBox(
-                              width: width * 0.60 * 0.70,
-                              height: width * 0.60 * 0.70,
-                              child: JitsiMeetConferencing(
-                                extraJS: const [
-                                  // extraJs setup example
-                                  '<script>function echo(){console.log("echo!!!")};</script>',
-                                  '<script src="https://code.jquery.com/jquery-3.5.1.slim.js" integrity="sha256-DrT5NfxfbHvMHux31Lkhxg42LY6of8TaYyK50jnxRnM=" crossorigin="anonymous"></script>'
-                                ],
-                              ),
-                            )),
-                      ))
-                ],
-              )
-            : meetConfig(context),
-      ),
+      body: kIsWeb
+          ? JitsiMeetConferencing(
+              extraJS: const [
+                // extraJs setup example
+                '<script>function echo(){console.log("echo!!!")};</script>',
+                '<script src="https://code.jquery.com/jquery-3.5.1.slim.js" integrity="sha256-DrT5NfxfbHvMHux31Lkhxg42LY6of8TaYyK50jnxRnM=" crossorigin="anonymous"></script>'
+              ],
+            )
+          : meetConfig(context),
     );
   }
 }
@@ -120,7 +95,7 @@ Widget meetConfig(BuildContext context) {
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text('Meeting Terminated'),
+        //Text('Meeting Terminated'),
         ElevatedButton(
           onPressed: () {
             Navigator.pop(context);
@@ -162,6 +137,7 @@ _joinMeeting(
   // Full list of feature flags (and defaults) available in the README
   Map<FeatureFlagEnum, bool> featureFlags = {
     FeatureFlagEnum.WELCOME_PAGE_ENABLED: false,
+    FeatureFlagEnum.INVITE_ENABLED: false,
   };
   if (!kIsWeb) {
     // Here is an example, disabling features for each platform

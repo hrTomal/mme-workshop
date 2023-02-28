@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:meetingme/bloc/login/login_bloc.dart';
 import 'package:meetingme/bloc/login/login_event.dart';
 import 'package:meetingme/bloc/login/login_state.dart';
@@ -81,8 +82,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
           // Text(state.message);
         } else if (state is LoginLoadingState) {
-          return const Center(
-            child: CircularProgressIndicator(),
+          return Center(
+            child: LoadingAnimationWidget.twistingDots(
+              leftDotColor: const Color(0xFF1A1A3F),
+              rightDotColor: const Color(0xFFEA3799),
+              size: 200,
+            ),
           );
         } else {
           return Container();
@@ -118,8 +123,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 ],
               );
             } else if (state is LoginLoadingState) {
-              return const Center(
-                child: CircularProgressIndicator(),
+              return Center(
+                child: LoadingAnimationWidget.inkDrop(
+                  color: ConstantColors.primaryColor,
+                  size: 100,
+                ),
               );
             } else {
               return LoginWidget(deviceHeight, deviceWidth);
@@ -151,6 +159,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   /// When the result of the future call respond and has data show that data
                   var _countriesForDropDown = snapshot.data!.results;
                   //print(dat.data!.results);
+
                   return DropdownButton(
                     hint: const Text('Country'),
                     value: _selectedCountry,

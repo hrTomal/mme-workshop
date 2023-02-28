@@ -30,8 +30,52 @@ class TasksService {
     return assignments;
   }
 
+  Future<Assignment> getRoomAssignments(roomId) async {
+    var apiURL = "${APIurls.devURL}assignments/?room_subject=$roomId";
+    var client = http.Client();
+    var assignments;
+    try {
+      var token = await SessionManager().get("token");
+      var response = await client.get(Uri.parse(apiURL), headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      });
+      if (response.statusCode == 200) {
+        var jsonString = response.body;
+        var jsonMap = json.decode(jsonString);
+        assignments = Assignment.fromJson(jsonMap);
+      }
+    } catch (ex) {
+      print(ex);
+    }
+    return assignments;
+  }
+
   Future<Note> getAllNotes() async {
     const apiURL = "${APIurls.devURL}notes/";
+    var client = http.Client();
+    var notes;
+    try {
+      var token = await SessionManager().get("token");
+      var response = await client.get(Uri.parse(apiURL), headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      });
+      if (response.statusCode == 200) {
+        var jsonString = response.body;
+        var jsonMap = json.decode(jsonString);
+        notes = Note.fromJson(jsonMap);
+      }
+    } catch (ex) {
+      print(ex);
+    }
+    return notes;
+  }
+
+  Future<Note> getRoomNotes(roomId) async {
+    var apiURL = "${APIurls.devURL}notes/?room_subject=$roomId";
     var client = http.Client();
     var notes;
     try {
