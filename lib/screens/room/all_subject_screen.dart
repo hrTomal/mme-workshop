@@ -39,28 +39,53 @@ class _AllSubjectScreenState extends State<AllSubjectScreen> {
         //initialData: InitialData,
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
-            var _roomList = snapshot.data!.results;
+            var roomList = snapshot.data!.results;
+
+            // var classes = [];
+            // for (var val in roomList) {
+            //   classes.add(val.roomDetails.name);
+            // }
+            // List<String> uniClasses = Set<String>.from(classes).toList();
+            // uniClasses.sort((a, b) => a.toString().compareTo(b.toString()));
+            // print(uniClasses);
+
+            // return ListView.builder(
+            //   itemCount: uniClasses.length,
+            //   itemBuilder: (BuildContext context, int index) {
+            //     return Container(
+            //       padding: EdgeInsets.symmetric(vertical: width * .03),
+            //       margin: EdgeInsets.symmetric(vertical: width * .01),
+            //       alignment: Alignment.center,
+            //       color: ConstantColors.primaryColor,
+            //       child: Text(
+            //         uniClasses[index],
+            //         style: const TextStyle(
+            //             color: Colors.white, fontWeight: FontWeight.bold),
+            //       ),
+            //     );
+            //   },
+            // );
             return GridView.builder(
               semanticChildCount: 2,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   mainAxisSpacing: 2,
                   mainAxisExtent: height * .1),
-              itemCount: _roomList.length,
+              itemCount: roomList.length,
               itemBuilder: (item, index) => GestureDetector(
                 onTap: () {
                   Navigator.pushNamed(
                     context,
                     SubjectScreen.routeName,
                     arguments: RoomArguments(
-                      _roomList[index].id ?? '',
+                      roomList[index].id ?? '',
                       Subject(
-                          id: _roomList[index].subject?.id ?? '',
-                          title: _roomList[index].subject?.title ?? '',
+                          id: roomList[index].subject?.id ?? '',
+                          title: roomList[index].subject?.title ?? '',
                           description:
-                              _roomList[index].subject?.description ?? ''),
-                      _roomList[index].description ?? '',
-                      _roomList[index].room ?? '',
+                              roomList[index].subject?.description ?? ''),
+                      roomList[index].description ?? '',
+                      roomList[index].room ?? '',
                     ),
                   );
                 },
@@ -70,8 +95,15 @@ class _AllSubjectScreenState extends State<AllSubjectScreen> {
                       child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(_roomList[index].subject.title),
-                      //Text(_roomList[index].subject.)
+                      Text(roomList[index].subject.title),
+                      Card(
+                          color: ConstantColors.primaryColor,
+                          child: Text(
+                            roomList[index].roomDetails.name,
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ))
                     ],
                   )),
                 ),
