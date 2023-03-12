@@ -32,7 +32,7 @@ class RoomsWidget extends StatelessWidget {
         children: [
           Container(
             //color: Colors.amber,
-            width: (width - (width * .050)) * .74,
+            width: (width - (width * .050)) * .70,
             child: FutureBuilder(
               future: _rooms,
               builder: ((context, snapshot) {
@@ -110,8 +110,9 @@ class RoomsWidget extends StatelessWidget {
               }),
             ),
           ),
-          Padding(
+          Container(
             padding: const EdgeInsets.only(top: 6.0),
+            margin: const EdgeInsets.only(left: 5.0),
             child: ElevatedButton(
               onPressed: () {
                 Navigator.of(context).pushNamed(

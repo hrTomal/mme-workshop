@@ -3,12 +3,10 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:meetingme/constants/colors.dart';
+import 'package:meetingme/constants/urls.dart';
 import 'package:meetingme/models/tasks/assignments.dart';
 import 'package:meetingme/services/download_from_url.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class FilesWidget extends StatefulWidget {
   const FilesWidget({
@@ -64,12 +62,27 @@ class _FilesWidgetState extends State<FilesWidget> {
                     color: Colors.white,
                     child: GestureDetector(
                       onTap: (() {
-                        DownloadFromURL.downloadFile(widget.files![index].file);
+                        //DownloadFromURL.downloadFile(widget.files![index].file);
+
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                  content: Container(
+                                // height: height * .3,
+                                // width: width * .6,
+                                color: Colors.white,
+                                child: GestureDetector(
+                                    onTap: () {
+                                      // DownloadFromURL.downloadFile(
+                                      //     widget.files![index].file ?? '');
+                                    },
+                                    child: Image.network(
+                                        widget.files![index].file ?? '')),
+                              ));
+                            });
                       }),
-                      child: Image.network(
-                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT3-RjXBulP7lPhXjyWTa1jaW6cd5fDzoC240S1hLRH_A6BUZ1b-U2UMYcJS9tg-xdfLYQ&usqp=CAU',
-                        fit: BoxFit.contain,
-                      ),
+                      child: Image.asset(ImageUrls.localfileImageUrl),
                     ),
                   );
                 }),

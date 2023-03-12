@@ -84,6 +84,7 @@ flutter:
   assets:
     - assets/images/meetingme_logo.jpg
     - assets/images/meetingme_logo.png
+    - assets/images/fileImage.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
