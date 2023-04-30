@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:jitsi_meet/jitsi_meet.dart';
+import 'package:meetingme/models/token_model.dart';
+import 'package:meetingme/services/room_data_service.dart';
 
 import '../../constants/urls.dart';
 
@@ -29,6 +31,8 @@ class _MeetingState extends State<Meeting> {
   final String userName;
   final String code;
 
+  TokenModel? lobbyAndTOken;
+
   late final serverText;
   final roomText = TextEditingController(text: "plugintestroom");
   final subjectText = TextEditingController(text: "My Plugin Test Meeting");
@@ -41,7 +45,7 @@ class _MeetingState extends State<Meeting> {
   bool? isVideoMuted = true;
 
   _MeetingState(this.userName, this.lobbyName, this.code) {
-    this.serverText = APIurls.meetingServerUrl + this.code;
+    serverText = APIurls.meetingServerUrl + lobbyName;
   }
 
   @override
@@ -54,17 +58,15 @@ class _MeetingState extends State<Meeting> {
           onConferenceTerminated: _onConferenceTerminated,
           onError: _onError),
     );
-    _joinMeeting(
-      this.serverText,
-      this.lobbyName,
-      '',
-      this.userName,
-      '',
-      '',
-      true,
-      true,
-      true,
-    );
+
+    MeetingRoomService().getMeetingToken(lobbyName).then((value) {
+      lobbyAndTOken = value;
+
+      var totaltext = '$serverText?jwt=${lobbyAndTOken?.token}';
+
+      _joinMeeting(totaltext, lobbyName, '', userName, '', '', true, true, true,
+          lobbyAndTOken?.token);
+    });
   }
 
   @override
@@ -120,16 +122,16 @@ class MeetingArguments {
 }
 
 _joinMeeting(
-  String serverText,
-  String roomText,
-  String subjectText,
-  String nameText,
-  String emailText,
-  String iosAppBarRGBAColor,
-  bool isAudioOnly,
-  bool isAudioMuted,
-  bool isVideoMuted,
-) async {
+    String serverText,
+    String roomText,
+    String subjectText,
+    String nameText,
+    String emailText,
+    String iosAppBarRGBAColor,
+    bool isAudioOnly,
+    bool isAudioMuted,
+    bool isVideoMuted,
+    String? jwt) async {
   String? serverUrl = serverText;
 
   // Enable or disable any feature flag here
@@ -144,10 +146,10 @@ _joinMeeting(
     if (Platform.isAndroid) {
       // Disable ConnectionService usage on Android to avoid issues (see README)
       featureFlags[FeatureFlagEnum.CALL_INTEGRATION_ENABLED] = false;
-      featureFlags[FeatureFlagEnum.RECORDING_ENABLED] = false;
+      // featureFlags[FeatureFlagEnum.RECORDING_ENABLED] = false;
     } else if (Platform.isIOS) {
       // Disable PIP on iOS as it looks weird
-      featureFlags[FeatureFlagEnum.RECORDING_ENABLED] = false;
+      // featureFlags[FeatureFlagEnum.RECORDING_ENABLED] = true;
       featureFlags[FeatureFlagEnum.PIP_ENABLED] = false;
     }
   }
@@ -162,6 +164,7 @@ _joinMeeting(
     ..audioMuted = isAudioMuted
     ..videoMuted = isVideoMuted
     ..featureFlags.addAll(featureFlags)
+    ..token = jwt
     ..webOptions = {
       "roomName": roomText,
       "width": "100%",

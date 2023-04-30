@@ -13,15 +13,21 @@ import 'package:meetingme/screens/exam_board/exam_board_screen.dart';
 import 'package:meetingme/screens/fees/fees_screeen.dart';
 import 'package:meetingme/screens/fees/payment_history.dart';
 import 'package:meetingme/screens/fees/payment_screen.dart';
+import 'package:meetingme/screens/fees/payment_screen_sdk.dart';
 import 'package:meetingme/screens/live_meeting/meeting_screen.dart';
 import 'package:meetingme/screens/login/login_screen.dart';
 import 'package:meetingme/screens/room/all_subject_screen.dart';
 import 'package:meetingme/screens/room/subject_sreen.dart';
 import 'package:meetingme/screens/task_screens/assignment_screen.dart';
 import 'package:meetingme/screens/splash/splash_screen.dart';
+import 'package:meetingme/screens/workshop/details.dart';
+import 'package:meetingme/screens/workshop/list.dart';
+import 'package:meetingme/screens/workshop/wp_Details.dart';
 import 'package:meetingme/services/general_data_service.dart';
 import 'package:meetingme/services/login_service.dart';
 import 'package:meetingme/services/tasks_data_service.dart';
+import 'package:meetingme/models/workshop/workshop_list_model.dart'
+    as workshopList;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -58,12 +64,13 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        title: 'MeetingMe',
+        title: 'MeetingMe-Workshop',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.blueGrey,
         ),
-        home: LoginScreen(),
+        home: WorkshopList(),
+        // LoginScreen(),
         onGenerateRoute: (settings) {
           if (settings.name == SplashScreen.routeName) {
             return MaterialPageRoute(
@@ -166,6 +173,26 @@ class MyApp extends StatelessWidget {
                   updatedBy: args.updatedBy,
                   roomSubject: args.roomSubject,
                   hasSubmitted: args.hasSubmitted,
+                );
+              },
+            );
+          }
+          if (settings.name == WorkshopDetails.routeName) {
+            return MaterialPageRoute(
+              builder: (_) {
+                final args = settings.arguments as workshopList.Results;
+                return WorkshopDetails(
+                  singleWorkhopModel: args,
+                );
+              },
+            );
+          }
+          if (settings.name == WPDetails.routeName) {
+            return MaterialPageRoute(
+              builder: (_) {
+                final args = settings.arguments as String;
+                return WPDetails(
+                  wpUrl: args,
                 );
               },
             );

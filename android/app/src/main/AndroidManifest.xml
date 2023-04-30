@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
    <application
         tools:replace="android:label,android:icon"
-        android:label="MeetingMe"
+        android:label="Workshop-MMe"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity

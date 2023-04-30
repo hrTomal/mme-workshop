@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
     <application 
         tools:replace="android:label,android:icon"  
-        android:label="meetingme"
+        android:label="Workshop-MMe"
         android:icon="@mipmap/launcher_icon">
     </application>
     <!-- The INTERNET permission is required for development. Specifically,

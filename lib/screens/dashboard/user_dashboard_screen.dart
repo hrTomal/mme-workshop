@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:meetingme/constants/colors.dart';
+import 'package:meetingme/models/token_model.dart';
 import 'package:meetingme/screens/dashboard/widgets/dashboard_image_carousel.dart';
 import 'package:meetingme/screens/dashboard/widgets/dashboard_side_drawer.dart';
 import 'package:meetingme/screens/dashboard/widgets/notice_widget.dart';
@@ -53,58 +55,19 @@ class _UserDashboardState extends State<UserDashboard>
       child: SafeArea(
         child: Scaffold(
           key: _scaffoldKey,
-          backgroundColor: Color.fromRGBO(26, 55, 77, 1),
+          backgroundColor: ConstantColors.primaryColor,
           drawer: SideDrawerForAllPage(
             userInfo: userInfo,
           ),
           body: Column(
             children: [
-              Container(
-                height: topSectionHeight,
-                padding: EdgeInsets.symmetric(horizontal: width * .03),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                            _scaffoldKey.currentState?.openDrawer();
-                          },
-                          icon: Icon(Icons.line_weight),
-                          color: Colors.white,
-                        ),
-                        const VerticalDivider(),
-                        Text(
-                          'Meeting Me',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: height * .03),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        SizedBox(
-                          child: Text(
-                            '${userInfo.firstName} ${userInfo.lastName}',
-                            style: const TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          child: Icon(
-                            Icons.verified_user,
-                            color: userVerification ? Colors.green : Colors.red,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
+              MMEAppBar(
+                  topSectionHeight: topSectionHeight,
+                  width: width,
+                  scaffoldKey: _scaffoldKey,
+                  height: height,
+                  userInfo: userInfo,
+                  userVerification: userVerification),
               Expanded(
                 child: Container(
                   padding: EdgeInsets.all(width * .025),
@@ -349,9 +312,10 @@ class _UserDashboardState extends State<UserDashboard>
                                 ),
                                 actions: [
                                   ElevatedButton(
-                                    onPressed: () {
+                                    onPressed: () async {
                                       Navigator.of(context, rootNavigator: true)
                                           .pop();
+
                                       webViewMethod(
                                           context,
                                           details.appointments![index].userName,
@@ -377,6 +341,75 @@ class _UserDashboardState extends State<UserDashboard>
         },
       );
     }
+  }
+}
+
+class MMEAppBar extends StatelessWidget {
+  const MMEAppBar({
+    super.key,
+    required this.topSectionHeight,
+    required this.width,
+    required GlobalKey<ScaffoldState> scaffoldKey,
+    required this.height,
+    required this.userInfo,
+    required this.userVerification,
+  }) : _scaffoldKey = scaffoldKey;
+
+  final double topSectionHeight;
+  final double width;
+  final GlobalKey<ScaffoldState> _scaffoldKey;
+  final double height;
+  final User userInfo;
+  final bool userVerification;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: topSectionHeight,
+      padding: EdgeInsets.symmetric(horizontal: width * .03),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              IconButton(
+                onPressed: () {
+                  _scaffoldKey.currentState?.openDrawer();
+                },
+                icon: Icon(Icons.line_weight),
+                color: Colors.white,
+              ),
+              const VerticalDivider(),
+              Text(
+                'Meeting Me',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: height * .03),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              SizedBox(
+                child: Text(
+                  '${userInfo.firstName} ${userInfo.lastName}',
+                  style: const TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              SizedBox(
+                child: Icon(
+                  Icons.verified_user,
+                  color: userVerification ? Colors.green : Colors.red,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -450,6 +483,25 @@ void _navigateToMeeting(
     arguments: MeetingArguments(userName, lobbyName, name),
   );
 }
+
+// void _navigateToMeeting(BuildContext context, String userName, String lobbyName,
+//     String name) async {
+//   try {
+//     // Call API to fetch token
+//     final value = await MeetingRoomService().getMeetingToken(lobbyName);
+//     final jwtToken = lobbyName + '?jwt=${value.token}';
+
+//     // Navigate to Meeting screen with arguments
+//     Navigator.pushNamed(
+//       context,
+//       Meeting.routeName,
+//       arguments: MeetingArguments(userName, jwtToken, name),
+//     );
+//   } catch (e) {
+//     // Handle error
+//     print('Error: $e');
+//   }
+// }
 
 class MeetingDataSource extends CalendarDataSource {
   MeetingDataSource(List<SingleMeeting> source) {
