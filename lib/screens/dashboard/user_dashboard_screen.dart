@@ -422,8 +422,14 @@ _getMeetings(values, userInfo) {
       DateTime meetingDate = DateTime.parse(element.meeting!.date);
       DateTime startTimeFull = DateTime.parse(
           element.meeting!.date + ' ' + element.meeting!.startTime);
-      DateTime endTimeFull = DateTime.parse(
-          (element.meeting!.date) + ' ' + element.meeting!.endTime);
+      DateTime endTimeFull;
+      if (element.meeting?.endTime != null) {
+        endTimeFull = DateTime.parse(
+            (element.meeting?.date ?? '') + ' ' + element.meeting?.endTime ??
+                '');
+      } else {
+        endTimeFull = startTimeFull.add(Duration(hours: 4));
+      }
 
       DateTime startTime = DateTime(
           meetingDate.year,

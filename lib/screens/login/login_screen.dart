@@ -11,6 +11,8 @@ import 'package:meetingme/bloc/login/login_state.dart';
 import 'package:meetingme/constants/colors.dart';
 import 'package:meetingme/models/country.dart';
 import 'package:meetingme/screens/dashboard/user_dashboard_screen.dart';
+import 'package:meetingme/screens/password_change/otp_verification.dart';
+import 'package:meetingme/screens/workshop/list.dart';
 import 'package:meetingme/services/login_service.dart';
 
 import '../../components/components.dart';
@@ -57,6 +59,12 @@ class _LoginScreenState extends State<LoginScreen> {
                 )
               ],
             ));
+  }
+
+  @override
+  Future<bool> onWillPop() async {
+    Navigator.pushNamed(context, WorkshopList.routeName);
+    return true;
   }
 
   @override
@@ -272,6 +280,26 @@ class _LoginScreenState extends State<LoginScreen> {
                 );
               }
             },
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pushNamed(context, OtpVerification.routeName);
+            },
+            child: const Text(
+              'Forgot Password',
+              style: TextStyle(
+                decoration: TextDecoration.underline,
+              ),
+            ),
+            style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.all<Color>(Colors.red),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pushNamed(context, WorkshopList.routeName);
+            },
+            child: const Text('Show All Workshops'),
           ),
         ],
       ),
