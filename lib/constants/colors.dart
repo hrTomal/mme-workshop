@@ -5,4 +5,5 @@ class ConstantColors {
   static const createButtonColor = Color.fromRGBO(26, 55, 77, 1);
   static const primaryColor = Color.fromRGBO(26, 55, 77, 1);
   static const loginButtonColor = Color.fromRGBO(26, 55, 77, 1);
+  static const meetingButtonColor = Color.fromRGBO(85, 185, 199, 1);
 }

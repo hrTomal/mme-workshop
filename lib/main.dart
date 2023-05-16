@@ -14,7 +14,9 @@ import 'package:meetingme/screens/fees/fees_screeen.dart';
 import 'package:meetingme/screens/fees/payment_history.dart';
 import 'package:meetingme/screens/fees/payment_screen.dart';
 import 'package:meetingme/screens/fees/payment_screen_sdk.dart';
+import 'package:meetingme/screens/live_meeting/join_by_code.dart';
 import 'package:meetingme/screens/live_meeting/meeting_screen.dart';
+import 'package:meetingme/screens/live_meeting/meeting_webview.dart';
 import 'package:meetingme/screens/login/login_screen.dart';
 import 'package:meetingme/screens/password_change/otp_verification.dart';
 import 'package:meetingme/screens/room/all_subject_screen.dart';
@@ -93,11 +95,24 @@ class MyApp extends StatelessWidget {
               builder: (_) => OtpVerification(),
             );
           }
+          if (settings.name == JoinMeetingByCode.routeName) {
+            return MaterialPageRoute(
+              builder: (_) => JoinMeetingByCode(),
+            );
+          }
           if (settings.name == PaymentWebView.routeName) {
             final args = settings.arguments as String;
             return MaterialPageRoute(
               builder: (_) => PaymentWebView(
                 paymentUrl: args,
+              ),
+            );
+          }
+          if (settings.name == MeetingWebview.routeName) {
+            final args = settings.arguments as String;
+            return MaterialPageRoute(
+              builder: (_) => MeetingWebview(
+                meetingUrl: args,
               ),
             );
           }

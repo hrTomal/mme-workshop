@@ -17,6 +17,7 @@ import 'package:meetingme/services/login_service.dart';
 
 import '../../components/components.dart';
 import '../../widgets/constant_widgets.dart';
+import '../live_meeting/join_by_code.dart';
 
 class LoginScreen extends StatefulWidget {
   static const routeName = '/login';
@@ -227,79 +228,109 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
           ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: ConstantColors.loginButtonColor,
-            ),
-            child: const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10.0),
-              child: Text(
-                'Login',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, OtpVerification.routeName);
+                },
+                style: ButtonStyle(
+                  foregroundColor: MaterialStateProperty.all<Color>(Colors.red),
+                  shape: MaterialStateProperty.all<OutlinedBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
+                      side: const BorderSide(color: Colors.red),
+                    ),
+                  ),
+                ),
+                child: const Text(
+                  'Forgot Password',
+                  // style: TextStyle(
+                  //   decoration: TextDecoration.underline,
+                  // ),
                 ),
               ),
-            ),
-            onPressed: () {
-              var country = _selectedCountry ?? 'null';
-              if (country == 'null') {
-                Fluttertoast.showToast(
-                    msg: "Please Select Country First.",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.BOTTOM,
-                    timeInSecForIosWeb: 1,
-                    backgroundColor: Colors.red,
-                    textColor: Colors.white,
-                    fontSize: 16.0);
-              } else if (phone.text == '') {
-                Fluttertoast.showToast(
-                    msg: "Please Enter Phone Number.",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.BOTTOM,
-                    timeInSecForIosWeb: 1,
-                    backgroundColor: Colors.red,
-                    textColor: Colors.white,
-                    fontSize: 16.0);
-              } else if (password.text == '') {
-                Fluttertoast.showToast(
-                    msg: "Please Enter Your Password.",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.BOTTOM,
-                    timeInSecForIosWeb: 1,
-                    backgroundColor: Colors.red,
-                    textColor: Colors.white,
-                    fontSize: 16.0);
-              } else {
-                loginBloc.add(
-                  LoginButtonPressed(
-                    phone: phone.text, //'01954492600'
-                    password: password.text, //'1234'
-                    country_code:
-                        _selectedCountry!, //'BD', //'BD' _selectedCountry!
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: ConstantColors.loginButtonColor,
+                ),
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Text(
+                    'Login',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                );
-              }
-            },
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pushNamed(context, OtpVerification.routeName);
-            },
-            child: const Text(
-              'Forgot Password',
-              style: TextStyle(
-                decoration: TextDecoration.underline,
+                ),
+                onPressed: () {
+                  var country = _selectedCountry ?? 'null';
+                  if (country == 'null') {
+                    Fluttertoast.showToast(
+                        msg: "Please Select Country First.",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.BOTTOM,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                        fontSize: 16.0);
+                  } else if (phone.text == '') {
+                    Fluttertoast.showToast(
+                        msg: "Please Enter Phone Number.",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.BOTTOM,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                        fontSize: 16.0);
+                  } else if (password.text == '') {
+                    Fluttertoast.showToast(
+                        msg: "Please Enter Your Password.",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.BOTTOM,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                        fontSize: 16.0);
+                  } else {
+                    loginBloc.add(
+                      LoginButtonPressed(
+                        phone: phone.text, //'01954492600'
+                        password: password.text, //'1234'
+                        country_code:
+                            _selectedCountry!, //'BD', //'BD' _selectedCountry!
+                      ),
+                    );
+                  }
+                },
               ),
+            ],
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pushNamed(context, JoinMeetingByCode.routeName);
+            },
+            style: ElevatedButton.styleFrom(
+              foregroundColor: Colors.white,
+              backgroundColor: ConstantColors.meetingButtonColor, // text color
             ),
-            style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all<Color>(Colors.red),
+            child: const Text(
+              'Join A Meeting By Code',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
           ElevatedButton(
             onPressed: () {
               Navigator.pushNamed(context, WorkshopList.routeName);
             },
-            child: const Text('Show All Workshops'),
+            style: ElevatedButton.styleFrom(
+              foregroundColor: Colors.white,
+              backgroundColor: ConstantColors.meetingButtonColor, // text color
+            ),
+            child: const Text('Live Workshops'),
           ),
         ],
       ),
