@@ -7,7 +7,8 @@ import '../../constants/urls.dart';
 
 class WorkshopDataService {
   Future<WorkshopListModel> getAllWorkshops() async {
-    const apiURL = "${APIurls.workshopUrl}workshops/";
+    const apiURL =
+        "${APIurls.workshopUrl}workshops/?not_offered_by=careercoach";
     var client = http.Client();
     var workshops;
     try {

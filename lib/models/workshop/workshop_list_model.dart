@@ -1,7 +1,7 @@
 class WorkshopListModel {
   int? count;
-  String? next;
-  String? previous;
+  Null? next;
+  Null? previous;
   List<Results>? results;
   int? totalPages;
   int? currentPage;
@@ -57,8 +57,10 @@ class Results {
   String? ledText;
   String? slug;
   String? wpUrl;
-  String? createdBy;
-  String? updatedBy;
+  int? priority;
+  Null? createdBy;
+  Null? updatedBy;
+  Null? offeredBy;
 
   Results(
       {this.id,
@@ -75,8 +77,10 @@ class Results {
       this.ledText,
       this.slug,
       this.wpUrl,
+      this.priority,
       this.createdBy,
-      this.updatedBy});
+      this.updatedBy,
+      this.offeredBy});
 
   Results.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -100,8 +104,10 @@ class Results {
     ledText = json['led_text'];
     slug = json['slug'];
     wpUrl = json['wp_url'];
+    priority = json['priority'];
     createdBy = json['created_by'];
     updatedBy = json['updated_by'];
+    offeredBy = json['offered_by'];
   }
 
   Map<String, dynamic> toJson() {
@@ -124,8 +130,10 @@ class Results {
     data['led_text'] = this.ledText;
     data['slug'] = this.slug;
     data['wp_url'] = this.wpUrl;
+    data['priority'] = this.priority;
     data['created_by'] = this.createdBy;
     data['updated_by'] = this.updatedBy;
+    data['offered_by'] = this.offeredBy;
     return data;
   }
 }
@@ -142,8 +150,8 @@ class Instructor {
   String? email;
   String? paymentReceivingMethod;
   String? accountInformation;
-  String? createdBy;
-  String? updatedBy;
+  Null? createdBy;
+  Null? updatedBy;
   String? teacher;
 
   Instructor(
