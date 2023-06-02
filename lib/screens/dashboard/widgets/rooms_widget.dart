@@ -82,6 +82,7 @@ class RoomsWidget extends StatelessWidget {
                                             ''),
                                     _roomList[index].description ?? '',
                                     _roomList[index].room ?? '',
+                                    _roomList[index].roomDetails!.name ?? '',
                                   ),
                                 );
                               },

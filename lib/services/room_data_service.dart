@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:meetingme/constants/urls.dart';
 import 'package:meetingme/models/meeting_room.dart';
+import 'package:meetingme/models/record.dart';
 import 'package:meetingme/models/token_model.dart';
 import '../models/room_info.dart';
 
@@ -84,5 +85,28 @@ class MeetingRoomService {
       print(ex);
     }
     return meetingToken;
+  }
+
+  Future<Record> getMeetingRecords(subjectId) async {
+    var url =
+        "${APIurls.devURL}meetings/room-subject-meeting-recordings/?room_subject=$subjectId";
+    var client = http.Client();
+    var records;
+    try {
+      var token = await SessionManager().get("token");
+      var response = await client.get(Uri.parse(url), headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      });
+      if (response.statusCode == 200) {
+        var jsonString = response.body;
+        var jsonMap = json.decode(jsonString);
+        records = Record.fromJson(jsonMap);
+      }
+    } catch (ex) {
+      print(ex);
+    }
+    return records;
   }
 }

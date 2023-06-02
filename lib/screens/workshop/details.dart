@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:meetingme/constants/colors.dart';
 import 'package:meetingme/models/workshop/workshop_list_model.dart';
 import 'package:meetingme/screens/fees/payment_screen.dart';
-import 'package:meetingme/screens/fees/payment_screen_sdk.dart';
 import 'package:meetingme/screens/workshop/wp_Details.dart';
 import 'package:meetingme/services/common/CommonDateFormatter.dart';
 import 'package:meetingme/services/common/show_toast.dart';
 import 'package:meetingme/services/workshop/workshop_data_service.dart';
 import 'package:meetingme/widgets/constant_widgets.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'package:intl/intl.dart';
 
 class WorkshopDetails extends StatefulWidget {
   const WorkshopDetails({
@@ -52,115 +50,125 @@ class _WorkshopDetailsState extends State<WorkshopDetails> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Container(
-              height: height * .05,
-              width: width * 1,
-              color: ConstantColors.widgetColor,
-              margin: EdgeInsets.symmetric(vertical: height * .02),
-              child: const Center(
-                child: Text(
-                  'Choose your Flexible Time',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ),
-            ),
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: rooms!.length,
-              itemBuilder: (context, int index) {
-                return RadioListTile(
-                  title: Card(
-                    child: Padding(
-                      padding: EdgeInsets.all(width * .02),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Text(
-                            CommonDateFormatter.getMonthandDate(
-                                rooms[index].startDate ?? ''),
-                          ),
-                          Column(
-                            children: [
-                              Text(
-                                '${CommonDateFormatter.get12hr(rooms[index].startTime ?? '')} - ${CommonDateFormatter.get12hr(rooms[index].endTime ?? '')}',
-                              ),
-                              Text(
-                                rooms[index].days ?? '',
-                              ),
-                            ],
-                          )
-                        ],
+            rooms == null
+                ? Container()
+                : Container(
+                    height: height * .05,
+                    width: width * 1,
+                    color: ConstantColors.widgetColor,
+                    margin: EdgeInsets.symmetric(vertical: height * .02),
+                    child: const Center(
+                      child: Text(
+                        'Choose your Flexible Time',
+                        style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),
-                  value: widget.singleWorkhopModel.batchRooms![index].id,
-                  groupValue: selectedId,
-                  onChanged: (val) {
-                    setState(() {
-                      selectedId = val;
-                    });
-                  },
-                );
-              },
-            ),
-            WhiteDivider(),
-            Container(
-              color: ConstantColors.widgetColor,
-              padding: EdgeInsets.symmetric(vertical: height * .003),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  ElevatedButton(
-                    child: const Text('Enroll Now'),
-                    onPressed: () {
-                      print(selectedId);
-                      if (selectedId == null) {
-                        ShowToast.ShowErrorToast('Please Select Your Time.');
-                      } else {
-                        CreateTempUser(context, selectedId,
-                            calculateCharge(widget.singleWorkhopModel.charge));
-                      }
+            rooms == null
+                ? Container()
+                : ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: rooms!.length,
+                    itemBuilder: (context, int index) {
+                      return RadioListTile(
+                        title: Card(
+                          child: Padding(
+                            padding: EdgeInsets.all(width * .02),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Text(
+                                  CommonDateFormatter.getMonthandDate(
+                                      rooms[index].startDate ?? ''),
+                                ),
+                                Column(
+                                  children: [
+                                    Text(
+                                      '${CommonDateFormatter.get12hr(rooms[index].startTime ?? '')} - ${CommonDateFormatter.get12hr(rooms[index].endTime ?? '')}',
+                                    ),
+                                    Text(
+                                      rooms[index].days ?? '',
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        value: widget.singleWorkhopModel.batchRooms![index].id,
+                        groupValue: selectedId,
+                        onChanged: (val) {
+                          setState(() {
+                            selectedId = val;
+                          });
+                        },
+                      );
                     },
-                    style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(Colors.orange)),
                   ),
-                  Column(
-                    children: [
-                      Text(
-                        '\u09F3${widget.singleWorkhopModel.charge}',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: width * .06,
-                            color: Colors.amber),
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            '${discountPercantage.toInt()}% off',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: width * .04,
-                                color: Colors.green),
-                          ),
-                          VerticalDivider(
-                            width: width * .02,
-                          ),
-                          Text(
-                            '\u09F3${widget.singleWorkhopModel.chargeBefore}',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                decoration: TextDecoration.lineThrough,
-                                fontSize: width * .04),
-                          ),
-                        ],
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            ),
+            WhiteDivider(),
+            rooms == null
+                ? Container()
+                : Container(
+                    color: ConstantColors.widgetColor,
+                    padding: EdgeInsets.symmetric(vertical: height * .003),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        ElevatedButton(
+                          child: const Text('Enroll Now'),
+                          onPressed: () {
+                            print(selectedId);
+                            if (selectedId == null) {
+                              ShowToast.ShowErrorToast(
+                                  'Please Select Your Time.');
+                            } else {
+                              CreateTempUser(
+                                  context,
+                                  selectedId,
+                                  calculateCharge(
+                                      widget.singleWorkhopModel.charge));
+                            }
+                          },
+                          style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.orange)),
+                        ),
+                        Column(
+                          children: [
+                            Text(
+                              '\u09F3${widget.singleWorkhopModel.charge}',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: width * .06,
+                                  color: Colors.amber),
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  '${discountPercantage.toInt()}% off',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: width * .04,
+                                      color: Colors.green),
+                                ),
+                                VerticalDivider(
+                                  width: width * .02,
+                                ),
+                                Text(
+                                  '\u09F3${widget.singleWorkhopModel.chargeBefore}',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      decoration: TextDecoration.lineThrough,
+                                      fontSize: width * .04),
+                                ),
+                              ],
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
             Row(
               children: [
                 Container(

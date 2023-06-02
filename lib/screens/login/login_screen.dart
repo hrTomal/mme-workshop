@@ -309,11 +309,22 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           ElevatedButton(
             onPressed: () {
-              Navigator.pushNamed(context, JoinMeetingByCode.routeName);
+              Navigator.pushNamed(context, WorkshopList.routeName);
             },
             style: ElevatedButton.styleFrom(
               foregroundColor: Colors.white,
-              backgroundColor: ConstantColors.meetingButtonColor, // text color
+              backgroundColor: ConstantColors.meetingButtonColor,
+            ),
+            child: const Text('Live Workshops'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pushNamed(context, JoinMeetingByCode.routeName);
+            },
+            style: ElevatedButton.styleFrom(
+              minimumSize: Size(deviceWidth * .85, deviceWidth * .1),
+              foregroundColor: Colors.white,
+              backgroundColor: ConstantColors.meetingButtonColor,
             ),
             child: const Text(
               'Join A Meeting By Code',
@@ -321,16 +332,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pushNamed(context, WorkshopList.routeName);
-            },
-            style: ElevatedButton.styleFrom(
-              foregroundColor: Colors.white,
-              backgroundColor: ConstantColors.meetingButtonColor, // text color
-            ),
-            child: const Text('Live Workshops'),
           ),
         ],
       ),

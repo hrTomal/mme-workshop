@@ -77,7 +77,8 @@ class _WorkshopListState extends State<WorkshopList> {
                                     width: width * .2,
                                     height: height * .15,
                                     child: Image.network(
-                                      allData[index].image,
+                                      allData[index].image ??
+                                          'https://www.dl.dropboxusercontent.com/s/fynems0yxeemorj/meetingme.png',
                                       fit: BoxFit.fill,
                                     ),
                                   ),

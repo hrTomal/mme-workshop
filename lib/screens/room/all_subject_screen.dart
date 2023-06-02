@@ -40,31 +40,6 @@ class _AllSubjectScreenState extends State<AllSubjectScreen> {
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
             var roomList = snapshot.data!.results;
-
-            // var classes = [];
-            // for (var val in roomList) {
-            //   classes.add(val.roomDetails.name);
-            // }
-            // List<String> uniClasses = Set<String>.from(classes).toList();
-            // uniClasses.sort((a, b) => a.toString().compareTo(b.toString()));
-            // print(uniClasses);
-
-            // return ListView.builder(
-            //   itemCount: uniClasses.length,
-            //   itemBuilder: (BuildContext context, int index) {
-            //     return Container(
-            //       padding: EdgeInsets.symmetric(vertical: width * .03),
-            //       margin: EdgeInsets.symmetric(vertical: width * .01),
-            //       alignment: Alignment.center,
-            //       color: ConstantColors.primaryColor,
-            //       child: Text(
-            //         uniClasses[index],
-            //         style: const TextStyle(
-            //             color: Colors.white, fontWeight: FontWeight.bold),
-            //       ),
-            //     );
-            //   },
-            // );
             return GridView.builder(
               semanticChildCount: 2,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -86,6 +61,7 @@ class _AllSubjectScreenState extends State<AllSubjectScreen> {
                               roomList[index].subject?.description ?? ''),
                       roomList[index].description ?? '',
                       roomList[index].room ?? '',
+                      roomList[index].roomDetails.name,
                     ),
                   );
                 },
@@ -100,7 +76,7 @@ class _AllSubjectScreenState extends State<AllSubjectScreen> {
                           color: ConstantColors.primaryColor,
                           child: Text(
                             roomList[index].roomDetails.name,
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.white,
                             ),
                           ))

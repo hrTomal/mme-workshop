@@ -23,6 +23,7 @@ import 'package:meetingme/screens/room/all_subject_screen.dart';
 import 'package:meetingme/screens/room/subject_sreen.dart';
 import 'package:meetingme/screens/task_screens/assignment_screen.dart';
 import 'package:meetingme/screens/splash/splash_screen.dart';
+import 'package:meetingme/screens/video_player/VideoPlayerScreen.dart';
 import 'package:meetingme/screens/workshop/details.dart';
 import 'package:meetingme/screens/workshop/list.dart';
 import 'package:meetingme/screens/workshop/wp_Details.dart';
@@ -108,6 +109,14 @@ class MyApp extends StatelessWidget {
               ),
             );
           }
+          if (settings.name == VideoPlayerScreen.routeName) {
+            final args = settings.arguments as String;
+            return MaterialPageRoute(
+              builder: (_) => VideoPlayerScreen(
+                videoUrl: args,
+              ),
+            );
+          }
           if (settings.name == MeetingWebview.routeName) {
             final args = settings.arguments as String;
             return MaterialPageRoute(
@@ -161,6 +170,7 @@ class MyApp extends StatelessWidget {
                   subject: args.subject,
                   description: args.description,
                   room: args.room,
+                  classRoomName: args.classRoomName,
                 );
               },
             );

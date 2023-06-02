@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:meetingme/constants/colors.dart';
+import 'package:meetingme/screens/live_meeting/join_by_code.dart';
 import 'package:meetingme/screens/login/login_screen.dart';
 
 class MMEAppBarNotLoggedIn extends StatelessWidget {
@@ -45,13 +46,28 @@ class MMEAppBarNotLoggedIn extends StatelessWidget {
             ],
           ),
           ElevatedButton(
-            child: const Text('Login'),
+            onPressed: () {
+              Navigator.pushNamed(context, JoinMeetingByCode.routeName);
+            },
+            style: ElevatedButton.styleFrom(
+              foregroundColor: Colors.white,
+              backgroundColor: ConstantColors.meetingButtonColor, // text color
+            ),
+            child: const Text(
+              'Join Meeting',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          ElevatedButton(
             onPressed: () {
               Navigator.pushNamed(context, LoginScreen.routeName);
             },
             style: ButtonStyle(
-                backgroundColor:
-                    MaterialStateProperty.all<Color>(Colors.green)),
+              backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+            ),
+            child: const Text('Login'),
           ),
           // Row(
           //   children: [

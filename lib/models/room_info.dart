@@ -274,11 +274,13 @@ class RoomArguments {
   final Subject subject;
   final String description;
   final String room;
+  final String classRoomName;
 
   RoomArguments(
     this.id,
     this.subject,
     this.description,
     this.room,
+    this.classRoomName,
   );
 }

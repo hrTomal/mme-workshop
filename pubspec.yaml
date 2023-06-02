@@ -59,6 +59,8 @@ dependencies:
   loading_animation_widget: ^1.2.0+4
   flutter_inappwebview: ^5.7.2+3
   aamarpay: ^0.0.9
+  video_player: ^2.6.1
+  chewie: ^1.0.0
 
 dev_dependencies:
   flutter_test:

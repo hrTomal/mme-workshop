@@ -33,37 +33,6 @@ class WorkshopDataService {
       first_name, last_name, email, phone, batch_room) async {
     String? res;
     const String apiUrl = '${APIurls.workshopUrl}workshops/temp-user/';
-    // try {
-
-    //   print(apiUrl);
-
-    //   Map<String, String> headers = {
-    //     "Content-type": "application/json",
-    //     "Accept": "application/json",
-    //   };
-
-    //   Map<String, dynamic> data = {
-    //     "first_name": first_name,
-    //     "last_name": last_name,
-    //     "email": email,
-    //     "phone": phone,
-    //     "batch_room": batch_room,
-    //   };
-
-    //   String jsonData = json.encode(data);
-
-    //   http
-    //       .post(Uri.parse(apiUrl), headers: headers, body: jsonData)
-    //       .then((response) {
-    //     if (response.statusCode == 200 || response.statusCode == 201) {
-    //       String jsonMap = json.decode(response.body);
-    //       res = jsonMap;
-    //     }
-    //   });
-    // } catch (ex) {
-    //   print(ex);
-    // }
-
     try {
       var reqBody = {
         "first_name": first_name,

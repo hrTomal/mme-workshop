@@ -10,7 +10,6 @@ import 'package:meetingme/bloc/tasks/notes/notes_state.dart';
 import 'package:meetingme/constants/colors.dart';
 import 'package:meetingme/models/tasks/notes.dart';
 import 'package:meetingme/services/download_from_url.dart';
-import 'package:meetingme/services/tasks_data_service.dart';
 import 'package:meetingme/widgets/constant_widgets.dart';
 
 class NotesWidget extends StatefulWidget {
@@ -55,7 +54,7 @@ class _NotesWidgetState extends State<NotesWidget> {
   );
 
   Widget _buildLoading() {
-    return Center(
+    return const Center(
       child: CircularProgressIndicator(),
     );
   }
@@ -124,7 +123,7 @@ class NotesWidgetView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (notes.results!.isEmpty) {
-      return Center(
+      return const Center(
         child: Text('No Notes Found'),
       );
     } else {

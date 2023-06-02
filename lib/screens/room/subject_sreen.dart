@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:meetingme/models/room_info.dart';
 import 'package:meetingme/screens/room/widgets/assignments_widget.dart';
 import 'package:meetingme/screens/room/widgets/notes_widget.dart';
+import 'package:meetingme/screens/room/widgets/records_widget.dart';
+
+import '../../constants/variable_names.dart';
 
 class SubjectScreen extends StatefulWidget {
   const SubjectScreen({
@@ -10,6 +13,7 @@ class SubjectScreen extends StatefulWidget {
     required this.subject,
     required this.room,
     required this.description,
+    required this.classRoomName,
   });
 
   static const routeName = '/subject-screen';
@@ -18,10 +22,11 @@ class SubjectScreen extends StatefulWidget {
   final Subject subject;
   final String room;
   final String description;
+  final String classRoomName;
 
   @override
   State<SubjectScreen> createState() =>
-      _SubjectScreenState(id, subject, room, description);
+      _SubjectScreenState(id, subject, room, description, classRoomName);
 }
 
 class _SubjectScreenState extends State<SubjectScreen>
@@ -30,10 +35,12 @@ class _SubjectScreenState extends State<SubjectScreen>
   final Subject subject;
   final String room;
   final String description;
+  final String classRoomName;
 
   late TabController _controller;
 
-  _SubjectScreenState(this.id, this.subject, this.room, this.description);
+  _SubjectScreenState(
+      this.id, this.subject, this.room, this.description, this.classRoomName);
 
   @override
   void initState() {
@@ -47,14 +54,36 @@ class _SubjectScreenState extends State<SubjectScreen>
     var deviceWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Meeting Me- ${subject.title}'),
         backgroundColor: const Color.fromRGBO(26, 55, 77, 1),
-        centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              '${VariableNames.organisationName} - ${subject.title}',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(
+              classRoomName,
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey,
+              ),
+            ),
+          ],
         ),
       ),
+      // AppBar(
+      //   title: Text('Meeting Me- ${subject.title}'),
+      //   backgroundColor: const Color.fromRGBO(26, 55, 77, 1),
+      //   centerTitle: true,
+      //   leading: IconButton(
+      //     icon: const Icon(Icons.arrow_back, color: Colors.white),
+      //     onPressed: () => Navigator.of(context).pop(),
+      //   ),
+      // ),
       body: Container(
         height: deviceHeight * .9,
         child: ListView(
@@ -65,17 +94,20 @@ class _SubjectScreenState extends State<SubjectScreen>
               controller: _controller,
               tabs: const [
                 Tab(
-                  child: Text('Notes'),
+                  child: FittedBox(child: Text('Notes')),
                 ),
                 Tab(
                   child: FittedBox(child: Text('Assignments')),
                 ),
                 Tab(
-                  child: Text('Exams'),
+                  child: FittedBox(child: Text('Records')),
                 ),
                 Tab(
-                  child: Text('Links'),
+                  child: FittedBox(child: Text('Exams')),
                 ),
+                // Tab(
+                //   child: FittedBox(child: Text('Links')),
+                // ),
               ],
             ),
             Container(
@@ -93,12 +125,15 @@ class _SubjectScreenState extends State<SubjectScreen>
                     subjectId: id,
                   ),
                   AssignmentsWidget(id),
+                  RecordsWidget(
+                    subjectId: id,
+                  ),
                   Center(
                     child: Text('Exams'),
                   ),
-                  Center(
-                    child: Text('Links'),
-                  ),
+                  // Center(
+                  //   child: Text('Links'),
+                  // ),
                 ],
               ),
             )
