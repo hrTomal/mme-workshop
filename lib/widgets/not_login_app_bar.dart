@@ -19,20 +19,18 @@ class MMEAppBarNotLoggedIn extends StatelessWidget {
     return Container(
       height: topSectionHeight,
       padding: EdgeInsets.symmetric(horizontal: width * .03),
-      color: ConstantColors.primaryColor,
+      decoration: BoxDecoration(
+        color: ConstantColors.primaryColor,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(width * .05),
+          topRight: Radius.circular(width * .05),
+        ),
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Row(
             children: [
-              // IconButton(
-              //   onPressed: () {
-              //     _scaffoldKey.currentState?.openDrawer();
-              //   },
-              //   icon: Icon(Icons.line_weight),
-              //   color: Colors.white,
-              // ),
-              // const VerticalDivider(),
               FittedBox(
                 fit: BoxFit.fitWidth,
                 child: Text(

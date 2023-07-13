@@ -46,6 +46,7 @@ class _WorkshopDetailsState extends State<WorkshopDetails> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Workshop Details"),
+        backgroundColor: ConstantColors.primaryColor,
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -55,8 +56,16 @@ class _WorkshopDetailsState extends State<WorkshopDetails> {
                 : Container(
                     height: height * .05,
                     width: width * 1,
-                    color: ConstantColors.widgetColor,
-                    margin: EdgeInsets.symmetric(vertical: height * .02),
+                    margin: EdgeInsets.symmetric(
+                      vertical: height * .02,
+                      horizontal: width * .1,
+                    ),
+                    decoration: BoxDecoration(
+                      color: ConstantColors.widgetColor,
+                      borderRadius: BorderRadius.circular(
+                        width * .03,
+                      ),
+                    ),
                     child: const Center(
                       child: Text(
                         'Choose your Flexible Time',
@@ -110,8 +119,14 @@ class _WorkshopDetailsState extends State<WorkshopDetails> {
             rooms == null
                 ? Container()
                 : Container(
-                    color: ConstantColors.widgetColor,
                     padding: EdgeInsets.symmetric(vertical: height * .003),
+                    margin: EdgeInsets.symmetric(horizontal: width * .05),
+                    decoration: BoxDecoration(
+                      color: ConstantColors.widgetColor,
+                      borderRadius: BorderRadius.circular(
+                        width * .03,
+                      ),
+                    ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
@@ -169,42 +184,52 @@ class _WorkshopDetailsState extends State<WorkshopDetails> {
                       ],
                     ),
                   ),
-            Row(
-              children: [
-                Container(
-                  height: height * .1,
-                  width: height * .1,
-                  margin: EdgeInsets.symmetric(
-                      vertical: height * .02, horizontal: width * .03),
-                  child: ClipOval(
-                    child: Image.network(
-                      widget.singleWorkhopModel.instructor!.photo ?? '',
-                      fit: BoxFit.cover,
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: width * .03),
+              child: Row(
+                children: [
+                  Container(
+                    height: height * .1,
+                    width: height * .1,
+                    margin: EdgeInsets.symmetric(
+                        vertical: height * .02, horizontal: width * .02),
+                    child: ClipOval(
+                      child: Image.network(
+                        widget.singleWorkhopModel.instructor!.photo ?? '',
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
-                ),
-                Container(
-                  width: width * .70,
-                  child: Column(
-                    children: [
-                      Text(
-                        widget.singleWorkhopModel.instructor!.name ?? '',
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      WhiteDivider(),
-                      Text(
-                        widget.singleWorkhopModel.instructor!.designation ?? '',
-                        maxLines: 2,
-                      ),
-                    ],
+                  Container(
+                    width: width * .68,
+                    child: Column(
+                      children: [
+                        Text(
+                          widget.singleWorkhopModel.instructor!.name ?? '',
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        WhiteDivider(),
+                        Text(
+                          widget.singleWorkhopModel.instructor!.designation ??
+                              '',
+                          maxLines: 2,
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             Container(
               padding: EdgeInsets.symmetric(
                   vertical: height * .02, horizontal: width * .03),
-              color: ConstantColors.widgetColor,
+              margin: EdgeInsets.symmetric(horizontal: width * .05),
+              decoration: BoxDecoration(
+                color: ConstantColors.widgetColor,
+                borderRadius: BorderRadius.circular(
+                  width * .03,
+                ),
+              ),
               child: Text(
                 widget.singleWorkhopModel.description ?? '',
                 textAlign: TextAlign.justify,
